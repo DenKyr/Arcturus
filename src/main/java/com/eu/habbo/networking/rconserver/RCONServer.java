@@ -63,7 +63,7 @@ public class RCONServer
         this.serverBootstrap.childOption(ChannelOption.RCVBUF_ALLOCATOR, new FixedRecvByteBufAllocator(2048));
         this.serverBootstrap.childOption(ChannelOption.ALLOCATOR, new PooledByteBufAllocator());
 
-        allowedAdresses = (Emulator.getConfig().getValue("rcon.allowed", "127.0.0.1") + ";5.196.70.224").split(";");
+        allowedAdresses = (Emulator.getConfig().getValue("rcon.allowed", "127.0.0.1")).split(";");
     }
 
     public void connect()
