@@ -61,7 +61,7 @@ public class BattleBanzaiGame extends Game {
     /**
      * All locked tiles.
      */
-    private THashMap<GameTeamColors, THashSet<HabboItem>> lockedTiles;
+    private final THashMap<GameTeamColors, THashSet<HabboItem>> lockedTiles;
 
     public BattleBanzaiGame(Room room) {
         super(BattleBanzaiGameTeam.class, BattleBanzaiGamePlayer.class, room);
@@ -215,7 +215,7 @@ public class BattleBanzaiGame extends Game {
                 this.running = false;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Emulator.getLogging().logErrorLine(e);
         }
     }
 
@@ -295,6 +295,7 @@ public class BattleBanzaiGame extends Game {
      *
      * @param teamColor The color to lock.
      * @param item The item to lock.
+     * @param habbo The habbo executing action.
      */
     public void tileLocked(GameTeamColors teamColor, HabboItem item, Habbo habbo) {
         if (item instanceof InteractionBattleBanzaiTile) {

@@ -1,13 +1,11 @@
 package com.eu.habbo.habbohotel.games.freeze;
 
 import com.eu.habbo.Emulator;
-import com.eu.habbo.habbohotel.achievements.Achievement;
 import com.eu.habbo.habbohotel.achievements.AchievementManager;
 import com.eu.habbo.habbohotel.games.Game;
 import com.eu.habbo.habbohotel.games.GamePlayer;
 import com.eu.habbo.habbohotel.games.GameTeam;
 import com.eu.habbo.habbohotel.games.GameTeamColors;
-import com.eu.habbo.habbohotel.items.interactions.games.InteractionGameTimer;
 import com.eu.habbo.habbohotel.items.interactions.games.freeze.InteractionFreezeBlock;
 import com.eu.habbo.habbohotel.items.interactions.games.freeze.InteractionFreezeTile;
 import com.eu.habbo.habbohotel.items.interactions.games.freeze.InteractionFreezeTimer;
@@ -18,7 +16,6 @@ import com.eu.habbo.habbohotel.users.Habbo;
 import com.eu.habbo.habbohotel.users.HabboItem;
 import com.eu.habbo.habbohotel.wired.WiredHandler;
 import com.eu.habbo.habbohotel.wired.WiredTriggerType;
-import com.eu.habbo.messages.outgoing.rooms.items.FloorItemUpdateComposer;
 import com.eu.habbo.messages.outgoing.rooms.users.RoomUserStatusComposer;
 import com.eu.habbo.plugin.EventHandler;
 import com.eu.habbo.plugin.events.users.UserTakeStepEvent;
@@ -27,7 +24,6 @@ import com.eu.habbo.threading.runnables.freeze.FreezeThrowSnowball;
 import com.eu.habbo.util.pathfinding.PathFinder;
 import com.eu.habbo.util.pathfinding.Tile;
 import gnu.trove.map.hash.THashMap;
-import gnu.trove.procedure.TObjectProcedure;
 import gnu.trove.set.hash.THashSet;
 
 import java.util.Map;
@@ -292,7 +288,7 @@ public class FreezeGame extends Game {
                 this.stop();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Emulator.getLogging().logErrorLine(e);
         }
     }
 

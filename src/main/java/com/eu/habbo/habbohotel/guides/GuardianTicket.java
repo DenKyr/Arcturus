@@ -16,17 +16,17 @@ import java.util.*;
 
 public class GuardianTicket {
 
-    private ArrayList<ModToolChatLog> chatLogs;
+    private final ArrayList<ModToolChatLog> chatLogs;
     private final THashMap<Habbo, GuardianVote> votes = new THashMap<Habbo, GuardianVote>();
     private GuardianVoteType verdict;
     private int timeLeft = 120;
     private int resendCount = 0;
-    private int checkSum = 0;
+    private final int checkSum = 0;
     private final Habbo reporter;
     private final Habbo reported;
     private final Date date;
 
-    private int guardianCount = 0;
+    private final int guardianCount = 0;
 
     public GuardianTicket(Habbo reporter, Habbo reported, ArrayList<ModToolChatLog> chatLogs) {
         this.chatLogs = chatLogs;
@@ -265,19 +265,19 @@ public class GuardianTicket {
      */
     public ArrayList<GuardianVote> getSortedVotes(Habbo guardian) {
         synchronized (this.votes) {
-            ArrayList<GuardianVote> votes = new ArrayList<GuardianVote>(this.votes.values());
-            Collections.sort(votes);
+            ArrayList<GuardianVote> votesl = new ArrayList<GuardianVote>(this.votes.values());
+            Collections.sort(votesl);
 
             GuardianVote v = null;
-            for (GuardianVote vote : votes) {
+            for (GuardianVote vote : votesl) {
                 if (vote.guardian == guardian) {
                     v = vote;
                     break;
                 }
             }
-            votes.remove(v);
+            votesl.remove(v);
 
-            return votes;
+            return votesl;
         }
     }
 

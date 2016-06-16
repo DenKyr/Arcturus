@@ -7,12 +7,12 @@ public class GamePlayer {
     /**
      * The Habbo that is linked to the game player.
      */
-    private Habbo habbo;
+    private final Habbo habbo;
 
     /**
      * The team color of this player.
      */
-    private GameTeamColors teamColor;
+    private final GameTeamColors teamColor;
 
     /**
      * The score of this player.

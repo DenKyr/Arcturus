@@ -30,6 +30,15 @@ public class GuardianVote implements Comparable<GuardianVote> {
         return false;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 37 * hash + this.id;
+        hash = 37 * hash + (this.guardian != null ? this.guardian.hashCode() : 0);
+        hash = 37 * hash + (this.type != null ? this.type.hashCode() : 0);
+        return hash;
+    }
+
     public void ignore() {
         this.ignore = true;
     }

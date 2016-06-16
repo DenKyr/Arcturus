@@ -13,6 +13,7 @@ import com.eu.habbo.plugin.events.games.GameStartedEvent;
 import com.eu.habbo.plugin.events.games.GameStoppedEvent;
 import com.eu.habbo.threading.runnables.SaveScoreForTeam;
 import gnu.trove.map.hash.THashMap;
+import java.lang.reflect.InvocationTargetException;
 
 import java.util.Map;
 
@@ -90,7 +91,17 @@ public abstract class Game implements Runnable {
 
                 return true;
             }
-        } catch (Exception e) {
+        } catch (NoSuchMethodException e) {
+            Emulator.getLogging().logErrorLine(e);
+        } catch (SecurityException e) {
+            Emulator.getLogging().logErrorLine(e);
+        } catch (InstantiationException e) {
+            Emulator.getLogging().logErrorLine(e);
+        } catch (IllegalAccessException e) {
+            Emulator.getLogging().logErrorLine(e);
+        } catch (IllegalArgumentException e) {
+            Emulator.getLogging().logErrorLine(e);
+        } catch (InvocationTargetException e) {
             Emulator.getLogging().logErrorLine(e);
         }
 
@@ -148,6 +159,7 @@ public abstract class Game implements Runnable {
     /**
      * Main game loop.
      */
+    @Override
     public abstract void run();
 
     /**

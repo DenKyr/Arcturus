@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class CraftingManager {
+public final class CraftingManager {
 
     private final THashSet<CraftingRecipe> recipes = new THashSet<CraftingRecipe>();
 

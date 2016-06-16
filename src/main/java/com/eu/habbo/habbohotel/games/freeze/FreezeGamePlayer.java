@@ -67,7 +67,6 @@ public class FreezeGamePlayer extends GamePlayer {
             if (game != null) {
                 game.playerDies(this);
             }
-            return;
         } else {
             super.getHabbo().getHabboInfo().getCurrentRoom().sendComposer(new FreezeLivesComposer(this).compose());
         }
@@ -130,11 +129,7 @@ public class FreezeGamePlayer extends GamePlayer {
     }
 
     public synchronized boolean canGetFrozen() {
-        if (this.isFrozen() || this.isProtected()) {
-            return false;
-        }
-
-        return true;
+        return !(this.isFrozen() || this.isProtected());
     }
 
     public synchronized void addProtection() {

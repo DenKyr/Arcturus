@@ -10,9 +10,6 @@ import com.eu.habbo.threading.runnables.GuideFindNewHelper;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.THashSet;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Map;
 
 public class GuideManager {
@@ -53,6 +50,9 @@ public class GuideManager {
 
     /**
      * Guide Shit
+     *
+     * @param habbo
+     * @param onDuty
      */
     public void setOnGuide(Habbo habbo, boolean onDuty) {
         if (onDuty) {
@@ -137,18 +137,8 @@ public class GuideManager {
     }
 
     /**
-     * Ends an tour session.
-     * <list>
-     * <ul>
-     * The requester cancels the tour request.
-     * </ul>
-     * <ul>
-     * The requester says no more help needed.
-     * </ul>
-     * <ul>
-     * The requester reported the helper.
-     * </ul>
-     * </list>
+     * Ends an tour session. The requester cancels the tour request. The
+     * requester says no more help needed. The requester reported the helper.
      *
      * @param tour
      */
@@ -351,6 +341,7 @@ public class GuideManager {
     }
 
     /**
+     * @param guardian
      * @return The active GuardianTicket for the Guardian.
      */
     public GuardianTicket getTicketForGuardian(Habbo guardian) {
@@ -360,6 +351,7 @@ public class GuideManager {
     }
 
     /**
+     * @param reporter
      * @return The most recent ticket send by the reporter. NULL when not found.
      */
     public GuardianTicket getRecentTicket(Habbo reporter) {
