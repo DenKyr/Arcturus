@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -40,9 +41,7 @@ public class ButlerBot extends Bot {
             while (set.next()) {
                 String[] keys = set.getString("keys").split(";");
                 THashSet<String> ks = new THashSet<String>();
-                for (String key : keys) {
-                    ks.add(key);
-                }
+                ks.addAll(Arrays.asList(keys));
                 serveItems.put(ks, set.getInt("item"));
             }
 

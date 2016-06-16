@@ -17,6 +17,7 @@ import com.eu.habbo.plugin.events.bots.BotPickedUpEvent;
 import com.eu.habbo.plugin.events.bots.BotPlacedEvent;
 import com.eu.habbo.util.pathfinding.Tile;
 import gnu.trove.map.hash.THashMap;
+import java.lang.reflect.InvocationTargetException;
 
 import java.lang.reflect.Method;
 import java.sql.PreparedStatement;
@@ -24,7 +25,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 
-public class BotManager {
+public final class BotManager {
 
     final private static THashMap<String, Class<? extends Bot>> botDefenitions = new THashMap<String, Class<? extends Bot>>();
 
@@ -55,7 +56,16 @@ public class BotManager {
             } catch (NoSuchMethodException e) {
                 Emulator.getLogging().logStart("Bot Manager -> Failed to execute initialise method upon bot type '" + set.getKey() + "'. No Such Method!");
                 return false;
-            } catch (Exception e) {
+            } catch (SecurityException e) {
+                Emulator.getLogging().logStart("Bot Manager -> Failed to execute initialise method upon bot type '" + set.getKey() + "'. Error: " + e.getMessage());
+                return false;
+            } catch (IllegalAccessException e) {
+                Emulator.getLogging().logStart("Bot Manager -> Failed to execute initialise method upon bot type '" + set.getKey() + "'. Error: " + e.getMessage());
+                return false;
+            } catch (IllegalArgumentException e) {
+                Emulator.getLogging().logStart("Bot Manager -> Failed to execute initialise method upon bot type '" + set.getKey() + "'. Error: " + e.getMessage());
+                return false;
+            } catch (InvocationTargetException e) {
                 Emulator.getLogging().logStart("Bot Manager -> Failed to execute initialise method upon bot type '" + set.getKey() + "'. Error: " + e.getMessage());
                 return false;
             }
@@ -226,7 +236,17 @@ public class BotManager {
             }
         } catch (SQLException e) {
             Emulator.getLogging().logSQLException(e);
-        } catch (Exception e) {
+        } catch (NoSuchMethodException e) {
+            Emulator.getLogging().logErrorLine(e);
+        } catch (SecurityException e) {
+            Emulator.getLogging().logErrorLine(e);
+        } catch (InstantiationException e) {
+            Emulator.getLogging().logErrorLine(e);
+        } catch (IllegalAccessException e) {
+            Emulator.getLogging().logErrorLine(e);
+        } catch (IllegalArgumentException e) {
+            Emulator.getLogging().logErrorLine(e);
+        } catch (InvocationTargetException e) {
             Emulator.getLogging().logErrorLine(e);
         }
 
@@ -266,7 +286,13 @@ public class BotManager {
                 m.invoke(null);
             } catch (NoSuchMethodException e) {
                 Emulator.getLogging().logStart("Bot Manager -> Failed to execute dispose method upon bot type '" + set.getKey() + "'. No Such Method!");
-            } catch (Exception e) {
+            } catch (SecurityException e) {
+                Emulator.getLogging().logStart("Bot Manager -> Failed to execute dispose method upon bot type '" + set.getKey() + "'. Error: " + e.getMessage());
+            } catch (IllegalAccessException e) {
+                Emulator.getLogging().logStart("Bot Manager -> Failed to execute dispose method upon bot type '" + set.getKey() + "'. Error: " + e.getMessage());
+            } catch (IllegalArgumentException e) {
+                Emulator.getLogging().logStart("Bot Manager -> Failed to execute dispose method upon bot type '" + set.getKey() + "'. Error: " + e.getMessage());
+            } catch (InvocationTargetException e) {
                 Emulator.getLogging().logStart("Bot Manager -> Failed to execute dispose method upon bot type '" + set.getKey() + "'. Error: " + e.getMessage());
             }
         }

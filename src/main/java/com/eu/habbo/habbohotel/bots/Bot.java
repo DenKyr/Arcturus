@@ -22,7 +22,6 @@ import com.eu.habbo.threading.runnables.BotFollowHabbo;
 import com.eu.habbo.util.pathfinding.PathFinder;
 import com.eu.habbo.util.pathfinding.Tile;
 
-import java.lang.reflect.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -110,7 +109,7 @@ public class Bot implements Runnable {
      * Type of this bot. Used to define custom behaviour. See API docs on how to
      * use this.
      */
-    private String type;
+    private final String type;
 
     /**
      * Wether the bot has to be saved to the database.
@@ -231,7 +230,7 @@ public class Bot implements Runnable {
                         statement.close();
                         statement.getConnection().close();
                     } catch (SQLException e) {
-                        e.printStackTrace();
+                        Emulator.getLogging().logSQLException(e);
                     }
                 }
             }
@@ -246,6 +245,8 @@ public class Bot implements Runnable {
      *
      * Override to implement custom behaviour. Make sure to call super.cycle()
      * first.
+     *
+     * @param canWalk Allowing or not bot to walk.
      */
     public void cycle(boolean canWalk) {
         if (this.roomUnit != null) {
@@ -264,8 +265,8 @@ public class Bot implements Runnable {
             }
 
             if (this.chatTimeOut <= Emulator.getIntUnixTimestamp() && this.chatAuto) {
-                Room room = this.roomUnit.getPathFinder().getRoom();
-                if (room != null) {
+                Room roomBot = this.roomUnit.getPathFinder().getRoom();
+                if (roomBot != null) {
                     this.lastChatIndex = (this.chatRandom ? (short) Emulator.getRandom().nextInt(this.chatLines.size()) : (this.lastChatIndex == (this.chatLines.size() - 1) ? 0 : this.lastChatIndex++));
                     this.talk(this.chatLines.get(this.lastChatIndex));
                     this.chatTimeOut = Emulator.getIntUnixTimestamp() + this.chatDelay;
