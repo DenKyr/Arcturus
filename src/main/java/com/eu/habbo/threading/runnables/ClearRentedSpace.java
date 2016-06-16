@@ -9,28 +9,23 @@ import com.eu.habbo.messages.outgoing.inventory.AddHabboItemComposer;
 import com.eu.habbo.util.pathfinding.Tile;
 import gnu.trove.set.hash.THashSet;
 
-public class ClearRentedSpace implements Runnable
-{
+public class ClearRentedSpace implements Runnable {
+
     private InteractionRentableSpace item;
     private Room room;
 
-    public ClearRentedSpace(InteractionRentableSpace item, Room room)
-    {
+    public ClearRentedSpace(InteractionRentableSpace item, Room room) {
         this.item = item;
         this.room = room;
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
         THashSet<HabboItem> items = new THashSet<HabboItem>();
 
-        for(Tile t : Tile.getTilesAt(this.item.getX(), this.item.getY(), this.item.getBaseItem().getWidth(), this.item.getBaseItem().getLength(), this.item.getRotation()))
-        {
-            for(HabboItem i : this.room.getItemsAt(t.X, t.Y))
-            {
-                if(i.getUserId() == this.item.getRenterId())
-                {
+        for (Tile t : Tile.getTilesAt(this.item.getX(), this.item.getY(), this.item.getBaseItem().getWidth(), this.item.getBaseItem().getLength(), this.item.getRotation())) {
+            for (HabboItem i : this.room.getItemsAt(t.X, t.Y)) {
+                if (i.getUserId() == this.item.getRenterId()) {
                     items.add(i);
                     i.setRoomId(0);
                     i.needsUpdate(true);
@@ -40,16 +35,12 @@ public class ClearRentedSpace implements Runnable
 
         Habbo owner = Emulator.getGameEnvironment().getHabboManager().getHabbo(this.item.getRenterId());
 
-        if(owner != null)
-        {
+        if (owner != null) {
             owner.getClient().sendResponse(new AddHabboItemComposer(items));
             owner.getHabboStats().rentedItemId = 0;
             owner.getHabboStats().rentedTimeEnd = 0;
-        }
-        else
-        {
-            for(HabboItem i : items)
-            {
+        } else {
+            for (HabboItem i : items) {
                 i.run();
             }
         }

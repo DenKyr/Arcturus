@@ -18,21 +18,18 @@ import com.eu.habbo.threading.runnables.PetClearPosture;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class InteractionPetDrink extends HabboItem
-{
-    public InteractionPetDrink(ResultSet set, Item baseItem) throws SQLException
-    {
+public class InteractionPetDrink extends HabboItem {
+
+    public InteractionPetDrink(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
 
-    public InteractionPetDrink(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public InteractionPetDrink(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
 
     @Override
-    public void serializeExtradata(ServerMessage serverMessage)
-    {
+    public void serializeExtradata(ServerMessage serverMessage) {
         serverMessage.appendInt32((this.isLimited() ? 256 : 0));
         serverMessage.appendString(this.getExtradata());
 
@@ -40,42 +37,34 @@ public class InteractionPetDrink extends HabboItem
     }
 
     @Override
-    public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects)
-    {
+    public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects) {
         return true;
     }
 
     @Override
-    public boolean isWalkable()
-    {
+    public boolean isWalkable() {
         return false;
     }
 
     @Override
-    public void onClick(GameClient client, Room room, Object[] objects) throws Exception
-    {
+    public void onClick(GameClient client, Room room, Object[] objects) throws Exception {
         super.onClick(client, room, objects);
     }
 
     @Override
-    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception
-    {
+    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception {
 
     }
 
     @Override
-    public void onWalkOn(RoomUnit client, Room room, Object[] objects) throws Exception
-    {
+    public void onWalkOn(RoomUnit client, Room room, Object[] objects) throws Exception {
         super.onWalkOn(client, room, objects);
 
         AbstractPet pet = room.getPet(client);
 
-        if(pet != null && pet instanceof Pet)
-        {
-            if(pet.getPetData().haveDrinkItem(this))
-            {
-                if (((Pet) pet).levelThirst >= 35)
-                {
+        if (pet != null && pet instanceof Pet) {
+            if (pet.getPetData().haveDrinkItem(this)) {
+                if (((Pet) pet).levelThirst >= 35) {
                     ((Pet) pet).setTask(PetTask.EAT);
                     pet.getRoomUnit().setGoalLocation(this.getX(), this.getY());
                     pet.getRoomUnit().setRotation(RoomUserRotation.values()[this.getRotation()]);
@@ -84,7 +73,7 @@ public class InteractionPetDrink extends HabboItem
                     pet.getRoomUnit().getStatus().put("eat", "0");
                     ((Pet) pet).addThirst(-75);
                     room.sendComposer(new RoomUserStatusComposer(client).compose());
-                    Emulator.getThreading().run(new PetClearPosture((Pet)pet, "eat", null, true), 500);
+                    Emulator.getThreading().run(new PetClearPosture((Pet) pet, "eat", null, true), 500);
 
                     AchievementManager.progressAchievement(Emulator.getGameEnvironment().getHabboManager().getHabbo(pet.getUserId()), Emulator.getGameEnvironment().getAchievementManager().achievements.get("PetFeeding"), 75);
                 }
@@ -93,8 +82,7 @@ public class InteractionPetDrink extends HabboItem
     }
 
     @Override
-    public void onWalkOff(RoomUnit roomUnit, Room room, Object[] objects) throws Exception
-    {
+    public void onWalkOff(RoomUnit roomUnit, Room room, Object[] objects) throws Exception {
         super.onWalkOff(roomUnit, room, objects);
     }
 }

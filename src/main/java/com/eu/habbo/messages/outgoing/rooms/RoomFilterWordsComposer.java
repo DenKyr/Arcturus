@@ -5,23 +5,20 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class RoomFilterWordsComposer extends MessageComposer
-{
+public class RoomFilterWordsComposer extends MessageComposer {
+
     private Room room;
 
-    public RoomFilterWordsComposer(Room room)
-    {
+    public RoomFilterWordsComposer(Room room) {
         this.room = room;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.RoomFilterWordsComposer);
         this.response.appendInt32(this.room.getWordFilterWords().size());
 
-        for(String string : this.room.getWordFilterWords())
-        {
+        for (String string : this.room.getWordFilterWords()) {
             this.response.appendString(string);
         }
 

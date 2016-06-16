@@ -8,27 +8,24 @@ import com.eu.habbo.messages.outgoing.Outgoing;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PromoteOwnRoomsListComposer extends MessageComposer
-{
+public class PromoteOwnRoomsListComposer extends MessageComposer {
+
     private final List<Room> rooms = new ArrayList<Room>();
 
-    public PromoteOwnRoomsListComposer(List<Room> rooms)
-    {
-        for(Room room : rooms)
-        {
-            if(!room.isPromoted())
+    public PromoteOwnRoomsListComposer(List<Room> rooms) {
+        for (Room room : rooms) {
+            if (!room.isPromoted()) {
                 this.rooms.add(room);
+            }
         }
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.PromoteOwnRoomsListComposer);
         this.response.appendBoolean(true);
         this.response.appendInt32(this.rooms.size());
-        for(Room room : this.rooms)
-        {
+        for (Room room : this.rooms) {
             this.response.appendInt32(room.getId());
             this.response.appendString(room.getName());
             this.response.appendBoolean(true); //IDK what the fuck this is.

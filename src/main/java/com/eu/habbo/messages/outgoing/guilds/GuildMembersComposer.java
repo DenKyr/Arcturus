@@ -11,16 +11,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-public class GuildMembersComposer extends MessageComposer
-{
+public class GuildMembersComposer extends MessageComposer {
+
     private final ArrayList<GuildMember> members;
     private final Guild guild;
     private final Habbo session;
     private final int pageId;
     private final int level;
 
-    public GuildMembersComposer(Guild guild, ArrayList<GuildMember> members, Habbo session, int pageId, int level)
-    {
+    public GuildMembersComposer(Guild guild, ArrayList<GuildMember> members, Habbo session, int pageId, int level) {
         this.guild = guild;
         this.members = members;
         this.session = session;
@@ -29,8 +28,7 @@ public class GuildMembersComposer extends MessageComposer
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.GuildMembersComposer);
         this.response.appendInt32(this.guild.getId());
         this.response.appendString(this.guild.getName());
@@ -40,8 +38,7 @@ public class GuildMembersComposer extends MessageComposer
         this.response.appendInt32(this.members.size());
 
         Calendar cal = Calendar.getInstance(TimeZone.getDefault());
-        for(GuildMember member : this.members)
-        {
+        for (GuildMember member : this.members) {
             cal.setTimeInMillis(member.getJoinDate() * 1000L);
             this.response.appendInt32(member.getRank().type);
             this.response.appendInt32(member.getUserId());

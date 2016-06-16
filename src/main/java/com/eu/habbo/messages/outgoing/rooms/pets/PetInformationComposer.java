@@ -9,29 +9,24 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class PetInformationComposer extends MessageComposer
-{
+public class PetInformationComposer extends MessageComposer {
+
     private final AbstractPet pet;
 
-    public PetInformationComposer(AbstractPet pet)
-    {
+    public PetInformationComposer(AbstractPet pet) {
         this.pet = pet;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         double days = Math.floor((Emulator.getIntUnixTimestamp() - this.pet.getCreated()) / 3600);
         this.response.init(Outgoing.PetInformationComposer);
         this.response.appendInt32(this.pet.getId());
         this.response.appendString(this.pet.getName());
-        if(this.pet instanceof MonsterplantPet)
-        {
+        if (this.pet instanceof MonsterplantPet) {
             this.response.appendInt32(3);
             this.response.appendInt32(7);
-        }
-        else
-        {
+        } else {
             this.response.appendInt32(this.pet.getLevel()); //level
             this.response.appendInt32(20); //max level
         }
@@ -43,7 +38,7 @@ public class PetInformationComposer extends MessageComposer
         this.response.appendInt32(100);
         this.response.appendInt32(this.pet.getRespect());
         this.response.appendInt32(this.pet.getUserId());
-        this.response.appendInt32((int)days + 1);
+        this.response.appendInt32((int) days + 1);
         this.response.appendString(""); //Owner name
         this.response.appendInt32(this.pet instanceof MonsterplantPet ? 1 : 0);
         this.response.appendBoolean(this.pet instanceof HorsePet && ((HorsePet) this.pet).hasSaddle());

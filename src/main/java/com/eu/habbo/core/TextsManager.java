@@ -9,52 +9,43 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-public class TextsManager
-{
+public class TextsManager {
+
     /**
      * All emulator texts are stored in this object.
      */
     private final Properties texts;
 
-    public TextsManager()
-    {
+    public TextsManager() {
         long millis = System.currentTimeMillis();
 
         this.texts = new Properties();
 
-        try
-        {
+        try {
 
             this.reload();
 
             Emulator.getLogging().logStart("Texts Manager -> Loaded! (" + (System.currentTimeMillis() - millis) + " MS)");
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     /**
      * Reloads all texts from the database.
+     *
      * @throws Exception
      */
-    public void reload() throws Exception
-    {
+    public void reload() throws Exception {
         PreparedStatement statement = Emulator.getDatabase().prepare("SELECT * FROM emulator_texts");
 
-        try
-        {
+        try {
             ResultSet set = statement.executeQuery();
 
-            while(set.next())
-            {
-                if(this.texts.containsKey(set.getString("key")))
-                {
+            while (set.next()) {
+                if (this.texts.containsKey(set.getString("key"))) {
                     this.texts.setProperty(set.getString("key"), set.getString("value"));
-                }
-                else
-                {
+                } else {
                     this.texts.put(set.getString("key"), set.getString("value"));
                 }
             }
@@ -62,31 +53,32 @@ public class TextsManager
             set.close();
             statement.close();
             statement.getConnection().close();
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             Emulator.getLogging().logSQLException(e);
         }
     }
 
     /**
      * Gets the string value for a specific key.
+     *
      * @param key The key to find the value for.
-     * @return The string value for the key. Returns an empty string if not found.
+     * @return The string value for the key. Returns an empty string if not
+     * found.
      */
-    public String getValue(String key)
-    {
+    public String getValue(String key) {
         return getValue(key, "");
     }
 
     /**
      * Gets the string value for a specific key.
+     *
      * @param key The key to find the value for.
-     * @param defaultValue The value that will be returned when the key is not found.
-     * @return The string value for the key. Returns defaultValue when not found.
+     * @param defaultValue The value that will be returned when the key is not
+     * found.
+     * @return The string value for the key. Returns defaultValue when not
+     * found.
      */
-    public String getValue(String key, String defaultValue)
-    {
+    public String getValue(String key, String defaultValue) {
         if (!this.texts.containsKey(key)) {
             Emulator.getLogging().logErrorLine("[TEXTS] Text key not found: " + key);
         }
@@ -95,28 +87,27 @@ public class TextsManager
 
     /**
      * Gets the boolean value for a specific key.
+     *
      * @param key The key to find the value for.
      * @return The boolean value for the key. Returns false if not found.
      */
-    public boolean getBoolean(String key)
-    {
+    public boolean getBoolean(String key) {
         return getBoolean(key, false);
     }
 
     /**
      * Gets the boolean value for a specific key.
+     *
      * @param key The key to find the value for.
-     * @param defaultValue The value that will be returned when the key is not found.
-     * @return The boolean value for the key. Returns defaultValue when not found.
+     * @param defaultValue The value that will be returned when the key is not
+     * found.
+     * @return The boolean value for the key. Returns defaultValue when not
+     * found.
      */
-    public boolean getBoolean(String key, Boolean defaultValue)
-    {
-        try
-        {
+    public boolean getBoolean(String key, Boolean defaultValue) {
+        try {
             return (getValue(key, "0").equals("1")) || (getValue(key, "false").equals("true"));
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Emulator.getLogging().logErrorLine(e);
         }
         return defaultValue;
@@ -124,28 +115,26 @@ public class TextsManager
 
     /**
      * Gets the int value for a specific key.
+     *
      * @param key The key to find the value for.
      * @return The int value for the key. Returns 0 if not found.
      */
-    public int getInt(String key)
-    {
+    public int getInt(String key) {
         return getInt(key, 0);
     }
 
     /**
      * Gets the int value for a specific key.
+     *
      * @param key The key to find the value for.
-     * @param defaultValue The value that will be returned when the key is not found.
+     * @param defaultValue The value that will be returned when the key is not
+     * found.
      * @return The int value for the key. Returns defaultValue when not found.
      */
-    public int getInt(String key, Integer defaultValue)
-    {
-        try
-        {
+    public int getInt(String key, Integer defaultValue) {
+        try {
             return Integer.parseInt(getValue(key, defaultValue.toString()));
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Emulator.getLogging().logErrorLine(e);
         }
         return defaultValue;

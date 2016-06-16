@@ -10,20 +10,18 @@ import com.eu.habbo.util.pathfinding.PathFinder;
 import com.eu.habbo.util.pathfinding.Tile;
 import gnu.trove.map.hash.THashMap;
 
-public class CannonKickAction implements Runnable
-{
+public class CannonKickAction implements Runnable {
+
     private final InteractionCannon cannon;
     private final Room room;
 
-    public CannonKickAction(InteractionCannon cannon, Room room)
-    {
+    public CannonKickAction(InteractionCannon cannon, Room room) {
         this.cannon = cannon;
         this.room = room;
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
         THashMap<String, String> dater = new THashMap<String, String>();
         dater.put("title", "${notification.room.kick.cannonball.title}");
         dater.put("message", "${notification.room.kick.cannonball.message}");
@@ -37,10 +35,8 @@ public class CannonKickAction implements Runnable
 
         Tile[] tiles = {a, b, c};
 
-        for(Tile t : tiles)
-        {
-            for(Habbo habbo : this.room.getHabbosAt(t.X, t.Y))
-            {
+        for (Tile t : tiles) {
+            for (Habbo habbo : this.room.getHabbosAt(t.X, t.Y)) {
                 Emulator.getGameEnvironment().getRoomManager().leaveRoom(habbo, this.room);
                 habbo.getClient().sendResponse(message); //kicked composer
             }

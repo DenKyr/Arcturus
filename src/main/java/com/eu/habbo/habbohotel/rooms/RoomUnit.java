@@ -23,8 +23,8 @@ import com.eu.habbo.util.pathfinding.Tile;
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
 
-public class RoomUnit
-{
+public class RoomUnit {
+
     private int id;
     private int x;
     private int y;
@@ -66,8 +66,7 @@ public class RoomUnit
     private int idleTimer;
     private Room room;
 
-    public RoomUnit()
-    {
+    public RoomUnit() {
         this.id = 0;
         this.x = 0;
         this.y = 0;
@@ -89,99 +88,87 @@ public class RoomUnit
         this.room = room;
     }
 
-    public void clearWalking()
-    {
+    public void clearWalking() {
         this.x = 0;
         this.y = 0;
         this.goalX = 0;
         this.goalY = 0;
         this.inRoom = false;
 
-        synchronized (this.status)
-        {
+        synchronized (this.status) {
             this.status.clear();
         }
 
         this.cacheable.clear();
     }
 
-    public void stopWalking()
-    {
-        synchronized (this.status)
-        {
+    public void stopWalking() {
+        synchronized (this.status) {
             this.status.remove("mv");
             this.setGoalLocation(this.x, this.y);
         }
     }
 
-    public boolean cycle(Room room)
-    {
-        try
-        {
+    public boolean cycle(Room room) {
+        try {
             /**
              * !this.getStatus().containsKey("mv") &&
              */
-            if(!this.isWalking())
+            if (!this.isWalking()) {
                 return false;
+            }
 
-            if (this.getStatus().containsKey("mv"))
-            {
+            if (this.getStatus().containsKey("mv")) {
                 this.getStatus().remove("mv");
             }
-            if (this.getStatus().containsKey("lay"))
-            {
+            if (this.getStatus().containsKey("lay")) {
                 this.getStatus().remove("lay");
             }
-            if (this.getStatus().containsKey("sit"))
-            {
+            if (this.getStatus().containsKey("sit")) {
                 this.getStatus().remove("sit");
             }
 
-            if(this.pathFinder == null)
+            if (this.pathFinder == null) {
                 return true;
+            }
 
-            if(this.fastWalk && this.getPathFinder().getPath().size() >= 3)
-            {
+            if (this.fastWalk && this.getPathFinder().getPath().size() >= 3) {
                 this.getPathFinder().getPath().poll();
                 this.getPathFinder().getPath().poll();
             }
 
             Node next = this.getPathFinder().getPath().poll();
 
-            if (next == null)
+            if (next == null) {
                 return true;
+            }
 
             Habbo habbo = room.getHabbo(this);
 
-            if(this.getStatus().containsKey("ded"))
-            {
+            if (this.getStatus().containsKey("ded")) {
                 this.getStatus().remove("ded");
             }
 
-            if(habbo != null)
-            {
-                if(this.isIdle())
-                {
+            if (habbo != null) {
+                if (this.isIdle()) {
                     UserIdleEvent event = new UserIdleEvent(habbo, UserIdleEvent.IdleReason.WALKED, false);
                     Emulator.getPluginManager().fireEvent(event);
 
-                    if (!event.isCancelled())
-                    {
-                        if (!event.idle)
-                        {
+                    if (!event.isCancelled()) {
+                        if (!event.idle) {
                             room.unIdle(habbo);
                             this.idleTimer = 0;
                         }
                     }
                 }
 
-                if (Emulator.getPluginManager().isRegistered(UserTakeStepEvent.class, false))
-                {
+                if (Emulator.getPluginManager().isRegistered(UserTakeStepEvent.class, false)) {
                     Event e = new UserTakeStepEvent(habbo, new Tile(this.x, this.y, this.z), next);
                     Emulator.getPluginManager().fireEvent(e);
 
-                    if (e.isCancelled())
+                    if (e.isCancelled()) {
                         return false;
+                    }
                 }
             }
 
@@ -189,21 +176,18 @@ public class RoomUnit
 
             boolean canSitNextTile = room.canSitAt(next.getX(), next.getY());
 
-            if(canSitNextTile)
-            {
+            if (canSitNextTile) {
                 HabboItem lowestChair = room.getLowestChair(next.getX(), next.getY());
 
-                if(lowestChair != null)
+                if (lowestChair != null) {
                     item = lowestChair;
+                }
             }
 
-            if(!(this.getPathFinder().getPath().size() == 1 && canSitNextTile))
-            {
-                if (!room.tileWalkable(next.getX(), next.getY()) && !(item instanceof InteractionTeleport))
-                {
+            if (!(this.getPathFinder().getPath().size() == 1 && canSitNextTile)) {
+                if (!room.tileWalkable(next.getX(), next.getY()) && !(item instanceof InteractionTeleport)) {
                     this.getPathFinder().findPath();
-                    if (this.getPathFinder().getPath().size() == 0)
-                    {
+                    if (this.getPathFinder().getPath().size() == 0) {
                         room.sendComposer(new RoomUserStatusComposer(this).compose());
                         return false;
                     }
@@ -214,35 +198,28 @@ public class RoomUnit
 
             double zHeight = 0.0D;
 
-            if(habbo != null)
-            {
-                if (habbo.getHabboInfo().getRiding() != null)
-                {
+            if (habbo != null) {
+                if (habbo.getHabboInfo().getRiding() != null) {
                     zHeight += 1.0D;
                 }
             }
 
             HabboItem habboItem = room.getTopItemAt(this.x, this.y);
-            if(habboItem != null)
-            {
-                if(!PathFinder.pointInSquare(habboItem.getX(), habboItem.getY(), habboItem.getX() + habboItem.getBaseItem().getWidth() - 1, habboItem.getY() + habboItem.getBaseItem().getLength() - 1, next.getX(), next.getY()))
+            if (habboItem != null) {
+                if (!PathFinder.pointInSquare(habboItem.getX(), habboItem.getY(), habboItem.getX() + habboItem.getBaseItem().getWidth() - 1, habboItem.getY() + habboItem.getBaseItem().getLength() - 1, next.getX(), next.getY())) {
                     habboItem.onWalkOff(this, room, null);
+                }
             }
 
             this.tilesWalked++;
 
             RoomUserRotation oldRotation = this.getBodyRotation();
             this.setRotation(RoomUserRotation.values()[Rotation.Calculate(this.getX(), this.getY(), next.getX(), next.getY())]);
-            if (item != null)
-            {
-                if(!PathFinder.pointInSquare(item.getX(), item.getY(), item.getX() + item.getBaseItem().getWidth() - 1, item.getY() + item.getBaseItem().getLength() - 1, this.x, this.y))
-                {
-                    if(item.canWalkOn(this, room, null))
-                    {
+            if (item != null) {
+                if (!PathFinder.pointInSquare(item.getX(), item.getY(), item.getX() + item.getBaseItem().getWidth() - 1, item.getY() + item.getBaseItem().getLength() - 1, this.x, this.y)) {
+                    if (item.canWalkOn(this, room, null)) {
                         item.onWalkOn(this, room, null);
-                    }
-                    else if(item instanceof InteractionGuildGate)
-                    {
+                    } else if (item instanceof InteractionGuildGate) {
                         this.setRotation(oldRotation);
                         this.tilesWalked--;
                         this.setGoalLocation(this.getX(), this.getY());
@@ -250,33 +227,25 @@ public class RoomUnit
                         room.sendComposer(new RoomUserStatusComposer(this).compose());
                         return false;
                     }
-                }
-                else
-                {
+                } else {
                     item.onWalk(this, room, null);
                 }
 
                 zHeight += item.getZ();
 
-                if(!item.getBaseItem().allowSit() && !item.getBaseItem().allowLay())
-                {
+                if (!item.getBaseItem().allowSit() && !item.getBaseItem().allowLay()) {
                     zHeight += item.getBaseItem().getHeight();
 
-                    if(item instanceof InteractionMultiHeight)
-                    {
-                        if(item.getExtradata().length() == 0)
-                        {
+                    if (item instanceof InteractionMultiHeight) {
+                        if (item.getExtradata().length() == 0) {
                             item.setExtradata("0");
                         }
                         zHeight += Item.getCurrentHeight(item);
-                    }
-                    else if(item instanceof InteractionFreezeBlock)
-                    {
+                    } else if (item instanceof InteractionFreezeBlock) {
                         zHeight -= item.getBaseItem().getHeight();
                     }
                 }
-            } else
-            {
+            } else {
                 zHeight += room.getLayout().getHeightAtSquare(next.getX(), next.getY());
             }
 
@@ -288,23 +257,20 @@ public class RoomUnit
             this.setY(next.getY());
             this.resetIdleTimer();
 
-            if (habbo != null)
-            {
-                if (next.getX() == room.getLayout().getDoorX() && next.getY() == room.getLayout().getDoorY())
-                {
+            if (habbo != null) {
+                if (next.getX() == room.getLayout().getDoorX() && next.getY() == room.getLayout().getDoorY()) {
                     Emulator.getThreading().run(new RoomUnitKick(habbo, room, false), 500);
                 }
             }
 
             return false;
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
+
     public int getId() {
         return id;
     }
@@ -329,18 +295,15 @@ public class RoomUnit
         this.y = y;
     }
 
-    public double getZ()
-    {
+    public double getZ() {
         return this.z;
     }
 
-    public void setZ(double z)
-    {
+    public void setZ(double z) {
         this.z = z;
     }
 
-    public Tile getLocation()
-    {
+    public Tile getLocation() {
         return new Tile(this.x, this.y, this.z);
     }
 
@@ -360,8 +323,7 @@ public class RoomUnit
         this.roomUnitType = roomUnitType;
     }
 
-    public void setRotation(RoomUserRotation rotation)
-    {
+    public void setRotation(RoomUserRotation rotation) {
         this.bodyRotation = rotation;
         this.headRotation = rotation;
     }
@@ -390,48 +352,39 @@ public class RoomUnit
         this.danceType = danceType;
     }
 
-    public void setCanWalk(boolean value)
-    {
+    public void setCanWalk(boolean value) {
         this.canWalk = value;
     }
 
-    public boolean canWalk()
-    {
+    public boolean canWalk() {
         return this.canWalk;
     }
 
-    public void setFastWalk(boolean fastWalk)
-    {
+    public void setFastWalk(boolean fastWalk) {
         this.fastWalk = fastWalk;
     }
 
-    public boolean isFastWalk()
-    {
+    public boolean isFastWalk() {
         return this.fastWalk;
     }
 
-    public Tile getStartLocation()
-    {
+    public Tile getStartLocation() {
         return new Tile(this.startX, this.startY, 0);
     }
 
-    public int getStartX()
-    {
+    public int getStartX() {
         return this.startX;
     }
 
-    public int getStartY()
-    {
+    public int getStartY() {
         return this.startY;
     }
 
-    public int tilesWalked()
-    {
+    public int tilesWalked() {
         return this.tilesWalked;
     }
 
-    public Tile getGoal()
-    {
+    public Tile getGoal() {
         return new Tile(this.goalX, this.goalY, 0);
     }
 
@@ -443,15 +396,14 @@ public class RoomUnit
         return goalY;
     }
 
-    public void setGoalLocation(int x, int y)
-    {
-        if(Emulator.getPluginManager().isRegistered(RoomUnitSetGoalEvent.class, false))
-        {
+    public void setGoalLocation(int x, int y) {
+        if (Emulator.getPluginManager().isRegistered(RoomUnitSetGoalEvent.class, false)) {
             Event event = new RoomUnitSetGoalEvent(this, new Tile(x, y, 0));
             Emulator.getPluginManager().fireEvent(event);
 
-            if(event.isCancelled())
+            if (event.isCancelled()) {
                 return;
+            }
         }
 
         this.startX = this.x;
@@ -463,8 +415,7 @@ public class RoomUnit
         this.cmdSit = false;
     }
 
-    public void setGoalLocation(Tile tile)
-    {
+    public void setGoalLocation(Tile tile) {
         this.setGoalLocation(tile.X, tile.Y);
     }
 
@@ -472,87 +423,74 @@ public class RoomUnit
         return pathFinder;
     }
 
-    public void setPathFinder(PathFinder pathFinder) { this.pathFinder = pathFinder; }
+    public void setPathFinder(PathFinder pathFinder) {
+        this.pathFinder = pathFinder;
+    }
 
     public void setPathFinderRoom(Room room) {
         this.pathFinder.setRoom(room);
     }
 
-    public boolean isAtGoal()
-    {
+    public boolean isAtGoal() {
         return this.goalX == this.x && this.goalY == this.y;
     }
 
-    public boolean isWalking()
-    {
+    public boolean isWalking() {
         return (this.goalX != this.x || this.goalY != this.y) && this.canWalk;
     }
 
-    public synchronized TMap<String, String> getStatus()
-    {
+    public synchronized TMap<String, String> getStatus() {
         return this.status;
     }
 
-    public synchronized boolean hasStatus(String key)
-    {
+    public synchronized boolean hasStatus(String key) {
         return this.status.containsKey(key);
     }
 
-    public TMap<String, Object> getCacheable()
-    {
+    public TMap<String, Object> getCacheable() {
         return this.cacheable;
     }
 
-    public int getHandItem()
-    {
+    public int getHandItem() {
         return this.handItem;
     }
 
-    public void setHandItem(int handItem)
-    {
+    public void setHandItem(int handItem) {
         this.handItem = handItem;
         this.handItemTimestamp = System.currentTimeMillis();
     }
 
-    public long getHandItemTimestamp()
-    {
+    public long getHandItemTimestamp() {
         return this.handItemTimestamp;
     }
 
-    public int getEffectId()
-    {
+    public int getEffectId() {
         return this.effectId;
     }
 
-    public void setEffectId(int effectId)
-    {
+    public void setEffectId(int effectId) {
         this.effectId = effectId;
     }
 
-    public int getWalkTimeOut()
-    {
+    public int getWalkTimeOut() {
         return this.walkTimeOut;
     }
 
-    public void setWalkTimeOut(int walkTimeOut)
-    {
+    public void setWalkTimeOut(int walkTimeOut) {
         this.walkTimeOut = walkTimeOut;
     }
 
-    public boolean canTalk()
-    {
-        if(this.wiredMuted)
+    public boolean canTalk() {
+        if (this.wiredMuted) {
             return false;
+        }
 
         return !this.isModMuted();
     }
 
-    public boolean isModMuted()
-    {
-        if(this.modMuted)
-        {
-            if (this.modMuteTime < Emulator.getIntUnixTimestamp())
-            {
+    public boolean isModMuted() {
+        if (this.modMuted) {
+            if (this.modMuteTime < Emulator.getIntUnixTimestamp()) {
                 this.modMuted = false;
             }
         }
@@ -560,40 +498,34 @@ public class RoomUnit
         return this.modMuted;
     }
 
-    public void increaseIdleTimer()
-    {
+    public void increaseIdleTimer() {
         this.idleTimer++;
     }
 
-    public boolean isIdle()
-    {
+    public boolean isIdle() {
         return this.idleTimer > Emulator.getConfig().getInt("hotel.roomuser.idle.cycles", 240); //Amount of room cycles / 2 = seconds.
     }
 
-    public int getIdleTimer()
-    {
+    public int getIdleTimer() {
         return this.idleTimer;
     }
 
-    public void resetIdleTimer()
-    {
+    public void resetIdleTimer() {
         this.idleTimer = 0;
     }
 
-    public void setIdle()
-    {
+    public void setIdle() {
         this.idleTimer = Emulator.getConfig().getInt("hotel.roomuser.idle.cycles", 240);
     }
 
-    public void lookAtPoint(Tile location)
-    {
-        if(Emulator.getPluginManager().isRegistered(RoomUnitLookAtPointEvent.class, true))
-        {
+    public void lookAtPoint(Tile location) {
+        if (Emulator.getPluginManager().isRegistered(RoomUnitLookAtPointEvent.class, true)) {
             Event lookAtPointEvent = new RoomUnitLookAtPointEvent(this, location);
             Emulator.getPluginManager().fireEvent(lookAtPointEvent);
 
-            if(lookAtPointEvent.isCancelled())
+            if (lookAtPointEvent.isCancelled()) {
                 return;
+            }
         }
 
         this.bodyRotation = (RoomUserRotation.values()[Rotation.Calculate(this.x, this.y, location.x, location.y)]);

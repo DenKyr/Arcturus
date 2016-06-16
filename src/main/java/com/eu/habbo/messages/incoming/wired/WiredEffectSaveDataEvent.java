@@ -10,31 +10,25 @@ import com.eu.habbo.messages.incoming.MessageHandler;
 import com.eu.habbo.messages.outgoing.rooms.users.RoomUserWhisperComposer;
 import com.eu.habbo.messages.outgoing.wired.WiredSavedComposer;
 
-public class WiredEffectSaveDataEvent extends MessageHandler
-{
+public class WiredEffectSaveDataEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         int itemId = this.packet.readInt();
 
         Room room = this.client.getHabbo().getHabboInfo().getCurrentRoom();
 
-        if(room != null)
-        {
-            if(room.getOwnerId() == this.client.getHabbo().getHabboInfo().getId() || this.client.getHabbo().hasPermission("acc_anyroomowner") || this.client.getHabbo().hasPermission("acc_moverotate"))
-            {
+        if (room != null) {
+            if (room.getOwnerId() == this.client.getHabbo().getHabboInfo().getId() || this.client.getHabbo().hasPermission("acc_anyroomowner") || this.client.getHabbo().hasPermission("acc_moverotate")) {
                 InteractionWiredEffect effect = room.getRoomSpecialTypes().getEffect(itemId);
 
-                if(effect != null)
-                {
-                    if(effect instanceof WiredEffectGiveReward && !this.client.getHabbo().hasPermission("acc_superwired"))
-                    {
+                if (effect != null) {
+                    if (effect instanceof WiredEffectGiveReward && !this.client.getHabbo().hasPermission("acc_superwired")) {
                         this.client.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage("U cannot do this.", this.client.getHabbo(), this.client.getHabbo(), RoomChatMessageBubbles.ALERT)));
                         return;
                     }
 
-                    if(effect.saveData(this.packet))
-                    {
+                    if (effect.saveData(this.packet)) {
                         this.client.sendResponse(new WiredSavedComposer());
 
                         effect.needsUpdate(true);

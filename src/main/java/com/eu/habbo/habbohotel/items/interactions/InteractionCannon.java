@@ -17,22 +17,18 @@ import com.eu.habbo.util.pathfinding.Tile;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class InteractionCannon extends HabboItem
+public class InteractionCannon extends HabboItem {
 
-{
-    public InteractionCannon(ResultSet set, Item baseItem) throws SQLException
-    {
+    public InteractionCannon(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
 
-    public InteractionCannon(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public InteractionCannon(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
 
     @Override
-    public void serializeExtradata(ServerMessage serverMessage)
-    {
+    public void serializeExtradata(ServerMessage serverMessage) {
         serverMessage.appendInt32((this.isLimited() ? 256 : 0));
         serverMessage.appendString(this.getExtradata());
 
@@ -40,28 +36,25 @@ public class InteractionCannon extends HabboItem
     }
 
     @Override
-    public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects)
-    {
+    public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects) {
         return true;
     }
 
     @Override
-    public boolean isWalkable()
-    {
+    public boolean isWalkable() {
         return false;
     }
 
     @Override
-    public void onClick(GameClient client, Room room, Object[] objects) throws Exception
-    {
+    public void onClick(GameClient client, Room room, Object[] objects) throws Exception {
         super.onClick(client, room, objects);
-        if(room == null)
+        if (room == null) {
             return;
+        }
 
         Tile tile = new Tile(this.getX(), this.getY(), 0.0);
 
-        if(tile.distance(client.getHabbo().getRoomUnit().getLocation()) <= 2)
-        {
+        if (tile.distance(client.getHabbo().getRoomUnit().getLocation()) <= 2) {
             this.setExtradata("1");
             room.updateItem(this);
             Emulator.getThreading().run(new CannonKickAction(this, room), 1000);
@@ -69,20 +62,17 @@ public class InteractionCannon extends HabboItem
     }
 
     @Override
-    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception
-    {
+    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception {
 
     }
 
     @Override
-    public void onWalkOn(RoomUnit roomUnit, Room room, Object[] objects) throws Exception
-    {
+    public void onWalkOn(RoomUnit roomUnit, Room room, Object[] objects) throws Exception {
         super.onWalkOn(roomUnit, room, objects);
     }
 
     @Override
-    public void onWalkOff(RoomUnit roomUnit, Room room, Object[] objects) throws Exception
-    {
+    public void onWalkOff(RoomUnit roomUnit, Room room, Object[] objects) throws Exception {
         super.onWalkOff(roomUnit, room, objects);
     }
 }

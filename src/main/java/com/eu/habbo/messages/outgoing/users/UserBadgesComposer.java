@@ -6,28 +6,24 @@ import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 import gnu.trove.set.hash.THashSet;
 
-public class UserBadgesComposer extends MessageComposer
-{
+public class UserBadgesComposer extends MessageComposer {
+
     private final THashSet<HabboBadge> badges;
     private final int habbo;
 
-    public UserBadgesComposer(THashSet<HabboBadge> badges, int habbo)
-    {
+    public UserBadgesComposer(THashSet<HabboBadge> badges, int habbo) {
         this.badges = badges;
         this.habbo = habbo;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.UserBadgesComposer);
         this.response.appendInt32(this.habbo);
 
-        synchronized (this.badges)
-        {
+        synchronized (this.badges) {
             this.response.appendInt32(this.badges.size());
-            for (HabboBadge badge : this.badges)
-            {
+            for (HabboBadge badge : this.badges) {
                 this.response.appendInt32(badge.getSlot());
                 this.response.appendString(badge.getCode());
             }

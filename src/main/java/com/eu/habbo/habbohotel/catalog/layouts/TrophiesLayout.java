@@ -8,8 +8,7 @@ import java.sql.SQLException;
 
 public class TrophiesLayout extends CatalogPage {
 
-    public TrophiesLayout(ResultSet set) throws SQLException
-    {
+    public TrophiesLayout(ResultSet set) throws SQLException {
         super(set);
     }
 

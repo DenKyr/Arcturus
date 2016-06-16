@@ -5,18 +5,16 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class GuildBoughtComposer extends MessageComposer
-{
+public class GuildBoughtComposer extends MessageComposer {
+
     private final Guild guild;
 
-    public GuildBoughtComposer(Guild guild)
-    {
+    public GuildBoughtComposer(Guild guild) {
         this.guild = guild;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.GuildBoughtComposer);
         this.response.appendInt32(this.guild.getRoomId());
         this.response.appendInt32(this.guild.getId());

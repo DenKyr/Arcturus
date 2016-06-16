@@ -12,13 +12,14 @@ import com.eu.habbo.messages.outgoing.rooms.users.RoomUserTalkComposer;
 public class RoomUserTalkEvent extends MessageHandler {
 
     @Override
-    public void handle() throws Exception
-    {
-        if(this.client.getHabbo().getHabboInfo().getCurrentRoom() == null)
+    public void handle() throws Exception {
+        if (this.client.getHabbo().getHabboInfo().getCurrentRoom() == null) {
             return;
+        }
 
-        if(!this.client.getHabbo().getRoomUnit().canTalk())
+        if (!this.client.getHabbo().getRoomUnit().canTalk()) {
             return;
+        }
 
         this.client.getHabbo().getHabboInfo().getCurrentRoom().talk(this.client.getHabbo(), new RoomChatMessage(this), RoomChatType.TALK);
 

@@ -6,21 +6,19 @@ import com.eu.habbo.habbohotel.users.HabboItem;
 import com.eu.habbo.messages.outgoing.rooms.items.FloorItemUpdateComposer;
 import gnu.trove.set.hash.THashSet;
 
-class FreezeResetExplosionTiles implements Runnable
-{
+class FreezeResetExplosionTiles implements Runnable {
+
     private final THashSet<InteractionFreezeTile> tiles;
     private final Room room;
 
-    public FreezeResetExplosionTiles(THashSet<InteractionFreezeTile> tiles, Room room)
-    {
+    public FreezeResetExplosionTiles(THashSet<InteractionFreezeTile> tiles, Room room) {
         this.tiles = tiles;
         this.room = room;
     }
+
     @Override
-    public void run()
-    {
-        for(HabboItem item : this.tiles)
-        {
+    public void run() {
+        for (HabboItem item : this.tiles) {
             room.updateItem(item);
         }
     }

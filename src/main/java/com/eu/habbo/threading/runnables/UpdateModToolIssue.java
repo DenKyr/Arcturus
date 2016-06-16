@@ -6,20 +6,17 @@ import com.eu.habbo.habbohotel.modtool.ModToolIssue;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class UpdateModToolIssue implements Runnable
-{
+public class UpdateModToolIssue implements Runnable {
+
     private final ModToolIssue issue;
 
-    public UpdateModToolIssue(ModToolIssue issue)
-    {
+    public UpdateModToolIssue(ModToolIssue issue) {
         this.issue = issue;
     }
 
     @Override
-    public void run()
-    {
-        try
-        {
+    public void run() {
+        try {
             PreparedStatement statement = Emulator.getDatabase().prepare("UPDATE support_tickets SET state = ?, type = ?, mod_id = ? WHERE id = ?");
             statement.setInt(1, this.issue.state.getState());
             statement.setInt(2, this.issue.type.getType());
@@ -28,9 +25,7 @@ public class UpdateModToolIssue implements Runnable
             statement.execute();
             statement.close();
             statement.getConnection().close();
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             Emulator.getLogging().logSQLException(e);
         }
     }

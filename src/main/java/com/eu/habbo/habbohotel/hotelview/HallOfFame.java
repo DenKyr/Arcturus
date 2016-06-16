@@ -7,8 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class HallOfFame
-{
+public class HallOfFame {
+
     /**
      * Hall of Fame winners are in here.
      */
@@ -19,8 +19,7 @@ public class HallOfFame
      */
     private static String competitionName;
 
-    public HallOfFame()
-    {
+    public HallOfFame() {
         setCompetitionName("xmasRoomComp");
 
         reload();
@@ -29,19 +28,15 @@ public class HallOfFame
     /**
      * Reloads the HoF
      */
-    public void reload()
-    {
-        synchronized (this.winners)
-        {
-            try
-            {
+    public void reload() {
+        synchronized (this.winners) {
+            try {
                 this.winners.clear();
 
                 PreparedStatement statement = Emulator.getDatabase().prepare("SELECT users.look, users.username, users.id, users_settings.hof_points FROM users_settings INNER JOIN users ON users_settings.user_id = users.id WHERE hof_points > 0 ORDER BY hof_points DESC, users.id ASC LIMIT 10");
                 ResultSet set = statement.executeQuery();
 
-                while (set.next())
-                {
+                while (set.next()) {
                     HallOfFameWinner winner = new HallOfFameWinner(set);
                     winners.put(winner.getId(), winner);
                 }
@@ -49,25 +44,21 @@ public class HallOfFame
                 set.close();
                 statement.close();
                 statement.getConnection().close();
-            } catch (SQLException e)
-            {
+            } catch (SQLException e) {
                 Emulator.getLogging().logSQLException(e);
             }
         }
     }
 
-    public THashMap<Integer, HallOfFameWinner> getWinners()
-    {
+    public THashMap<Integer, HallOfFameWinner> getWinners() {
         return this.winners;
     }
 
-    public String getCompetitionName()
-    {
+    public String getCompetitionName() {
         return competitionName;
     }
 
-    void setCompetitionName(String name)
-    {
+    void setCompetitionName(String name) {
         competitionName = name;
     }
 }

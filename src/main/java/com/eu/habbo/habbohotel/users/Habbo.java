@@ -18,8 +18,8 @@ import com.eu.habbo.plugin.events.users.UserDisconnectEvent;
 
 import java.sql.ResultSet;
 
-public class Habbo implements Runnable
-{
+public class Habbo implements Runnable {
+
     private GameClient client;
 
     private final HabboInfo habboInfo;
@@ -34,8 +34,7 @@ public class Habbo implements Runnable
 
     public boolean firstVisit = false;
 
-    public Habbo(ResultSet set)
-    {
+    public Habbo(ResultSet set) {
         this.client = null;
         this.habboInfo = new HabboInfo(set);
         this.habboStats = HabboStats.load(this);
@@ -51,78 +50,64 @@ public class Habbo implements Runnable
         this.update = false;
     }
 
-    public boolean isOnline()
-    {
+    public boolean isOnline() {
         return this.habboInfo.isOnline();
     }
 
-    void isOnline(boolean value)
-    {
+    void isOnline(boolean value) {
         this.habboInfo.setOnline(value);
         this.update();
     }
 
-    void update()
-    {
+    void update() {
         this.update = true;
         Emulator.getThreading().run(this);
     }
 
-    void needsUpdate(boolean value)
-    {
+    void needsUpdate(boolean value) {
         this.update = value;
     }
 
-    boolean needsUpdate()
-    {
+    boolean needsUpdate() {
         return this.update;
     }
 
-    public Messenger getMessenger()
-    {
+    public Messenger getMessenger() {
         return this.messenger;
     }
 
-    public HabboInfo getHabboInfo()
-    {
+    public HabboInfo getHabboInfo() {
         return this.habboInfo;
     }
 
-    public HabboStats getHabboStats()
-    {
+    public HabboStats getHabboStats() {
         return this.habboStats;
     }
 
-    public HabboInventory getHabboInventory()
-    {
+    public HabboInventory getHabboInventory() {
         return this.habboInventory;
     }
 
-    public RoomUnit getRoomUnit()
-    {
+    public RoomUnit getRoomUnit() {
         return this.roomUnit;
     }
 
-    public void setRoomUnit(RoomUnit roomUnit)
-    {
+    public void setRoomUnit(RoomUnit roomUnit) {
         this.roomUnit = roomUnit;
     }
 
-    public GameClient getClient()
-    {
+    public GameClient getClient() {
         return this.client;
     }
 
-    public void setClient(GameClient client)
-    {
+    public void setClient(GameClient client) {
         this.client = client;
     }
 
     /*
-        Called upon succesfull SSO Login. NOT socket connection.
+     Called upon succesfull SSO Login. NOT socket connection.
      */
-    public void connect()
-    {
+    public void connect() {
         this.isOnline(true);
 
         //This cause login bug?
@@ -133,24 +118,20 @@ public class Habbo implements Runnable
         Emulator.getLogging().logUserLine(this.habboInfo.getUsername() + " logged in. IP: " + this.client.getChannel().remoteAddress().toString());
     }
 
-
-    public synchronized void disconnect()
-    {
+    public synchronized void disconnect() {
         Emulator.getPluginManager().fireEvent(new UserDisconnectEvent(this));
 
-        if(this.disconnected || this.disconnecting)
+        if (this.disconnected || this.disconnecting) {
             return;
+        }
 
         this.disconnecting = true;
 
-        try
-        {
-            if (this.getHabboInfo().getCurrentRoom() != null)
-            {
+        try {
+            if (this.getHabboInfo().getCurrentRoom() != null) {
                 Emulator.getGameEnvironment().getRoomManager().leaveRoom(this, this.getHabboInfo().getCurrentRoom());
             }
-            if (this.getHabboInfo().getRoomQueueId() > 0)
-            {
+            if (this.getHabboInfo().getRoomQueueId() > 0) {
                 Emulator.getGameEnvironment().getRoomManager().getRoom(this.getHabboInfo().getRoomQueueId()).removeFromQueue(this);
             }
 
@@ -166,74 +147,59 @@ public class Habbo implements Runnable
             AchievementManager.saveAchievements(this);
 
             this.habboStats.dispose();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Emulator.getLogging().logErrorLine(e);
             return;
-        }
-        finally
-        {
+        } finally {
             Emulator.getGameEnvironment().getRoomManager().unloadRoomsForHabbo(this);
             Emulator.getGameEnvironment().getHabboManager().removeHabbo(this);
         }
         Emulator.getLogging().logUserLine(this.habboInfo.getUsername() + " disconnected.");
     }
+
     @Override
-    public void run()
-    {
-        if(this.needsUpdate())
-        {
+    public void run() {
+        if (this.needsUpdate()) {
             this.habboInfo.run();
             this.needsUpdate(false);
         }
     }
 
-    public boolean hasPermission(String key)
-    {
+    public boolean hasPermission(String key) {
         return Emulator.getGameEnvironment().getPermissionsManager().hasPermission(this, key);
     }
 
-    public void giveCredits(int credits)
-    {
+    public void giveCredits(int credits) {
         this.getHabboInfo().addCredits(credits);
         this.client.sendResponse(new UserCreditsComposer(this.client.getHabbo()));
     }
 
-    public void givePixels(int pixels)
-    {
+    public void givePixels(int pixels) {
         this.getHabboInfo().addPixels(pixels);
         this.client.sendResponse(new UserCurrencyComposer(this.client.getHabbo()));
     }
 
-    public void givePoints(int points)
-    {
+    public void givePoints(int points) {
         this.givePoints(Emulator.getConfig().getInt("seasonal.primary.type"), points);
     }
 
-    public void givePoints(int type, int points)
-    {
+    public void givePoints(int type, int points) {
         this.getHabboInfo().addCurrencyAmount(type, points);
         this.client.sendResponse(new UserPointsComposer(this.client.getHabbo().getHabboInfo().getCurrencyAmount(type), points, type));
     }
 
-    public void whisper(String message)
-    {
+    public void whisper(String message) {
         this.whisper(message, this.habboStats.chatColor);
     }
 
-    public void whisper(String message, RoomChatMessageBubbles bubble)
-    {
-        if (this.getRoomUnit().isInRoom())
-        {
+    public void whisper(String message, RoomChatMessageBubbles bubble) {
+        if (this.getRoomUnit().isInRoom()) {
             this.client.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(message, client.getHabbo().getRoomUnit(), bubble)));
         }
     }
 
-    public void talk(String message, RoomChatMessageBubbles bubble)
-    {
-        if (this.getRoomUnit().isInRoom())
-        {
+    public void talk(String message, RoomChatMessageBubbles bubble) {
+        if (this.getRoomUnit().isInRoom()) {
             this.getHabboInfo().getCurrentRoom().sendComposer(new RoomUserTalkComposer(new RoomChatMessage(message, client.getHabbo().getRoomUnit(), bubble)).compose());
         }
     }

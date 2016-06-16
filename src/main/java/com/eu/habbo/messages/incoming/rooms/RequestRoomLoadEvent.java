@@ -11,8 +11,7 @@ public class RequestRoomLoadEvent extends MessageHandler {
         int roomId = this.packet.readInt();
         String password = this.packet.readString();
 
-        if(this.client.getHabbo().getHabboInfo().getCurrentRoom() != null)
-        {
+        if (this.client.getHabbo().getHabboInfo().getCurrentRoom() != null) {
             Emulator.getGameEnvironment().getRoomManager().logExit(this.client.getHabbo());
             this.client.getHabbo().getHabboInfo().getCurrentRoom().sendComposer(new RoomUserRemoveComposer(this.client.getHabbo().getRoomUnit()).compose());
             this.client.getHabbo().getHabboInfo().getCurrentRoom().removeHabbo(this.client.getHabbo());

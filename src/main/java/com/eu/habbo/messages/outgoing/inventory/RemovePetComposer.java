@@ -5,23 +5,20 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class RemovePetComposer extends MessageComposer
-{
+public class RemovePetComposer extends MessageComposer {
+
     private final int petId;
 
-    public RemovePetComposer(int petId)
-    {
+    public RemovePetComposer(int petId) {
         this.petId = petId;
     }
 
-    public RemovePetComposer(AbstractPet pet)
-    {
+    public RemovePetComposer(AbstractPet pet) {
         this.petId = pet.getId();
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.RemovePetComposer);
         this.response.appendInt32(this.petId);
         return this.response;

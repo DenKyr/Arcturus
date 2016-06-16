@@ -12,54 +12,43 @@ import com.eu.habbo.messages.outgoing.rooms.users.RoomUserWhisperComposer;
 
 import java.util.Map;
 
-public class MassGiftCommand extends Command
-{
-    public MassGiftCommand()
-    {
+public class MassGiftCommand extends Command {
+
+    public MassGiftCommand() {
         super("cmd_massgift", Emulator.getTexts().getValue("commands.keys.cmd_massgift").split(";"));
     }
 
     @Override
-    public boolean handle(final GameClient gameClient, String[] params) throws Exception
-    {
-        if(params.length >= 2)
-        {
-            try
-            {
+    public boolean handle(final GameClient gameClient, String[] params) throws Exception {
+        if (params.length >= 2) {
+            try {
                 int itemId = Integer.valueOf(params[1]);
 
-                if(itemId < 0)
-                {
+                if (itemId < 0) {
                     gameClient.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.error.cmd_gift.not_a_number"), gameClient.getHabbo(), gameClient.getHabbo(), RoomChatMessageBubbles.ALERT)));
                     return true;
                 }
 
                 final Item baseItem = Emulator.getGameEnvironment().getItemManager().getItem(itemId);
 
-                if(baseItem == null)
-                {
+                if (baseItem == null) {
                     gameClient.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.error.cmd_gift.not_found").replace("%itemid%", itemId + ""), gameClient.getHabbo(), gameClient.getHabbo(), RoomChatMessageBubbles.ALERT)));
                     return true;
                 }
 
                 String message = "";
 
-                if(params.length > 2)
-                {
-                    for (int i = 2; i < params.length; i++)
-                    {
+                if (params.length > 2) {
+                    for (int i = 2; i < params.length; i++) {
                         message += params[i] + " ";
                     }
                 }
 
                 final String finalMessage = message;
-                Emulator.getThreading().run(new Runnable()
-                {
+                Emulator.getThreading().run(new Runnable() {
                     @Override
-                    public void run()
-                    {
-                        for(Map.Entry<Integer, Habbo> set : Emulator.getGameEnvironment().getHabboManager().getOnlineHabbos().entrySet())
-                        {
+                    public void run() {
+                        for (Map.Entry<Integer, Habbo> set : Emulator.getGameEnvironment().getHabboManager().getOnlineHabbos().entrySet()) {
                             Habbo habbo = set.getValue();
 
                             HabboItem item = Emulator.getGameEnvironment().getItemManager().createItem(0, baseItem, 0, 0, "");
@@ -67,7 +56,7 @@ public class MassGiftCommand extends Command
                             Item giftItem = Emulator.getGameEnvironment().getItemManager().getItem((Integer) Emulator.getGameEnvironment().getCatalogManager().giftFurnis.values().toArray()[Emulator.getRandom().nextInt(Emulator.getGameEnvironment().getCatalogManager().giftFurnis.size())]);
 
                             String extraData = "1\t" + item.getId();
-                            extraData += "\t0\t0\t0\t"+ finalMessage +"\t0\t0";
+                            extraData += "\t0\t0\t0\t" + finalMessage + "\t0\t0";
 
                             Emulator.getGameEnvironment().getItemManager().createGift(habbo.getHabboInfo().getUsername(), giftItem, extraData, 0, 0);
 
@@ -76,11 +65,8 @@ public class MassGiftCommand extends Command
                     }
                 });
 
-
                 return true;
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
                 gameClient.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.error.cmd_gift.not_a_number"), gameClient.getHabbo(), gameClient.getHabbo(), RoomChatMessageBubbles.ALERT)));
                 return true;

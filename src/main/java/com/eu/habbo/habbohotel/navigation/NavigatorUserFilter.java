@@ -8,18 +8,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class NavigatorUserFilter extends NavigatorFilter
-{
+public class NavigatorUserFilter extends NavigatorFilter {
+
     public final static String name = "myworld_view";
 
-    public NavigatorUserFilter()
-    {
+    public NavigatorUserFilter() {
         super(name);
     }
 
     @Override
-    public List<SearchResultList> getResult(Habbo habbo)
-    {
+    public List<SearchResultList> getResult(Habbo habbo) {
         List<SearchResultList> resultLists = new ArrayList<SearchResultList>();
         List<Room> rooms = Emulator.getGameEnvironment().getRoomManager().getRoomsForHabbo(habbo);
         Collections.sort(rooms);

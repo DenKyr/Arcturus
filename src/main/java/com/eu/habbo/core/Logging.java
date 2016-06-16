@@ -8,8 +8,8 @@ import java.io.*;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class Logging
-{
+public class Logging {
+
     private static File packets;
     private static File packetsUndefined;
     private static File errorsPackets;
@@ -40,8 +40,7 @@ public class Logging
 
     private final THashSet<ErrorLog> errorLogs = new THashSet<ErrorLog>();
 
-    public Logging()
-    {
+    public Logging() {
         packets = new File("logging//packets//packets.txt");
         packetsUndefined = new File("logging//packets//undefined.txt");
         errorsPackets = new File("logging//errors/packets.txt");
@@ -50,117 +49,103 @@ public class Logging
 
         debugFile = new File("logging//debug.txt");
 
-        try
-        {
-            if (!packets.exists())
+        try {
+            if (!packets.exists()) {
                 packets.createNewFile();
+            }
 
-            if (!packetsUndefined.exists())
+            if (!packetsUndefined.exists()) {
                 packetsUndefined.createNewFile();
+            }
 
-            if (!errorsPackets.exists())
+            if (!errorsPackets.exists()) {
                 errorsPackets.createNewFile();
+            }
 
-            if (!errorsSQL.exists())
+            if (!errorsSQL.exists()) {
                 errorsSQL.createNewFile();
+            }
 
-            if (!errorsRuntime.exists())
+            if (!errorsRuntime.exists()) {
                 errorsRuntime.createNewFile();
+            }
 
-            if (!debugFile.exists())
+            if (!debugFile.exists()) {
                 debugFile.createNewFile();
-        }
-        catch(Exception e)
-        {
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        try
-        {
+        try {
             packetsWriter = new PrintWriter(new FileWriter(packets));
             packetsUndefinedWriter = new PrintWriter(new FileWriter(packetsUndefined));
             errorsPacketsWriter = new PrintWriter(new FileWriter(errorsPackets));
             errorsSQLWriter = new PrintWriter(new FileWriter(errorsSQL));
             errorsRuntimeWriter = new PrintWriter(new FileWriter(errorsRuntime));
             debugFileWriter = new PrintWriter(new FileWriter(debugFile));
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    public void logStart(Object line)
-    {
+
+    public void logStart(Object line) {
         System.out.println("[" + Logging.ANSI_BRIGHT + Logging.ANSI_GREEN + "LOADING" + Logging.ANSI_RESET + "] " + line.toString());
     }
-    
-    public void logShutdownLine(Object line)
-    {
-        if(Emulator.getConfig().getBoolean("logging.debug"))
-        {
+
+    public void logShutdownLine(Object line) {
+        if (Emulator.getConfig().getBoolean("logging.debug")) {
             write(debugFileWriter, line.toString());
         }
         System.out.println("[" + Logging.ANSI_BRIGHT + Logging.ANSI_GREEN + "SHUTDOWN" + Logging.ANSI_RESET + "] " + line.toString());
     }
-    
-    public void logUserLine(Object line)
-    {
-        if(Emulator.getConfig().getBoolean("logging.debug"))
-        {
+
+    public void logUserLine(Object line) {
+        if (Emulator.getConfig().getBoolean("logging.debug")) {
             write(debugFileWriter, line.toString());
         }
         System.out.println("[USER] " + line.toString());
     }
-    
-    public synchronized void logDebugLine(Object line)
-    {
+
+    public synchronized void logDebugLine(Object line) {
         if (Emulator.getConfig().getBoolean("debug.mode")) {
             System.out.println("[DEBUG] " + line.toString());
         }
 
-        if(Emulator.getConfig().getBoolean("logging.debug"))
-        {
+        if (Emulator.getConfig().getBoolean("logging.debug")) {
             write(debugFileWriter, line.toString());
         }
     }
-    
-    public synchronized void logPacketLine(Object line)
-    {
+
+    public synchronized void logPacketLine(Object line) {
         if (Emulator.getConfig().getBoolean("debug.show.packets")) {
             System.out.println("[" + Logging.ANSI_BLUE + "PACKET" + Logging.ANSI_RESET + "]" + line.toString());
         }
 
-        if(Emulator.getConfig().getBoolean("logging.packets"))
-        {
+        if (Emulator.getConfig().getBoolean("logging.packets")) {
             write(packetsWriter, line.toString());
         }
     }
-    
-    public synchronized void logUndefinedPacketLine(Object line)
-    {
+
+    public synchronized void logUndefinedPacketLine(Object line) {
         if (Emulator.getConfig().getBoolean("debug.show.packets.undefined")) {
             System.out.println("[PACKET] [UNDEFINED] " + line.toString());
         }
 
-        if (Emulator.getConfig().getBoolean("logging.packets.undefined"))
-        {
+        if (Emulator.getConfig().getBoolean("logging.packets.undefined")) {
             write(packetsUndefinedWriter, line.toString());
         }
     }
-    
-    public synchronized void logErrorLine(Object line)
-    {
+
+    public synchronized void logErrorLine(Object line) {
         System.err.println("[ERROR] " + line.toString());
 
-        if (Emulator.isReady && Emulator.getConfig().getBoolean("logging.errors.runtime"))
-        {
+        if (Emulator.isReady && Emulator.getConfig().getBoolean("logging.errors.runtime")) {
             write(errorsRuntimeWriter, line);
 
-            if(line instanceof Throwable)
-            {
+            if (line instanceof Throwable) {
                 ((Throwable) line).printStackTrace();
-                if (line instanceof SQLException)
-                {
+                if (line instanceof SQLException) {
                     this.logSQLException((SQLException) line);
                     return;
                 }
@@ -175,10 +160,8 @@ public class Logging
         }
     }
 
-    public void logSQLException(SQLException e)
-    {
-        if(Emulator.getConfig().getBoolean("logging.errors.sql"))
-        {
+    public void logSQLException(SQLException e) {
+        if (Emulator.getConfig().getBoolean("logging.errors.sql")) {
             e.printStackTrace();
             write(errorsSQLWriter, e);
 
@@ -186,63 +169,48 @@ public class Logging
         }
     }
 
-    public void logPacketError(Object e)
-    {
-        if(Emulator.getConfig().getBoolean("logging.errors.packets"))
-        {
-            if(e instanceof Exception)
+    public void logPacketError(Object e) {
+        if (Emulator.getConfig().getBoolean("logging.errors.packets")) {
+            if (e instanceof Exception) {
                 ((Exception) e).printStackTrace();
+            }
 
             write(errorsPacketsWriter, e);
         }
     }
-    
-    public void handleException(Exception e)
-    {
+
+    public void handleException(Exception e) {
         e.printStackTrace();
     }
 
-    private synchronized void write(PrintWriter printWriter, Object message)
-    {
-        if(printWriter != null && message != null)
-        {
-            if(message instanceof Exception)
-            {
+    private synchronized void write(PrintWriter printWriter, Object message) {
+        if (printWriter != null && message != null) {
+            if (message instanceof Exception) {
                 ((Exception) message).printStackTrace(printWriter);
-            }
-            else
-            {
+            } else {
                 printWriter.write(message.toString() + "\r\n");
             }
         }
     }
 
-    public void saveLogs()
-    {
-        synchronized (this.errorLogs)
-        {
+    public void saveLogs() {
+        synchronized (this.errorLogs) {
             PreparedStatement statement = Emulator.getDatabase().prepare(ErrorLog.insertQuery);
 
-            for(ErrorLog log : this.errorLogs)
-            {
-                try
-                {
+            for (ErrorLog log : this.errorLogs) {
+                try {
                     log.log(statement);
-                } catch (SQLException e)
-                {
+                } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
 
             this.errorLogs.clear();
 
-            try
-            {
+            try {
                 statement.close();
                 statement.getConnection().close();
-            }
-            catch (SQLException e)
-            {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }

@@ -14,8 +14,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 
-public class HabboInfo implements Runnable
-{
+public class HabboInfo implements Runnable {
+
     private String username;
     private String realName;
     private String motto;
@@ -47,10 +47,8 @@ public class HabboInfo implements Runnable
     private TIntIntHashMap currencies;
     private GamePlayer gamePlayer;
 
-    public HabboInfo(ResultSet set)
-    {
-        try
-        {
+    public HabboInfo(ResultSet set) {
+        try {
             this.id = set.getInt("id");
             this.username = set.getString("username");
             this.realName = set.getString("real_name");
@@ -68,61 +66,47 @@ public class HabboInfo implements Runnable
             this.lastOnline = set.getInt("last_online");
             this.online = false;
             this.currentRoom = null;
-        }
-        catch(SQLException e)
-        {
+        } catch (SQLException e) {
             Emulator.getLogging().logSQLException(e);
         }
 
         this.loadCurrencies();
     }
 
-    private void loadCurrencies()
-    {
+    private void loadCurrencies() {
         this.currencies = new TIntIntHashMap();
 
-        try
-        {
+        try {
             PreparedStatement statement = Emulator.getDatabase().prepare("SELECT * FROM users_currency WHERE user_id = ?");
             statement.setInt(1, this.id);
             ResultSet set = statement.executeQuery();
 
-            while(set.next())
-            {
+            while (set.next()) {
                 this.currencies.put(set.getInt("type"), set.getInt("amount"));
             }
 
             set.close();
             statement.close();
             statement.getConnection().close();
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             Emulator.getLogging().logSQLException(e);
         }
     }
 
-    private void saveCurrencies()
-    {
-        try
-        {
+    private void saveCurrencies() {
+        try {
             final PreparedStatement statement = Emulator.getDatabase().prepare("INSERT INTO users_currency (user_id, type, amount) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE amount = ? ");
 
-            this.currencies.forEachEntry(new TIntIntProcedure()
-            {
+            this.currencies.forEachEntry(new TIntIntProcedure() {
                 @Override
-                public boolean execute(int a, int b)
-                {
-                    try
-                    {
+                public boolean execute(int a, int b) {
+                    try {
                         statement.setInt(1, getId());
                         statement.setInt(2, a);
                         statement.setInt(3, b);
                         statement.setInt(4, b);
                         statement.execute();
-                    }
-                    catch (SQLException e)
-                    {
+                    } catch (SQLException e) {
                         Emulator.getLogging().logSQLException(e);
                     }
 
@@ -132,60 +116,48 @@ public class HabboInfo implements Runnable
 
             statement.close();
             statement.getConnection().close();
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             Emulator.getLogging().logSQLException(e);
         }
     }
 
-    public int getCurrencyAmount(int type)
-    {
+    public int getCurrencyAmount(int type) {
         return this.currencies.get(type);
     }
 
-    public TIntIntHashMap getCurrencies()
-    {
+    public TIntIntHashMap getCurrencies() {
         return this.currencies;
     }
 
-    public void addCurrencyAmount(int type, int amount)
-    {
+    public void addCurrencyAmount(int type, int amount) {
         this.currencies.adjustOrPutValue(type, amount, amount);
     }
 
-    public void setCurrencyAmount(int type, int amount)
-    {
+    public void setCurrencyAmount(int type, int amount) {
         this.currencies.put(type, amount);
     }
 
-    public int getId()
-    {
+    public int getId() {
         return this.id;
     }
 
-    public String getUsername()
-    {
+    public String getUsername() {
         return this.username;
     }
 
-    public String getRealName()
-    {
+    public String getRealName() {
         return this.realName;
     }
 
-    public String getMotto()
-    {
+    public String getMotto() {
         return this.motto;
     }
 
-    public void setMotto(String motto)
-    {
+    public void setMotto(String motto) {
         this.motto = motto;
     }
 
-    public int getRank()
-    {
+    public int getRank() {
         return this.rank;
     }
 
@@ -193,15 +165,15 @@ public class HabboInfo implements Runnable
         this.rank = rank;
     }
 
-    public String getLook()
-    {
+    public String getLook() {
         return this.look;
     }
 
-    public void setLook(String look) { this.look = look; }
+    public void setLook(String look) {
+        this.look = look;
+    }
 
-    public HabboGender getGender()
-    {
+    public HabboGender getGender() {
         return this.gender;
     }
 
@@ -233,8 +205,7 @@ public class HabboInfo implements Runnable
         this.ipRegister = ipRegister;
     }
 
-    public int getAccountCreated()
-    {
+    public int getAccountCreated() {
         return this.accountCreated;
     }
 
@@ -242,169 +213,139 @@ public class HabboInfo implements Runnable
         this.accountCreated = accountCreated;
     }
 
-    public int getAchievementScore()
-    {
+    public int getAchievementScore() {
         return this.achievementScore;
     }
 
-    public void addAchievementScore(int achievementScore)
-    {
+    public void addAchievementScore(int achievementScore) {
         this.achievementScore += achievementScore;
     }
 
-    public boolean canBuy(CatalogItem item)
-    {
-        if(this.credits < item.getCredits())
+    public boolean canBuy(CatalogItem item) {
+        if (this.credits < item.getCredits()) {
             return false;
+        }
 
-        if(this.getCurrencies().get(item.getPointsType()) < item.getPoints())
+        if (this.getCurrencies().get(item.getPointsType()) < item.getPoints()) {
             return false;
+        }
 
         return true;
     }
 
-    public int getCredits()
-    {
+    public int getCredits() {
         return credits;
     }
 
-    public void setCredits(int credits)
-    {
+    public void setCredits(int credits) {
         this.credits = credits;
     }
 
-    public void addCredits(int credits)
-    {
+    public void addCredits(int credits) {
         this.credits += credits;
     }
 
-    public int getPixels()
-    {
+    public int getPixels() {
         return this.getCurrencyAmount(0);
     }
 
-    public void setPixels(int pixels)
-    {
+    public void setPixels(int pixels) {
         this.setCurrencyAmount(0, pixels);
     }
 
-    public void addPixels(int pixels)
-    {
+    public void addPixels(int pixels) {
         this.addCurrencyAmount(0, pixels);
     }
 
-    int getLastLogin()
-    {
+    int getLastLogin() {
         return this.lastLogin;
     }
 
-    public void setLastLogin(int lastLogin)
-    {
+    public void setLastLogin(int lastLogin) {
         this.lastLogin = lastLogin;
     }
 
-    public int getLastOnline()
-    {
+    public int getLastOnline() {
         return this.lastOnline;
     }
 
-    public void setLastOnline(int lastOnline)
-    {
+    public void setLastOnline(int lastOnline) {
         this.lastLogin = lastOnline;
     }
 
-    public int getHomeRoom()
-    {
+    public int getHomeRoom() {
         return this.homeRoom;
     }
 
-    public void setHomeRoom(int homeRoom)
-    {
+    public void setHomeRoom(int homeRoom) {
         this.homeRoom = homeRoom;
     }
 
-    public boolean isOnline()
-    {
+    public boolean isOnline() {
         return this.online;
     }
 
-    public void setOnline(boolean value)
-    {
+    public void setOnline(boolean value) {
         this.online = value;
     }
 
-    public int getLoadingRoom()
-    {
+    public int getLoadingRoom() {
         return this.loadingRoom;
     }
 
-    public void setLoadingRoom(int loadingRoom)
-    {
+    public void setLoadingRoom(int loadingRoom) {
         this.loadingRoom = loadingRoom;
     }
 
-    public Room getCurrentRoom()
-    {
+    public Room getCurrentRoom() {
         return this.currentRoom;
     }
 
-    public void setCurrentRoom(Room room)
-    {
+    public void setCurrentRoom(Room room) {
         this.currentRoom = room;
     }
 
-    public int getRoomQueueId()
-    {
+    public int getRoomQueueId() {
         return this.roomQueueId;
     }
 
-    public void setRoomQueueId(int roomQueueId)
-    {
+    public void setRoomQueueId(int roomQueueId) {
         this.roomQueueId = roomQueueId;
     }
 
-    public HorsePet getRiding()
-    {
+    public HorsePet getRiding() {
         return riding;
     }
 
-    public void setRiding(HorsePet riding)
-    {
+    public void setRiding(HorsePet riding) {
         this.riding = riding;
     }
 
-    public Class<? extends Game> getCurrentGame()
-    {
+    public Class<? extends Game> getCurrentGame() {
         return this.currentGame;
     }
 
-    public void setCurrentGame(Class<? extends Game> currentGame)
-    {
+    public void setCurrentGame(Class<? extends Game> currentGame) {
         this.currentGame = currentGame;
     }
 
-    public boolean isInGame()
-    {
+    public boolean isInGame() {
         return this.currentGame != null;
     }
 
-    public synchronized GamePlayer getGamePlayer()
-    {
+    public synchronized GamePlayer getGamePlayer() {
         return this.gamePlayer;
     }
 
-    public synchronized void setGamePlayer(GamePlayer gamePlayer)
-    {
+    public synchronized void setGamePlayer(GamePlayer gamePlayer) {
         this.gamePlayer = gamePlayer;
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
         this.saveCurrencies();
 
-        try
-        {
+        try {
             PreparedStatement statement = Emulator.getDatabase().prepare("UPDATE users SET motto = ?, online = ?, look = ?, gender = ?, credits = ?, last_login = ?, last_online = ?, home_room = ? WHERE id = ?");
             statement.setString(1, this.motto);
             statement.setString(2, this.online ? "1" : "0");
@@ -418,15 +359,12 @@ public class HabboInfo implements Runnable
             statement.execute();
             statement.close();
             statement.getConnection().close();
-        }
-        catch(SQLException e)
-        {
+        } catch (SQLException e) {
             Emulator.getLogging().logSQLException(e);
         }
     }
 
-    public int getBonusRarePoints()
-    {
+    public int getBonusRarePoints() {
         return this.getCurrencyAmount(Emulator.getConfig().getInt("hotelview.promotional.points.type"));
     }
 }

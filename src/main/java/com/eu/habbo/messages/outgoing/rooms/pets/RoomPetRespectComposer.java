@@ -5,18 +5,16 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class RoomPetRespectComposer extends MessageComposer
-{
+public class RoomPetRespectComposer extends MessageComposer {
+
     private final Pet pet;
 
-    public RoomPetRespectComposer(Pet pet)
-    {
+    public RoomPetRespectComposer(Pet pet) {
         this.pet = pet;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.RoomPetRespectComposer);
         this.response.appendInt32(1);
         this.response.appendInt32(100);

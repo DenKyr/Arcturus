@@ -9,20 +9,18 @@ import gnu.trove.set.hash.THashSet;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-public class ModToolUserRoomVisitsComposer extends MessageComposer
-{
+public class ModToolUserRoomVisitsComposer extends MessageComposer {
+
     private final Habbo habbo;
     private final THashSet<ModToolRoomVisit> roomVisits;
 
-    public ModToolUserRoomVisitsComposer(Habbo habbo, THashSet<ModToolRoomVisit> roomVisits)
-    {
+    public ModToolUserRoomVisitsComposer(Habbo habbo, THashSet<ModToolRoomVisit> roomVisits) {
         this.habbo = habbo;
         this.roomVisits = roomVisits;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.ModToolUserRoomVisitsComposer);
 
         this.response.appendInt32(this.habbo.getHabboInfo().getId());
@@ -30,8 +28,7 @@ public class ModToolUserRoomVisitsComposer extends MessageComposer
         this.response.appendInt32(this.roomVisits.size());
 
         Calendar cal = Calendar.getInstance(TimeZone.getDefault());
-        for(ModToolRoomVisit visit : this.roomVisits)
-        {
+        for (ModToolRoomVisit visit : this.roomVisits) {
             cal.setTimeInMillis(visit.timestamp * 1000);
             this.response.appendInt32(visit.roomId);
             this.response.appendString(visit.roomName);

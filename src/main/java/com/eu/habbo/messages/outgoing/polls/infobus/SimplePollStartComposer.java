@@ -4,19 +4,17 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class SimplePollStartComposer extends MessageComposer
-{
+public class SimplePollStartComposer extends MessageComposer {
+
     public final String question;
 
-    public SimplePollStartComposer(String question)
-    {
+    public SimplePollStartComposer(String question) {
         this.question = question;
     }
     //:test 3047 s:a i:10 i:20 i:10000 i:1 i:1 i:3 s:abcdefghijklmnopqrstuvwxyz12345678901234? i:1 s:a s:b
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.SimplePollStartComposer);
         this.response.appendString("");
         this.response.appendInt32(0);

@@ -7,23 +7,20 @@ import com.eu.habbo.messages.outgoing.Outgoing;
 
 import java.util.List;
 
-public class JukeBoxTrackDataComposer extends MessageComposer
-{
+public class JukeBoxTrackDataComposer extends MessageComposer {
+
     private List<SoundTrack> tracks;
 
-    public JukeBoxTrackDataComposer(List<SoundTrack> tracks)
-    {
+    public JukeBoxTrackDataComposer(List<SoundTrack> tracks) {
         this.tracks = tracks;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.JukeBoxTrackDataComposer);
         this.response.appendInt32(this.tracks.size());
 
-        for(SoundTrack track : this.tracks)
-        {
+        for (SoundTrack track : this.tracks) {
             this.response.appendInt32(track.getId());
             this.response.appendString(track.getCode());
             this.response.appendString(track.getName());

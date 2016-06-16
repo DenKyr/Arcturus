@@ -12,15 +12,14 @@ import com.eu.habbo.util.pathfinding.PathFinder;
 import com.eu.habbo.util.pathfinding.Tile;
 import gnu.trove.set.hash.THashSet;
 
-public class RoomTrashing implements Runnable
-{
+public class RoomTrashing implements Runnable {
+
     public static RoomTrashing INSTANCE;
 
     private Habbo habbo;
     private Room room;
 
-    public RoomTrashing(Habbo habbo, Room room)
-    {
+    public RoomTrashing(Habbo habbo, Room room) {
         this.habbo = habbo;
         this.room = room;
 
@@ -28,29 +27,27 @@ public class RoomTrashing implements Runnable
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
 
     }
 
     @EventHandler
-    public static void onUserWalkEvent(UserTakeStepEvent event)
-    {
-        if(INSTANCE == null)
+    public static void onUserWalkEvent(UserTakeStepEvent event) {
+        if (INSTANCE == null) {
             return;
+        }
 
-        if(INSTANCE.habbo == null)
+        if (INSTANCE.habbo == null) {
             return;
+        }
 
-        if(!INSTANCE.habbo.isOnline())
+        if (!INSTANCE.habbo.isOnline()) {
             INSTANCE.habbo = null;
+        }
 
-        if(INSTANCE.habbo == event.habbo)
-        {
-            if(event.habbo.getHabboInfo().getCurrentRoom() != null)
-            {
-                if(event.habbo.getHabboInfo().getCurrentRoom().equals(INSTANCE.room))
-                {
+        if (INSTANCE.habbo == event.habbo) {
+            if (event.habbo.getHabboInfo().getCurrentRoom() != null) {
+                if (event.habbo.getHabboInfo().getCurrentRoom().equals(INSTANCE.room)) {
                     THashSet<ServerMessage> messages = new THashSet<ServerMessage>();
 
                     THashSet<HabboItem> items = INSTANCE.room.getItemsAt(event.toLocation.getX(), event.toLocation.getY());
@@ -58,41 +55,31 @@ public class RoomTrashing implements Runnable
                     int offset = Emulator.getRandom().nextInt(4) + 2;
 
                     Tile t = null;
-                    while(offset > 0)
-                    {
+                    while (offset > 0) {
                         t = PathFinder.getSquareInFront(event.toLocation.getX(), event.toLocation.getY(), event.habbo.getRoomUnit().getBodyRotation().getValue(), offset);
 
-                        if(!INSTANCE.room.getLayout().tileWalkable(t.X, t.Y))
-                        {
+                        if (!INSTANCE.room.getLayout().tileWalkable(t.X, t.Y)) {
                             offset--;
-                        }
-                        else
-                        {
+                        } else {
                             break;
                         }
                     }
 
-                    for(HabboItem item : items)
-                    {
+                    for (HabboItem item : items) {
                         t.Z = (INSTANCE.room.getTopHeightAt(t.X, t.Y));
 
                         messages.add(new FloorItemOnRollerComposer(item, null, t, INSTANCE.room).compose());
                     }
 
-
                     offset = Emulator.getRandom().nextInt(4) + 2;
 
                     t = null;
-                    while(offset > 0)
-                    {
+                    while (offset > 0) {
                         t = PathFinder.getSquareInFront(event.toLocation.getX(), event.toLocation.getY(), event.habbo.getRoomUnit().getBodyRotation().getValue() + 7, offset);
 
-                        if(!INSTANCE.room.getLayout().tileWalkable(t.X, t.Y))
-                        {
+                        if (!INSTANCE.room.getLayout().tileWalkable(t.X, t.Y)) {
                             offset--;
-                        }
-                        else
-                        {
+                        } else {
                             break;
                         }
                     }
@@ -100,8 +87,7 @@ public class RoomTrashing implements Runnable
                     Tile s = PathFinder.getSquareInFront(INSTANCE.habbo.getRoomUnit().getX(), INSTANCE.habbo.getRoomUnit().getY(), INSTANCE.habbo.getRoomUnit().getBodyRotation().getValue() + 7);
                     items = INSTANCE.room.getItemsAt(s.X, s.Y);
 
-                    for(HabboItem item : items)
-                    {
+                    for (HabboItem item : items) {
                         t.Z = (INSTANCE.room.getTopHeightAt(t.X, t.Y));
 
                         messages.add(new FloorItemOnRollerComposer(item, null, t, INSTANCE.room).compose());
@@ -110,16 +96,12 @@ public class RoomTrashing implements Runnable
                     offset = Emulator.getRandom().nextInt(4) + 2;
 
                     t = null;
-                    while(offset > 0)
-                    {
+                    while (offset > 0) {
                         t = PathFinder.getSquareInFront(event.toLocation.getX(), event.toLocation.getY(), event.habbo.getRoomUnit().getBodyRotation().getValue() + 1, offset);
 
-                        if(!INSTANCE.room.getLayout().tileWalkable(t.X, t.Y))
-                        {
+                        if (!INSTANCE.room.getLayout().tileWalkable(t.X, t.Y)) {
                             offset--;
-                        }
-                        else
-                        {
+                        } else {
                             break;
                         }
                     }
@@ -127,22 +109,16 @@ public class RoomTrashing implements Runnable
                     s = PathFinder.getSquareInFront(INSTANCE.habbo.getRoomUnit().getX(), INSTANCE.habbo.getRoomUnit().getY(), INSTANCE.habbo.getRoomUnit().getBodyRotation().getValue() + 1);
                     items = INSTANCE.room.getItemsAt(s.X, s.Y);
 
-                    for(HabboItem item : items)
-                    {
+                    for (HabboItem item : items) {
                         t.Z = (INSTANCE.room.getTopHeightAt(t.X, t.Y));
 
                         messages.add(new FloorItemOnRollerComposer(item, null, t, INSTANCE.room).compose());
                     }
 
-
-
-                    for(ServerMessage message : messages)
-                    {
+                    for (ServerMessage message : messages) {
                         INSTANCE.room.sendComposer(message);
                     }
-                }
-                else
-                {
+                } else {
                     INSTANCE.habbo = null;
                     INSTANCE.room = null;
                 }
@@ -150,23 +126,19 @@ public class RoomTrashing implements Runnable
         }
     }
 
-    public Habbo getHabbo()
-    {
+    public Habbo getHabbo() {
         return this.habbo;
     }
 
-    public void setHabbo(Habbo habbo)
-    {
+    public void setHabbo(Habbo habbo) {
         this.habbo = habbo;
     }
 
-    public Room getRoom()
-    {
+    public Room getRoom() {
         return this.room;
     }
 
-    public void setRoom(Room room)
-    {
+    public void setRoom(Room room) {
         this.room = room;
     }
 }

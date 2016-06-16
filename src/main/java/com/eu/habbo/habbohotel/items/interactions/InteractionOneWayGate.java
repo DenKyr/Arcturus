@@ -17,41 +17,34 @@ import com.eu.habbo.util.pathfinding.Tile;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class InteractionOneWayGate extends HabboItem
-{
-    public InteractionOneWayGate(ResultSet set, Item baseItem) throws SQLException
-    {
+public class InteractionOneWayGate extends HabboItem {
+
+    public InteractionOneWayGate(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
 
-    public InteractionOneWayGate(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public InteractionOneWayGate(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
 
     @Override
-    public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects)
-    {
+    public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects) {
         return isWalkable() && room.getHabbosAt(this.getX(), this.getY()).isEmpty();
     }
 
     @Override
-    public boolean isWalkable()
-    {
+    public boolean isWalkable() {
         return this.getExtradata().equals("0");
     }
 
     @Override
-    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception
-    {
+    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception {
 
     }
 
     @Override
-    public void serializeExtradata(ServerMessage serverMessage)
-    {
-        if(this.getExtradata().length() == 0)
-        {
+    public void serializeExtradata(ServerMessage serverMessage) {
+        if (this.getExtradata().length() == 0) {
             this.setExtradata("0");
             this.needsUpdate(true);
         }
@@ -63,16 +56,13 @@ public class InteractionOneWayGate extends HabboItem
     }
 
     @Override
-    public void onClick(GameClient client, Room room, Object[] objects) throws Exception
-    {
+    public void onClick(GameClient client, Room room, Object[] objects) throws Exception {
         super.onClick(client, room, objects);
 
         Tile tile = PathFinder.getSquareInFront(this.getX(), this.getY(), this.getRotation());
 
-        if(tile.equals(new Tile(client.getHabbo().getRoomUnit().getX(), client.getHabbo().getRoomUnit().getY(), 0)))
-        {
-            if(room.getHabbosAt(this.getX(), this.getY()).isEmpty())
-            {
+        if (tile.equals(new Tile(client.getHabbo().getRoomUnit().getX(), client.getHabbo().getRoomUnit().getY(), 0))) {
+            if (room.getHabbosAt(this.getX(), this.getY()).isEmpty()) {
                 client.getHabbo().getRoomUnit().isTeleporting = true;
 
                 client.getHabbo().getRoomUnit().setGoalLocation(this.getX(), this.getY());

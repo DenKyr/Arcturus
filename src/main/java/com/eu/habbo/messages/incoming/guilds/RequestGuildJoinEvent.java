@@ -10,23 +10,23 @@ import com.eu.habbo.messages.outgoing.guilds.GuildInfoComposer;
 import com.eu.habbo.messages.outgoing.guilds.GuildJoinErrorComposer;
 import com.eu.habbo.messages.outgoing.rooms.RoomRightsComposer;
 
-public class RequestGuildJoinEvent extends MessageHandler
-{
+public class RequestGuildJoinEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         int guildId = this.packet.readInt();
 
-        if(this.client.getHabbo().getHabboStats().hasGuild(guildId))
+        if (this.client.getHabbo().getHabboStats().hasGuild(guildId)) {
             return;
+        }
 
         Guild guild = Emulator.getGameEnvironment().getGuildManager().getGuild(guildId);
 
-        if(guild == null)
+        if (guild == null) {
             return;
+        }
 
-        if(guild.getState() == GuildState.CLOSED)
-        {
+        if (guild.getState() == GuildState.CLOSED) {
             this.client.sendResponse(new GuildJoinErrorComposer(GuildJoinErrorComposer.GROUP_CLOSED));
             return;
         }
@@ -36,8 +36,9 @@ public class RequestGuildJoinEvent extends MessageHandler
 
         Room room = this.client.getHabbo().getHabboInfo().getCurrentRoom();
 
-        if(room == null || room.getGuildId() != guildId)
+        if (room == null || room.getGuildId() != guildId) {
             return;
+        }
 
         room.refreshRightsForHabbo(this.client.getHabbo());
     }

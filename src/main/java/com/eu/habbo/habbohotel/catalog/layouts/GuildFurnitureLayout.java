@@ -6,16 +6,14 @@ import com.eu.habbo.messages.ServerMessage;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class GuildFurnitureLayout extends CatalogPage
-{
-    public GuildFurnitureLayout(ResultSet set) throws SQLException
-    {
+public class GuildFurnitureLayout extends CatalogPage {
+
+    public GuildFurnitureLayout(ResultSet set) throws SQLException {
         super(set);
     }
 
     @Override
-    public void serialize(ServerMessage message)
-    {
+    public void serialize(ServerMessage message) {
         message.appendString("guild_custom_furni");
         message.appendInt32(2);
         message.appendString(super.getHeaderImage());

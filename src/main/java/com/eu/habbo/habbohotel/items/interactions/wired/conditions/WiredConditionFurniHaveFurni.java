@@ -14,61 +14,56 @@ import gnu.trove.set.hash.THashSet;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class WiredConditionFurniHaveFurni extends InteractionWiredCondition
-{
+public class WiredConditionFurniHaveFurni extends InteractionWiredCondition {
+
     public static final WiredConditionType type = WiredConditionType.FURNI_HAS_FURNI;
 
     private boolean all;
     private THashSet<HabboItem> items;
 
-    public WiredConditionFurniHaveFurni(ResultSet set, Item baseItem) throws SQLException
-    {
+    public WiredConditionFurniHaveFurni(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
         this.items = new THashSet<HabboItem>();
     }
 
-    public WiredConditionFurniHaveFurni(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public WiredConditionFurniHaveFurni(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
         this.items = new THashSet<HabboItem>();
     }
 
     @Override
-    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff)
-    {
+    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff) {
         this.refresh();
 
         boolean foundSomething = false;
-        for(HabboItem item : this.items)
-        {
+        for (HabboItem item : this.items) {
             boolean found = false;
 
             THashSet<HabboItem> stackedItems = room.getItemsAt(item.getX(), item.getY());
 
-            if(stackedItems.isEmpty() && this.all)
+            if (stackedItems.isEmpty() && this.all) {
                 return false;
+            }
 
-            for(HabboItem i : stackedItems)
-            {
-                if(i == item)
+            for (HabboItem i : stackedItems) {
+                if (i == item) {
                     continue;
+                }
 
-                if(i.getZ() >= item.getZ())
-                {
+                if (i.getZ() >= item.getZ()) {
                     found = true;
                     foundSomething = true;
                 }
             }
 
-            if(this.all)
-            {
-                if(!found)
+            if (this.all) {
+                if (!found) {
                     return false;
-            }
-            else
-            {
-                if(found)
+                }
+            } else {
+                if (found) {
                     return true;
+                }
             }
         }
 
@@ -77,72 +72,67 @@ public class WiredConditionFurniHaveFurni extends InteractionWiredCondition
     }
 
     @Override
-    public String getWiredData()
-    {
+    public String getWiredData() {
         this.refresh();
 
         String data = (all ? "1" : "0") + ":";
 
-        for(HabboItem item : this.items)
+        for (HabboItem item : this.items) {
             data += item.getId() + ";";
+        }
 
         return data;
     }
 
     @Override
-    public void loadWiredData(ResultSet set, Room room) throws SQLException
-    {
+    public void loadWiredData(ResultSet set, Room room) throws SQLException {
         String[] data = set.getString("wired_data").split(":");
 
-        if(data.length >= 1)
-        {
+        if (data.length >= 1) {
             this.all = (data[0].equals("1"));
 
-            if(data.length == 2)
-            {
+            if (data.length == 2) {
                 String[] items = data[1].split(";");
 
-                for (String s : items)
-                {
+                for (String s : items) {
                     HabboItem item = room.getHabboItem(Integer.valueOf(s));
 
-                    if(item != null)
+                    if (item != null) {
                         this.items.add(item);
+                    }
                 }
             }
         }
     }
 
     @Override
-    public void onPickUp()
-    {
+    public void onPickUp() {
         this.items.clear();
         this.all = false;
     }
 
     @Override
-    public WiredConditionType getType()
-    {
+    public WiredConditionType getType() {
         return type;
     }
 
     @Override
-    public void serializeWiredData(ServerMessage message)
-    {
+    public void serializeWiredData(ServerMessage message) {
         this.refresh();
 
         message.appendBoolean(false);
         message.appendInt32(5);
         message.appendInt32(this.items.size());
 
-        for(HabboItem item : this.items)
+        for (HabboItem item : this.items) {
             message.appendInt32(item.getId());
+        }
 
         message.appendInt32(this.getBaseItem().getSpriteId());
         message.appendInt32(this.getId());
         message.appendString("");
         message.appendInt32(1);
-            message.appendInt32(this.all ? 1 : 0);
+        message.appendInt32(this.all ? 1 : 0);
         message.appendInt32(0);
         message.appendInt32(this.getType().code);
         message.appendInt32(0);
@@ -150,8 +140,7 @@ public class WiredConditionFurniHaveFurni extends InteractionWiredCondition
     }
 
     @Override
-    public boolean saveData(ClientMessage packet)
-    {
+    public boolean saveData(ClientMessage packet) {
         this.items.clear();
 
         int count;
@@ -165,14 +154,13 @@ public class WiredConditionFurniHaveFurni extends InteractionWiredCondition
 
         Room room = Emulator.getGameEnvironment().getRoomManager().getRoom(this.getRoomId());
 
-        if(room != null)
-        {
-            for (int i = 0; i < count; i++)
-            {
+        if (room != null) {
+            for (int i = 0; i < count; i++) {
                 HabboItem item = room.getHabboItem(packet.readInt());
 
-                if(item != null)
+                if (item != null) {
                     this.items.add(item);
+                }
             }
 
             return true;
@@ -180,26 +168,21 @@ public class WiredConditionFurniHaveFurni extends InteractionWiredCondition
         return false;
     }
 
-    private void refresh()
-    {
+    private void refresh() {
         THashSet<HabboItem> items = new THashSet<HabboItem>();
 
         Room room = Emulator.getGameEnvironment().getRoomManager().getRoom(this.getRoomId());
-        if(room == null)
-        {
+        if (room == null) {
             items.addAll(this.items);
-        }
-        else
-        {
-            for (HabboItem item : this.items)
-            {
-                if (room.getHabboItem(item.getId()) == null)
+        } else {
+            for (HabboItem item : this.items) {
+                if (room.getHabboItem(item.getId()) == null) {
                     items.add(item);
+                }
             }
         }
 
-        for(HabboItem item : items)
-        {
+        for (HabboItem item : items) {
             this.items.remove(item);
         }
     }

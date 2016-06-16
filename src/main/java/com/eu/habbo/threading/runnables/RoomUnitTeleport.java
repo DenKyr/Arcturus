@@ -6,8 +6,8 @@ import com.eu.habbo.habbohotel.users.Habbo;
 import com.eu.habbo.messages.outgoing.rooms.users.RoomUnitOnRollerComposer;
 import com.eu.habbo.util.pathfinding.Tile;
 
-public class RoomUnitTeleport implements Runnable
-{
+public class RoomUnitTeleport implements Runnable {
+
     private RoomUnit roomUnit;
     private Room room;
     private int x;
@@ -16,8 +16,7 @@ public class RoomUnitTeleport implements Runnable
 
     private int newEffect;
 
-    public RoomUnitTeleport(RoomUnit roomUnit, Room room, int x, int y, double z, int newEffect)
-    {
+    public RoomUnitTeleport(RoomUnit roomUnit, Room room, int x, int y, double z, int newEffect) {
         this.roomUnit = roomUnit;
         this.room = room;
         this.x = x;
@@ -27,8 +26,7 @@ public class RoomUnitTeleport implements Runnable
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
         this.roomUnit.setGoalLocation(x, y);
         this.roomUnit.getStatus().remove("mv");
 

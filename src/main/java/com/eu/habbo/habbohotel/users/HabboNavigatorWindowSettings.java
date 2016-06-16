@@ -3,8 +3,8 @@ package com.eu.habbo.habbohotel.users;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class HabboNavigatorWindowSettings
-{
+public class HabboNavigatorWindowSettings {
+
     public int x = 100;
     public int y = 100;
     public int width = 425;
@@ -12,10 +12,10 @@ public class HabboNavigatorWindowSettings
     public boolean openSearches = false;
     public int unknown = 0;
 
-    public HabboNavigatorWindowSettings(){}
+    public HabboNavigatorWindowSettings() {
+    }
 
-    public HabboNavigatorWindowSettings(ResultSet set) throws SQLException
-    {
+    public HabboNavigatorWindowSettings(ResultSet set) throws SQLException {
         this.x = set.getInt("x");
         this.y = set.getInt("y");
         this.width = set.getInt("width");

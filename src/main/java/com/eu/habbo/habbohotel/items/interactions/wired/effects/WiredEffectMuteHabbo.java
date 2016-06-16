@@ -11,23 +11,20 @@ import com.eu.habbo.messages.ServerMessage;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class WiredEffectMuteHabbo extends InteractionWiredEffect
-{
+public class WiredEffectMuteHabbo extends InteractionWiredEffect {
+
     private static final WiredEffectType type = WiredEffectType.MUTE_TRIGGER;
 
-    public WiredEffectMuteHabbo(ResultSet set, Item baseItem) throws SQLException
-    {
+    public WiredEffectMuteHabbo(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
 
-    public WiredEffectMuteHabbo(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public WiredEffectMuteHabbo(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
 
     @Override
-    public void serializeWiredData(ServerMessage message)
-    {
+    public void serializeWiredData(ServerMessage message) {
         message.appendBoolean(false);
         message.appendInt32(5);
         message.appendInt32(0);
@@ -42,16 +39,15 @@ public class WiredEffectMuteHabbo extends InteractionWiredEffect
     }
 
     @Override
-    public boolean saveData(ClientMessage packet)
-    {
+    public boolean saveData(ClientMessage packet) {
         return false;
     }
 
     @Override
-    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff)
-    {
-        if(roomUnit == null)
+    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff) {
+        if (roomUnit == null) {
             return true;
+        }
 
         roomUnit.wiredMuted = !roomUnit.wiredMuted;
 
@@ -59,26 +55,22 @@ public class WiredEffectMuteHabbo extends InteractionWiredEffect
     }
 
     @Override
-    public String getWiredData()
-    {
+    public String getWiredData() {
         return "";
     }
 
     @Override
-    public void loadWiredData(ResultSet set, Room room) throws SQLException
-    {
+    public void loadWiredData(ResultSet set, Room room) throws SQLException {
 
     }
 
     @Override
-    public void onPickUp()
-    {
+    public void onPickUp() {
 
     }
 
     @Override
-    public WiredEffectType getType()
-    {
+    public WiredEffectType getType() {
         return type;
     }
 }

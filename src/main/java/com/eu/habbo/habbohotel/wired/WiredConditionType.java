@@ -1,7 +1,7 @@
 package com.eu.habbo.habbohotel.wired;
 
-public enum WiredConditionType
-{
+public enum WiredConditionType {
+
     MATCH_SSHOT(0),
     FURNI_HAVE_HABBO(1),
     TRIGGER_ON_FURNI(2),
@@ -29,8 +29,7 @@ public enum WiredConditionType
 
     public final int code;
 
-    WiredConditionType(int code)
-    {
+    WiredConditionType(int code) {
         this.code = code;
     }
 }

@@ -3,8 +3,8 @@ package com.eu.habbo.plugin.events.users.friends;
 import com.eu.habbo.habbohotel.users.Habbo;
 import com.eu.habbo.plugin.events.users.UserEvent;
 
-public class UserRequestFriendshipEvent extends UserEvent
-{
+public class UserRequestFriendshipEvent extends UserEvent {
+
     /**
      * The Habbo name invited.
      */
@@ -17,12 +17,12 @@ public class UserRequestFriendshipEvent extends UserEvent
 
     /**
      * Triggered when a Habbo requests friendship with another user.
+     *
      * @param habbo The Habbo this event applies to.
      * @param name The Habbo name invited.
      * @param friend The Habbo invited. NULL when user is offline.
      */
-    public UserRequestFriendshipEvent(Habbo habbo, String name, Habbo friend)
-    {
+    public UserRequestFriendshipEvent(Habbo habbo, String name, Habbo friend) {
         super(habbo);
 
         this.name = name;

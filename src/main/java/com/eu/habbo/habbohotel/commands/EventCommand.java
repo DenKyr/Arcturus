@@ -11,24 +11,19 @@ import gnu.trove.map.hash.THashMap;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class EventCommand extends Command
-{
-    public EventCommand()
-    {
+public class EventCommand extends Command {
+
+    public EventCommand() {
         super("cmd_event", Emulator.getTexts().getValue("commands.keys.cmd_event").split(";"));
     }
 
     @Override
-    public boolean handle(GameClient gameClient, String[] params) throws Exception
-    {
-        if(gameClient.getHabbo().getHabboInfo().getCurrentRoom() != null)
-        {
-            if (params.length >= 2)
-            {
+    public boolean handle(GameClient gameClient, String[] params) throws Exception {
+        if (gameClient.getHabbo().getHabboInfo().getCurrentRoom() != null) {
+            if (params.length >= 2) {
                 String message = "";
 
-                for (int i = 1; i < params.length; i++)
-                {
+                for (int i = 1; i < params.length; i++) {
                     message += params[i];
                     message += " ";
                 }
@@ -40,11 +35,11 @@ public class EventCommand extends Command
 
                 ServerMessage msg = new BubbleAlertComposer("hotel.event", codes).compose();
 
-                for(Map.Entry<Integer, Habbo> set : Emulator.getGameEnvironment().getHabboManager().getOnlineHabbos().entrySet())
-                {
+                for (Map.Entry<Integer, Habbo> set : Emulator.getGameEnvironment().getHabboManager().getOnlineHabbos().entrySet()) {
                     Habbo habbo = set.getValue();
-                    if(habbo.getHabboStats().blockStaffAlerts)
+                    if (habbo.getHabboStats().blockStaffAlerts) {
                         continue;
+                    }
 
                     habbo.getClient().sendResponse(msg);
                 }

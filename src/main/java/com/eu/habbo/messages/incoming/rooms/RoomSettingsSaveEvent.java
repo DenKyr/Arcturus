@@ -9,19 +9,16 @@ import com.eu.habbo.habbohotel.rooms.RoomState;
 import com.eu.habbo.messages.incoming.MessageHandler;
 import com.eu.habbo.messages.outgoing.rooms.*;
 
-public class RoomSettingsSaveEvent extends MessageHandler
-{
+public class RoomSettingsSaveEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         int roomId = this.packet.readInt();
 
         Room room = this.client.getHabbo().getHabboInfo().getCurrentRoom();
 
-        if(room.getId() == roomId)
-        {
-            if(room.getOwnerId() == this.client.getHabbo().getHabboInfo().getId() || this.client.getHabbo().hasPermission("acc_anyroomowner"))
-            {
+        if (room.getId() == roomId) {
+            if (room.getOwnerId() == this.client.getHabbo().getHabboInfo().getId() || this.client.getHabbo().hasPermission("acc_anyroomowner")) {
                 room.setName(this.packet.readString());
                 room.setDescription(this.packet.readString());
                 room.setState(RoomState.values()[this.packet.readInt() % RoomState.values().length]);
@@ -30,20 +27,16 @@ public class RoomSettingsSaveEvent extends MessageHandler
 
                 int categoryId = this.packet.readInt();
 
-                if(Emulator.getGameEnvironment().getRoomManager().hasCategory(categoryId, this.client.getHabbo()))
+                if (Emulator.getGameEnvironment().getRoomManager().hasCategory(categoryId, this.client.getHabbo())) {
                     room.setCategory(categoryId);
-                else
-                {
+                } else {
                     RoomCategory category = Emulator.getGameEnvironment().getRoomManager().getCategory(categoryId);
 
                     String message = "";
 
-                    if(category == null)
-                    {
+                    if (category == null) {
                         message = Emulator.getTexts().getValue("scripter.warning.roomsettings.category.nonexisting").replace("%username%", client.getHabbo().getHabboInfo().getUsername());
-                    }
-                    else
-                    {
+                    } else {
                         message = Emulator.getTexts().getValue("scripter.warning.roomsettings.category.permission").replace("%username%", client.getHabbo().getHabboInfo().getUsername()).replace("%category%", Emulator.getGameEnvironment().getRoomManager().getCategory(categoryId) + "");
                     }
 
@@ -53,8 +46,7 @@ public class RoomSettingsSaveEvent extends MessageHandler
 
                 String tags = "";
                 int count = this.packet.readInt();
-                for(int i = 0; i < count; i++)
-                {
+                for (int i = 0; i < count; i++) {
                     tags += this.packet.readString() + ";";
                 }
 

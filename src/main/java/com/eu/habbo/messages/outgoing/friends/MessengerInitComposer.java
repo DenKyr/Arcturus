@@ -5,18 +5,16 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class MessengerInitComposer extends MessageComposer
-{
+public class MessengerInitComposer extends MessageComposer {
+
     private Habbo habbo;
 
-    public MessengerInitComposer(Habbo habbo)
-    {
+    public MessengerInitComposer(Habbo habbo) {
         this.habbo = habbo;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.MessengerInitComposer);
         this.response.appendInt32(300);
         this.response.appendInt32(1337);

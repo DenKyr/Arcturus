@@ -5,15 +5,14 @@ import com.eu.habbo.Emulator;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class Message implements Runnable
-{
+public class Message implements Runnable {
+
     private final int fromId;
     private final int toId;
     private final String message;
     private final int timestamp;
 
-    public Message(int fromId, int toId, String message)
-    {
+    public Message(int fromId, int toId, String message) {
         this.fromId = fromId;
         this.toId = toId;
         this.message = message;
@@ -22,12 +21,9 @@ public class Message implements Runnable
     }
 
     @Override
-    public void run()
-    {
-        if(Emulator.getConfig().getBoolean("save.private.chats", false))
-        {
-            try
-            {
+    public void run() {
+        if (Emulator.getConfig().getBoolean("save.private.chats", false)) {
+            try {
                 PreparedStatement statement = Emulator.getDatabase().prepare("INSERT INTO chatlogs_private (user_from_id, user_to_id, message, timestamp) VALUES (?, ?, ?, ?)");
                 statement.setInt(1, this.fromId);
                 statement.setInt(2, this.toId);
@@ -36,16 +32,13 @@ public class Message implements Runnable
                 statement.execute();
                 statement.close();
                 statement.getConnection().close();
-            }
-            catch(SQLException e)
-            {
+            } catch (SQLException e) {
                 Emulator.getLogging().logSQLException(e);
             }
         }
     }
 
-    public int getToId()
-    {
+    public int getToId() {
         return this.toId;
     }
 

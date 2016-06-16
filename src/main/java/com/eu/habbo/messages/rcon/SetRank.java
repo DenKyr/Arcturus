@@ -9,42 +9,33 @@ import com.google.gson.Gson;
 
 import java.sql.PreparedStatement;
 
-public class SetRank extends RCONMessage<SetRank.JSONSetRank>
-{
-    public SetRank()
-    {
+public class SetRank extends RCONMessage<SetRank.JSONSetRank> {
+
+    public SetRank() {
         super(JSONSetRank.class);
     }
 
     @Override
-    public String handle(JSONSetRank object)
-    {
+    public String handle(JSONSetRank object) {
         Habbo habbo = Emulator.getGameEnvironment().getHabboManager().getHabbo(object.username);
 
-        if(Emulator.getGameEnvironment().getPermissionsManager().getPermissionsForRank(object.rank) == null)
-        {
+        if (Emulator.getGameEnvironment().getPermissionsManager().getPermissionsForRank(object.rank) == null) {
             return new Gson().toJson("INVALID_RANK", String.class);
         }
 
-        if(habbo != null)
-        {
+        if (habbo != null) {
             habbo.getHabboInfo().setRank(object.rank);
             habbo.getClient().sendResponse(new UserPermissionsComposer(habbo));
-        }
-        else
-        {
+        } else {
             PreparedStatement statement = Emulator.getDatabase().prepare("UPDATE users SET rank = ? WHERE username = ? LIMIT 1");
 
-            try
-            {
+            try {
                 statement.setInt(1, object.rank);
                 statement.setString(2, object.username);
                 statement.execute();
                 statement.close();
                 statement.getConnection().close();
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 new Gson().toJson("FAILED", String.class);
             }
         }
@@ -52,8 +43,8 @@ public class SetRank extends RCONMessage<SetRank.JSONSetRank>
         return new Gson().toJson("OK", String.class);
     }
 
-    public class JSONSetRank
-    {
+    public class JSONSetRank {
+
         public String username;
         public int rank;
     }

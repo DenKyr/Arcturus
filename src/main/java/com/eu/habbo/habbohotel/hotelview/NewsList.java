@@ -7,12 +7,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class NewsList
-{
+public class NewsList {
+
     private final THashSet<NewsWidget> newsWidgets;
 
-    public NewsList()
-    {
+    public NewsList() {
         this.newsWidgets = new THashSet<NewsWidget>();
         this.reload();
     }
@@ -20,18 +19,15 @@ public class NewsList
     /**
      * Reloads the news.
      */
-    public void reload()
-    {
+    public void reload() {
         this.newsWidgets.clear();
 
         THashSet<NewsWidget> news = new THashSet<NewsWidget>();
-        try
-        {
+        try {
             PreparedStatement statement = Emulator.getDatabase().prepare("SELECT * FROM hotelview_news ORDER BY id DESC LIMIT 10");
             ResultSet set = statement.executeQuery();
 
-            while(set.next())
-            {
+            while (set.next()) {
                 news.add(new NewsWidget(set));
             }
             set.close();
@@ -40,19 +36,17 @@ public class NewsList
 
             this.newsWidgets.addAll(news);
             news.clear();
-        }
-        catch(SQLException e)
-        {
+        } catch (SQLException e) {
             Emulator.getLogging().logSQLException(e);
         }
     }
 
     /**
      * The newsitems displayed on the HotelView
+     *
      * @return
      */
-    public THashSet<NewsWidget> getNewsWidgets()
-    {
+    public THashSet<NewsWidget> getNewsWidgets() {
         return newsWidgets;
     }
 }

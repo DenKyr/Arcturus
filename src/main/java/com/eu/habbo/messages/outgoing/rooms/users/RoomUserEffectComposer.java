@@ -5,18 +5,16 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class RoomUserEffectComposer extends MessageComposer
-{
+public class RoomUserEffectComposer extends MessageComposer {
+
     private final RoomUnit roomUnit;
 
-    public RoomUserEffectComposer(RoomUnit roomUnit)
-    {
+    public RoomUserEffectComposer(RoomUnit roomUnit) {
         this.roomUnit = roomUnit;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.RoomUserEffectComposer);
         this.response.appendInt32(this.roomUnit.getId());
         this.response.appendInt32(this.roomUnit.getEffectId());

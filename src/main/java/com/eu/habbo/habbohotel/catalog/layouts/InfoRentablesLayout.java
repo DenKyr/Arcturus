@@ -6,16 +6,14 @@ import com.eu.habbo.messages.ServerMessage;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class InfoRentablesLayout extends CatalogPage
-{
-    public InfoRentablesLayout(ResultSet set) throws SQLException
-    {
+public class InfoRentablesLayout extends CatalogPage {
+
+    public InfoRentablesLayout(ResultSet set) throws SQLException {
         super(set);
     }
 
     @Override
-    public void serialize(ServerMessage message)
-    {
+    public void serialize(ServerMessage message) {
         String[] data = getTextOne().split("\\|\\|");
         message.appendString("info_rentables");
         message.appendInt32(1);

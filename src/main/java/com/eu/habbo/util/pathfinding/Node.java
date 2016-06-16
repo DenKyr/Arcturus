@@ -2,24 +2,20 @@ package com.eu.habbo.util.pathfinding;
 
 public class Node extends AbstractNode {
 
-    public Node(int xPosition, int yPosition)
-    {
+    public Node(int xPosition, int yPosition) {
         super(xPosition, yPosition);
     }
 
     @Override
-    public void sethCosts(AbstractNode endNode)
-    {
+    public void sethCosts(AbstractNode endNode) {
         sethCosts((absolute(getX() - endNode.getX()) + absolute(getY() - endNode.getY())) * 10);
     }
 
-    private int absolute(int a)
-    {
+    private int absolute(int a) {
         return a > 0 ? a : -a;
     }
 
-    public boolean equals(Node node)
-    {
+    public boolean equals(Node node) {
         return (getX() == node.getX()) && (getY() == node.getY());
     }
 }

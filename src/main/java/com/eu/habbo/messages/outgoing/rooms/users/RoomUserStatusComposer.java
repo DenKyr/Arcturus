@@ -10,35 +10,30 @@ import gnu.trove.set.hash.THashSet;
 
 import java.util.Map;
 
-public class RoomUserStatusComposer extends MessageComposer{
+public class RoomUserStatusComposer extends MessageComposer {
 
     private TIntObjectMap<Habbo> habbos;
     private THashSet<RoomUnit> roomUnits;
 
-    public RoomUserStatusComposer(RoomUnit roomUnit)
-    {
+    public RoomUserStatusComposer(RoomUnit roomUnit) {
         this.roomUnits = new THashSet<RoomUnit>();
         this.roomUnits.add(roomUnit);
     }
 
-    public RoomUserStatusComposer(THashSet<RoomUnit> roomUnits, boolean value)
-    {
+    public RoomUserStatusComposer(THashSet<RoomUnit> roomUnits, boolean value) {
         this.roomUnits = roomUnits;
     }
 
-    public RoomUserStatusComposer(TIntObjectMap<Habbo> habbos)
-    {
+    public RoomUserStatusComposer(TIntObjectMap<Habbo> habbos) {
         this.habbos = habbos;
     }
 
     @Override
-    public ServerMessage compose()    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.RoomUserStatusComposer);
-        if(this.roomUnits != null)
-        {
+        if (this.roomUnits != null) {
             this.response.appendInt32(this.roomUnits.size());
-            for(RoomUnit roomUnit : this.roomUnits)
-            {
+            for (RoomUnit roomUnit : this.roomUnits) {
                 this.response.appendInt32(roomUnit.getId());
                 this.response.appendInt32(roomUnit.getX());
                 this.response.appendInt32(roomUnit.getY());
@@ -48,15 +43,13 @@ public class RoomUserStatusComposer extends MessageComposer{
 
                 String status = "/";
 
-                for (Map.Entry<String, String> keys : roomUnit.getStatus().entrySet())
-                {
+                for (Map.Entry<String, String> keys : roomUnit.getStatus().entrySet()) {
                     status = status + keys.getKey() + " " + keys.getValue() + "/";
                 }
 
                 this.response.appendString(status);
             }
-        }
-        else {
+        } else {
             this.response.appendInt32(this.habbos.size());
             for (Habbo habbo : this.habbos.valueCollection()) {
                 this.response.appendInt32(habbo.getRoomUnit().getId());

@@ -13,27 +13,26 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-public class ConfigurationManager
-{
+public class ConfigurationManager {
+
     public boolean loaded = false;
     /**
      * Our configurations stored in this object.
      */
     private final Properties properties;
-    
-    public ConfigurationManager(String path) throws Exception
-    {
+
+    public ConfigurationManager(String path) throws Exception {
         this.properties = new Properties();
-        
+
         this.reload();
     }
 
     /**
      * Reloads the settings from the config file.
+     *
      * @throws Exception
      */
-    public void reload() throws Exception
-    {
+    public void reload() throws Exception {
         this.properties.clear();
 
         InputStream input = null;
@@ -58,8 +57,7 @@ public class ConfigurationManager
             }
         }
 
-        if(loaded)
-        {
+        if (loaded) {
             this.loadFromDatabase();
         }
 
@@ -69,36 +67,27 @@ public class ConfigurationManager
     /**
      * Loads the settings from the database.
      */
-    public void loadFromDatabase()
-    {
+    public void loadFromDatabase() {
         PreparedStatement statement = Emulator.getDatabase().prepare("SELECT * FROM emulator_settings");
 
         ResultSet set = null;
-        try
-        {
+        try {
             set = statement.executeQuery();
 
-            while(set.next())
-            {
+            while (set.next()) {
                 this.properties.put(set.getString("key"), set.getString("value"));
             }
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             Emulator.getLogging().logSQLException(e);
-        }
-        finally
-        {
-            try
-            {
-                if(set != null)
+        } finally {
+            try {
+                if (set != null) {
                     set.close();
+                }
 
                 statement.close();
                 statement.getConnection().close();
-            }
-            catch (SQLException e)
-            {
+            } catch (SQLException e) {
                 Emulator.getLogging().logSQLException(e);
             }
         }
@@ -106,22 +95,25 @@ public class ConfigurationManager
 
     /**
      * Gets the string value for a specific key.
+     *
      * @param key The key to find the value for.
-     * @return The string value for the key. Returns an empty string if not found.
+     * @return The string value for the key. Returns an empty string if not
+     * found.
      */
-    public String getValue(String key)
-    {
+    public String getValue(String key) {
         return getValue(key, "");
     }
 
     /**
      * Gets the string value for a specific key.
+     *
      * @param key The key to find the value for.
-     * @param defaultValue The value that will be returned when the key is not found.
-     * @return The string value for the key. Returns defaultValue when not found.
+     * @param defaultValue The value that will be returned when the key is not
+     * found.
+     * @return The string value for the key. Returns defaultValue when not
+     * found.
      */
-    public String getValue(String key, String defaultValue)
-    {
+    public String getValue(String key, String defaultValue) {
         if (!this.properties.containsKey(key)) {
             Emulator.getLogging().logErrorLine("[CONFIG] Key not found: " + key);
         }
@@ -130,28 +122,27 @@ public class ConfigurationManager
 
     /**
      * Gets the boolean value for a specific key.
+     *
      * @param key The key to find the value for.
      * @return The boolean value for the key. Returns false if not found.
      */
-    public boolean getBoolean(String key)
-    {
+    public boolean getBoolean(String key) {
         return getBoolean(key, false);
     }
 
     /**
      * Gets the boolean value for a specific key.
+     *
      * @param key The key to find the value for.
-     * @param defaultValue The value that will be returned when the key is not found.
-     * @return The boolean value for the key. Returns defaultValue when not found.
+     * @param defaultValue The value that will be returned when the key is not
+     * found.
+     * @return The boolean value for the key. Returns defaultValue when not
+     * found.
      */
-    public boolean getBoolean(String key, boolean defaultValue)
-    {
-        try
-        {
+    public boolean getBoolean(String key, boolean defaultValue) {
+        try {
             return (getValue(key, "0").equals("1")) || (getValue(key, "false").equals("true"));
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Emulator.getLogging().logErrorLine(e);
         }
         return defaultValue;
@@ -159,27 +150,26 @@ public class ConfigurationManager
 
     /**
      * Gets the int value for a specific key.
+     *
      * @param key The key to find the value for.
      * @return The int value for the key. Returns 0 if not found.
      */
-    public int getInt(String key)
-    {
+    public int getInt(String key) {
         return getInt(key, 0);
     }
 
     /**
      * Gets the int value for a specific key.
+     *
      * @param key The key to find the value for.
-     * @param defaultValue The value that will be returned when the key is not found.
+     * @param defaultValue The value that will be returned when the key is not
+     * found.
      * @return The int value for the key. Returns defaultValue when not found.
      */
-    public int getInt(String key, Integer defaultValue)
-    {
-        try
-        {
+    public int getInt(String key, Integer defaultValue) {
+        try {
             return Integer.parseInt(getValue(key, defaultValue.toString()));
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             Emulator.getLogging().logErrorLine(e);
         }
         return defaultValue;

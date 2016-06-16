@@ -8,16 +8,14 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class RoomDataComposer extends MessageComposer
-{
+public class RoomDataComposer extends MessageComposer {
 
     private final Room room;
     private final Habbo habbo;
     private final boolean publicRoom;
     private final boolean unknown;
 
-    public RoomDataComposer(Room room, Habbo habbo, boolean boolA, boolean boolB)
-    {
+    public RoomDataComposer(Room room, Habbo habbo, boolean boolA, boolean boolB) {
         this.room = room;
         this.habbo = habbo;
         this.publicRoom = boolA;
@@ -25,18 +23,15 @@ public class RoomDataComposer extends MessageComposer
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.RoomDataComposer);
         this.response.appendBoolean(this.unknown);
         this.response.appendInt32(this.room.getId());
         this.response.appendString(this.room.getName());
-        if (this.room.isPublicRoom())
-        {
+        if (this.room.isPublicRoom()) {
             this.response.appendInt32(0);
             this.response.appendString("");
-        } else
-        {
+        } else {
             this.response.appendInt32(this.room.getOwnerId());
             this.response.appendString(this.room.getOwnerName());
         }
@@ -50,49 +45,40 @@ public class RoomDataComposer extends MessageComposer
         this.response.appendInt32(this.room.getCategory());
         String[] tags = this.room.getTags().split(";");
         this.response.appendInt32(tags.length);
-        for(String s : tags)
-        {
+        for (String s : tags) {
             this.response.appendString(s);
         }
 
         int base = 8 | 16;
 
-        if(this.room.getGuildId() > 0)
-        {
+        if (this.room.getGuildId() > 0) {
             base = base | 2;
         }
 
-        if(!this.room.isPublicRoom())
-        {
+        if (!this.room.isPublicRoom()) {
             base = base | 8;
         }
 
-        if(this.room.isPromoted())
-        {
+        if (this.room.isPromoted()) {
             base = base | 4;
         }
 
         this.response.appendInt32(base);
 
-        if(this.room.getGuildId() > 0)
-        {
+        if (this.room.getGuildId() > 0) {
             Guild g = Emulator.getGameEnvironment().getGuildManager().getGuild(this.room.getGuildId());
-            if (g != null)
-            {
+            if (g != null) {
                 this.response.appendInt32(g.getId());
                 this.response.appendString(g.getName());
                 this.response.appendString(g.getBadge());
-            }
-            else
-            {
+            } else {
                 this.response.appendInt32(0);
                 this.response.appendString("");
                 this.response.appendString("");
             }
         }
 
-        if(this.room.isPromoted())
-        {
+        if (this.room.isPromoted()) {
             this.response.appendString(this.room.getPromotion().getTitle());
             this.response.appendString(this.room.getPromotion().getDescription());
             this.response.appendInt32((this.room.getPromotion().getEndTimestamp() - Emulator.getIntUnixTimestamp()) / 60);
@@ -114,7 +100,6 @@ public class RoomDataComposer extends MessageComposer
         this.response.appendInt32(this.room.getChatSpeed());
         this.response.appendInt32(this.room.getChatDistance());
         this.response.appendInt32(this.room.getChatProtection());
-
 
         return this.response;
     }

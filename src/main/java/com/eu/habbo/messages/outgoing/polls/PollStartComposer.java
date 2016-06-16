@@ -5,18 +5,16 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class PollStartComposer extends MessageComposer
-{
+public class PollStartComposer extends MessageComposer {
+
     private final Poll poll;
 
-    public PollStartComposer(Poll poll)
-    {
+    public PollStartComposer(Poll poll) {
         this.poll = poll;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.PollStartComposer);
         this.response.appendInt32(this.poll.getId());
         this.response.appendString(this.poll.getTitle());

@@ -5,19 +5,16 @@ import com.eu.habbo.habbohotel.games.GamePlayer;
 import com.eu.habbo.habbohotel.games.GameTeam;
 import com.eu.habbo.habbohotel.games.GameTeamColors;
 
-public class FreezeGameTeam extends GameTeam
-{
-    public FreezeGameTeam(GameTeamColors teamColor)
-    {
+public class FreezeGameTeam extends GameTeam {
+
+    public FreezeGameTeam(GameTeamColors teamColor) {
         super(teamColor);
     }
 
     @Override
-    public void removeMember(GamePlayer gamePlayer)
-    {
+    public void removeMember(GamePlayer gamePlayer) {
         Game game = gamePlayer.getHabbo().getHabboInfo().getCurrentRoom().getGame(gamePlayer.getHabbo().getHabboInfo().getCurrentGame());
-        if(game != null && game instanceof FreezeGame)
-        {
+        if (game != null && game instanceof FreezeGame) {
             ((FreezeGame) game).placebackHelmet(gamePlayer.getTeamColor());
         }
 
@@ -28,8 +25,7 @@ public class FreezeGameTeam extends GameTeam
     }
 
     @Override
-    public void addMember(GamePlayer gamePlayer)
-    {
+    public void addMember(GamePlayer gamePlayer) {
         super.addMember(gamePlayer);
 
         gamePlayer.getHabbo().getHabboInfo().getCurrentRoom().giveEffect(gamePlayer.getHabbo(), FreezeGame.effectId + this.teamColor.type);

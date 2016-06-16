@@ -6,10 +6,9 @@ import com.eu.habbo.messages.ServerMessage;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class CatalogRootLayout extends CatalogPage
-{
-    public CatalogRootLayout(ResultSet set) throws SQLException
-    {
+public class CatalogRootLayout extends CatalogPage {
+
+    public CatalogRootLayout(ResultSet set) throws SQLException {
         super(null);
 
         this.id = -1;
@@ -25,8 +24,7 @@ public class CatalogRootLayout extends CatalogPage
     }
 
     @Override
-    public void serialize(ServerMessage message)
-    {
+    public void serialize(ServerMessage message) {
 
     }
 }

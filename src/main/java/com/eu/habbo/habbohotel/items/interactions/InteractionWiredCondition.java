@@ -13,52 +13,45 @@ import com.eu.habbo.messages.outgoing.wired.WiredConditionDataComposer;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public abstract class InteractionWiredCondition extends InteractionWired implements IWired
-{
-    public InteractionWiredCondition(ResultSet set, Item baseItem) throws SQLException
-    {
+public abstract class InteractionWiredCondition extends InteractionWired implements IWired {
+
+    public InteractionWiredCondition(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
 
-    public InteractionWiredCondition(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public InteractionWiredCondition(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
 
     @Override
-    public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects)
-    {
+    public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects) {
         return true;
     }
 
     @Override
-    public boolean isWalkable()
-    {
+    public boolean isWalkable() {
         return true;
     }
 
     @Override
-    public void onClick(GameClient client, Room room, Object[] objects) throws Exception
-    {
-        if(room.hasRights(client.getHabbo()))
+    public void onClick(GameClient client, Room room, Object[] objects) throws Exception {
+        if (room.hasRights(client.getHabbo())) {
             client.sendResponse(new WiredConditionDataComposer(this));
+        }
     }
 
     @Override
-    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception
-    {
-
-    }
-
-    @Override
-    public void onWalkOn(RoomUnit roomUnit, Room room, Object[] objects) throws Exception
-    {
+    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception {
 
     }
 
     @Override
-    public void onWalkOff(RoomUnit roomUnit, Room room, Object[] objects) throws Exception
-    {
+    public void onWalkOn(RoomUnit roomUnit, Room room, Object[] objects) throws Exception {
+
+    }
+
+    @Override
+    public void onWalkOff(RoomUnit roomUnit, Room room, Object[] objects) throws Exception {
 
     }
 

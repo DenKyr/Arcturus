@@ -11,48 +11,44 @@ import com.eu.habbo.messages.outgoing.generic.alerts.GenericAlertComposer;
 import com.eu.habbo.messages.outgoing.rooms.ForwardToRoomComposer;
 import gnu.trove.set.hash.THashSet;
 
-public class FloorPlanEditorSaveEvent extends MessageHandler
-{
+public class FloorPlanEditorSaveEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         final Room room = this.client.getHabbo().getHabboInfo().getCurrentRoom();
 
-        if(room == null)
+        if (room == null) {
             return;
+        }
 
-        if(room.getOwnerId() == this.client.getHabbo().getHabboInfo().getId() || this.client.getHabbo().hasPermission("acc_anyroomowner"))
-        {
+        if (room.getOwnerId() == this.client.getHabbo().getHabboInfo().getId() || this.client.getHabbo().hasPermission("acc_anyroomowner")) {
             String map = this.packet.readString();
 
-            if(map.isEmpty() || map.length() == 0)
+            if (map.isEmpty() || map.length() == 0) {
                 return;
+            }
 
             int lengthX = -1;
 
-            String[] data = map.split(((char)13) + "");
+            String[] data = map.split(((char) 13) + "");
 
-            if(data.length > 64)
-            {
+            if (data.length > 64) {
                 this.client.sendResponse(new GenericAlertComposer("Incorrect Floorplan! Maximum size of 64 x 64"));
                 return;
             }
 
-            for(String s : data)
-            {
-                if(lengthX == -1)
-                {
+            for (String s : data) {
+                if (lengthX == -1) {
                     lengthX = s.length();
                 }
 
-                if(s.length() != lengthX || s.length() > 50)
-                {
+                if (s.length() != lengthX || s.length() > 50) {
                     this.client.sendResponse(new GenericAlertComposer("Incorrect Floorplan! Maximum size of 64 x 64"));
                     return;
                 }
             }
 
-            map = map.substring(0, map.length()-1).replace((char)13 +"", "\r\n");
+            map = map.substring(0, map.length() - 1).replace((char) 13 + "", "\r\n");
 
             int doorX = this.packet.readInt();
             int doorY = this.packet.readInt();
@@ -61,13 +57,13 @@ public class FloorPlanEditorSaveEvent extends MessageHandler
             int floorSize = this.packet.readInt();
             int wallHeight = -1;
 
-            if(this.packet.bytesAvailable() >= 4)
+            if (this.packet.bytesAvailable() >= 4) {
                 wallHeight = this.packet.readInt();
+            }
 
             CustomRoomLayout layout = Emulator.getGameEnvironment().getRoomManager().loadCustomLayout(room);
 
-            if(layout != null)
-            {
+            if (layout != null) {
                 layout.setDoorX(doorX);
                 layout.setDoorY(doorY);
                 layout.setDoorDirection(doorRotation);
@@ -75,14 +71,11 @@ public class FloorPlanEditorSaveEvent extends MessageHandler
                 layout.parse();
                 layout.needsUpdate(true);
                 Emulator.getThreading().run(layout);
-            }
-            else
-            {
+            } else {
                 layout = Emulator.getGameEnvironment().getRoomManager().insertCustomLayout(room, map, doorX, doorY, doorRotation);
             }
 
-            if(layout != null)
-            {
+            if (layout != null) {
                 final THashSet<Habbo> habbos = new THashSet<Habbo>(room.getCurrentHabbos().valueCollection());
 
                 room.setHasCustomLayout(true);
@@ -92,31 +85,23 @@ public class FloorPlanEditorSaveEvent extends MessageHandler
                 room.setFloorSize(floorSize);
                 room.setWallHeight(wallHeight);
 
-                Emulator.getThreading().run(new Runnable()
-                {
+                Emulator.getThreading().run(new Runnable() {
                     @Override
-                    public void run()
-                    {
+                    public void run() {
                         room.dispose();
 
-                        try
-                        {
+                        try {
                             Thread.sleep(1000);
-                        }
-                        catch (InterruptedException e)
-                        {
+                        } catch (InterruptedException e) {
                         }
 
                         ServerMessage message = new ForwardToRoomComposer(room.getId()).compose();
-                        for(Habbo habbo : habbos)
-                        {
+                        for (Habbo habbo : habbos) {
                             habbo.getClient().sendResponse(message);
                         }
                     }
                 });
-            }
-            else
-            {
+            } else {
                 this.client.sendResponse(new GenericAlertComposer("Oh boi. Saving Failed! Please try again in a few minutes!"));
             }
         }

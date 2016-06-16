@@ -9,8 +9,8 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
-public class GameServer
-{
+public class GameServer {
+
     private final PacketManager packetManager;
     private final GameClientManager gameClientManager;
     private final ServerBootstrap serverBootstrap;
@@ -20,8 +20,7 @@ public class GameServer
     private final String host;
     private final int port;
 
-    public GameServer(String host, int port)
-    {
+    public GameServer(String host, int port) {
         this.packetManager = new PacketManager();
         this.gameClientManager = new GameClientManager();
 
@@ -34,15 +33,12 @@ public class GameServer
         this.port = port;
     }
 
-    public void initialise()
-    {
+    public void initialise() {
         this.serverBootstrap.group(bossGroup, workerGroup);
         this.serverBootstrap.channel(NioServerSocketChannel.class);
-        this.serverBootstrap.childHandler(new ChannelInitializer<SocketChannel>()
-        {
+        this.serverBootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
             @Override
-            public void initChannel(SocketChannel ch) throws Exception
-            {
+            public void initChannel(SocketChannel ch) throws Exception {
                 ch.pipeline().addLast("bytesDecoder", new GameByteDecoder());
                 ch.pipeline().addLast(new GameMessageHandler());
             }
@@ -55,49 +51,40 @@ public class GameServer
         this.serverBootstrap.childOption(ChannelOption.ALLOCATOR, new PooledByteBufAllocator());
     }
 
-    public void connect()
-    {
+    public void connect() {
         this.serverBootstrap.bind(this.host, this.port);
     }
 
-    public void stop()
-    {
+    public void stop() {
         this.workerGroup.shutdownGracefully();
         this.bossGroup.shutdownGracefully();
     }
 
-    public PacketManager getPacketManager()
-    {
+    public PacketManager getPacketManager() {
         return packetManager;
     }
 
-    public GameClientManager getGameClientManager()
-    {
+    public GameClientManager getGameClientManager() {
         return gameClientManager;
     }
 
-    public ServerBootstrap getServerBootstrap()
-    {
+    public ServerBootstrap getServerBootstrap() {
         return serverBootstrap;
     }
 
-    public EventLoopGroup getBossGroup()
-    {
+    public EventLoopGroup getBossGroup() {
         return bossGroup;
     }
 
-    public EventLoopGroup getWorkerGroup()
-    {
+    public EventLoopGroup getWorkerGroup() {
         return workerGroup;
     }
 
-    public String getHost()
-    {
+    public String getHost() {
         return host;
     }
 
-    public int getPort()
-    {
+    public int getPort() {
         return port;
     }
 }

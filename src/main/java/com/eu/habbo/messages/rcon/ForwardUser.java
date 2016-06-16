@@ -5,30 +5,24 @@ import com.eu.habbo.habbohotel.rooms.Room;
 import com.eu.habbo.habbohotel.users.Habbo;
 import com.google.gson.Gson;
 
-public class ForwardUser extends RCONMessage<ForwardUser.ForwardUserJSON>
-{
-    public ForwardUser()
-    {
+public class ForwardUser extends RCONMessage<ForwardUser.ForwardUserJSON> {
+
+    public ForwardUser() {
         super(ForwardUserJSON.class);
     }
 
     @Override
-    public String handle(ForwardUserJSON object)
-    {
+    public String handle(ForwardUserJSON object) {
         Habbo habbo = Emulator.getGameEnvironment().getHabboManager().getHabbo(object.user_id);
 
-        if(habbo != null)
-        {
+        if (habbo != null) {
             Room room = Emulator.getGameEnvironment().getRoomManager().getRoom(object.room_id);
 
-            if(room != null)
-            {
+            if (room != null) {
                 Emulator.getGameEnvironment().getRoomManager().enterRoom(habbo, room);
 
                 return new Gson().toJson("OK", String.class);
-            }
-            else
-            {
+            } else {
                 return new Gson().toJson("ROOM_ERROR", String.class);
             }
         }
@@ -36,8 +30,8 @@ public class ForwardUser extends RCONMessage<ForwardUser.ForwardUserJSON>
         return new Gson().toJson("USER_ERROR", String.class);
     }
 
-    public class ForwardUserJSON
-    {
+    public class ForwardUserJSON {
+
         public int user_id;
         public int room_id;
     }

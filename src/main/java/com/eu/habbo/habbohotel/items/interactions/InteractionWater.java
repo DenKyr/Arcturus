@@ -13,58 +13,49 @@ import com.eu.habbo.util.pathfinding.Tile;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class InteractionWater extends InteractionDefault
-{
-    public InteractionWater(ResultSet set, Item baseItem) throws SQLException
-    {
+public class InteractionWater extends InteractionDefault {
+
+    public InteractionWater(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
 
-    public InteractionWater(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public InteractionWater(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
 
     @Override
-    public void onMove(Tile oldLocation, Tile newLocation)
-    {
+    public void onMove(Tile oldLocation, Tile newLocation) {
         this.refreshWaters();
     }
 
     @Override
-    public void onPickUp()
-    {
+    public void onPickUp() {
         this.refreshWaters();
     }
 
     @Override
-    public void onPlace()
-    {
+    public void onPlace() {
         this.refreshWaters();
     }
 
-    private void refreshWaters()
-    {
+    private void refreshWaters() {
         Room room = Emulator.getGameEnvironment().getRoomManager().getRoom(this.getRoomId());
 
-        if(room == null)
+        if (room == null) {
             return;
+        }
 
-        for(HabboItem item : room.getRoomSpecialTypes().getItemsOfType(InteractionWaterItem.class))
-        {
-            ((InteractionWaterItem)item).update();
+        for (HabboItem item : room.getRoomSpecialTypes().getItemsOfType(InteractionWaterItem.class)) {
+            ((InteractionWaterItem) item).update();
         }
     }
 
     @Override
-    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception
-    {
+    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception {
         AbstractPet pet = room.getPet(roomUnit);
 
-        if (pet != null)
-        {
-            if(pet instanceof Pet)
-            {
+        if (pet != null) {
+            if (pet instanceof Pet) {
                 pet.getRoomUnit().getStatus().put("dip", "0");
             }
         }

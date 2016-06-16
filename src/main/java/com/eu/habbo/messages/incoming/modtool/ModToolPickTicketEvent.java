@@ -7,21 +7,18 @@ import com.eu.habbo.messages.incoming.MessageHandler;
 import com.eu.habbo.messages.outgoing.generic.alerts.GenericAlertComposer;
 import com.eu.habbo.messages.outgoing.modtool.ModToolIssueInfoComposer;
 
-public class ModToolPickTicketEvent extends MessageHandler
-{
+public class ModToolPickTicketEvent extends MessageHandler {
+
     public static boolean send = false;
+
     @Override
-    public void handle() throws Exception
-    {
-        if(this.client.getHabbo().hasPermission("acc_supporttool"))
-        {
+    public void handle() throws Exception {
+        if (this.client.getHabbo().hasPermission("acc_supporttool")) {
             this.packet.readInt();
             ModToolIssue issue = Emulator.getGameEnvironment().getModToolManager().getTicket(this.packet.readInt());
 
-            if(issue != null)
-            {
-                if(issue.state == ModToolTicketState.PICKED)
-                {
+            if (issue != null) {
+                if (issue.state == ModToolTicketState.PICKED) {
                     this.client.sendResponse(new ModToolIssueInfoComposer(issue));
                     this.client.sendResponse(new GenericAlertComposer("Picking issue failedd: \rTicket already picked or does not exist!"));
 
@@ -30,14 +27,10 @@ public class ModToolPickTicketEvent extends MessageHandler
 
                 //this.client.sendResponse(new ModToolIssueInfoComposer(issue));
                 Emulator.getGameEnvironment().getModToolManager().pickTicket(issue, this.client.getHabbo());
-            }
-            else
-            {
+            } else {
                 this.client.sendResponse(new GenericAlertComposer("Picking issue failed: \rTicket already picked or does not exist!"));
             }
-        }
-        else
-        {
+        } else {
             Emulator.getGameEnvironment().getModToolManager().quickTicket(this.client.getHabbo(), "Scripter", Emulator.getTexts().getValue("scripter.warning.modtools.ticket.pick").replace("%username%", this.client.getHabbo().getHabboInfo().getUsername()));
         }
     }

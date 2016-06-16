@@ -3,8 +3,8 @@ package com.eu.habbo.habbohotel.catalog;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Voucher
-{
+public class Voucher {
+
     /**
      * Voucher ID
      */
@@ -32,11 +32,11 @@ public class Voucher
 
     /**
      * Constructs a new Voucher.
+     *
      * @param set The ResultSet to read the data from.
      * @throws SQLException
      */
-    public Voucher(ResultSet set) throws SQLException
-    {
+    public Voucher(ResultSet set) throws SQLException {
         this.id = set.getInt("id");
         this.code = set.getString("code");
         this.credits = set.getInt("credits");

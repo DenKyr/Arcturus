@@ -3,8 +3,8 @@ package com.eu.habbo.plugin.events.roomunit;
 import com.eu.habbo.habbohotel.rooms.RoomUnit;
 import com.eu.habbo.util.pathfinding.Tile;
 
-public class RoomUnitLookAtPointEvent extends RoomUnitEvent
-{
+public class RoomUnitLookAtPointEvent extends RoomUnitEvent {
+
     /**
      * The tile to look at.
      */
@@ -14,8 +14,7 @@ public class RoomUnitLookAtPointEvent extends RoomUnitEvent
      * @param roomUnit The RoomUnit this event applies to.
      * @param location The tile to look at.
      */
-    public RoomUnitLookAtPointEvent(RoomUnit roomUnit, Tile location)
-    {
+    public RoomUnitLookAtPointEvent(RoomUnit roomUnit, Tile location) {
         super(roomUnit);
 
         this.location = location;

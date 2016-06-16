@@ -4,21 +4,18 @@ import com.eu.habbo.habbohotel.users.Habbo;
 import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 
-public class KnockKnockUnknownComposer2 extends MessageComposer
-{
+public class KnockKnockUnknownComposer2 extends MessageComposer {
+
     private final Habbo habbo;
 
-    public KnockKnockUnknownComposer2(Habbo habbo)
-    {
+    public KnockKnockUnknownComposer2(Habbo habbo) {
         this.habbo = habbo;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(1504);//TODO Hardcoded header
-        if(this.habbo != null)
-        {
+        if (this.habbo != null) {
             this.response.appendString(this.habbo.getHabboInfo().getUsername());
         }
         this.response.appendString("");

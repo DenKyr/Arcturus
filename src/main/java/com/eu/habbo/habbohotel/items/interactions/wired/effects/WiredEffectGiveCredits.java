@@ -12,25 +12,22 @@ import com.eu.habbo.messages.ServerMessage;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class WiredEffectGiveCredits extends InteractionWiredEffect
-{
+public class WiredEffectGiveCredits extends InteractionWiredEffect {
+
     public static final WiredEffectType type = WiredEffectType.SHOW_MESSAGE;
 
     private int credits = 0;
 
-    public WiredEffectGiveCredits(ResultSet set, Item baseItem) throws SQLException
-    {
+    public WiredEffectGiveCredits(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
 
-    public WiredEffectGiveCredits(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public WiredEffectGiveCredits(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
 
     @Override
-    public void serializeWiredData(ServerMessage message)
-    {
+    public void serializeWiredData(ServerMessage message) {
         message.appendBoolean(false);
         message.appendInt32(0);
         message.appendInt32(0);
@@ -45,16 +42,12 @@ public class WiredEffectGiveCredits extends InteractionWiredEffect
     }
 
     @Override
-    public boolean saveData(ClientMessage packet)
-    {
+    public boolean saveData(ClientMessage packet) {
         packet.readInt();
 
-        try
-        {
+        try {
             this.credits = Integer.valueOf(packet.readString());
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return false;
         }
 
@@ -62,18 +55,17 @@ public class WiredEffectGiveCredits extends InteractionWiredEffect
     }
 
     @Override
-    public WiredEffectType getType()
-    {
+    public WiredEffectType getType() {
         return type;
     }
 
     @Override
-    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff)
-    {
+    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff) {
         Habbo habbo = room.getHabbo(roomUnit);
 
-        if(habbo == null)
+        if (habbo == null) {
             return false;
+        }
 
         habbo.giveCredits(this.credits);
 
@@ -81,37 +73,29 @@ public class WiredEffectGiveCredits extends InteractionWiredEffect
     }
 
     @Override
-    protected String getWiredData()
-    {
+    protected String getWiredData() {
         return this.getDelay() + "\t" + this.credits;
     }
 
     @Override
-    public void loadWiredData(ResultSet set, Room room) throws SQLException
-    {
+    public void loadWiredData(ResultSet set, Room room) throws SQLException {
         String wireData = set.getString("wired_data");
         String[] data = wireData.split("\t");
         this.credits = 0;
 
-        if(data.length >= 2)
-        {
+        if (data.length >= 2) {
             super.setDelay(Integer.valueOf(data[0]));
 
-            try
-            {
+            try {
                 this.credits = Integer.valueOf(data[1]);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
     @Override
-    public void onPickUp()
-    {
+    public void onPickUp() {
         this.credits = 0;
     }
 }
-

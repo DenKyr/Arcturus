@@ -7,22 +7,21 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class AddFloorItemComposer extends MessageComposer
-{
+public class AddFloorItemComposer extends MessageComposer {
+
     private final HabboItem item;
     private final String itemOwnerName;
 
-    public AddFloorItemComposer(HabboItem item, String itemOwnerName)
-    {
+    public AddFloorItemComposer(HabboItem item, String itemOwnerName) {
         this.item = item;
         this.itemOwnerName = itemOwnerName;
     }
 
     @Override
-    public ServerMessage compose()    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.AddFloorItemComposer);
         this.item.serializeFloorData(this.response);
-        this.response.appendInt32(this.item instanceof InteractionGift ? ((((InteractionGift) this.item).getColorId() * 1000) + ((InteractionGift) this.item).getRibbonId()) : (this.item instanceof InteractionMusicDisc ? ((InteractionMusicDisc)this.item).getSongId() : 1));
+        this.response.appendInt32(this.item instanceof InteractionGift ? ((((InteractionGift) this.item).getColorId() * 1000) + ((InteractionGift) this.item).getRibbonId()) : (this.item instanceof InteractionMusicDisc ? ((InteractionMusicDisc) this.item).getSongId() : 1));
         this.item.serializeExtradata(this.response);
         this.response.appendInt32(-1);
         this.response.appendInt32(this.item.getBaseItem().getStateCount() > 1 ? 1 : 0);

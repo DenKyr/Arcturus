@@ -12,8 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
 
-public abstract class CatalogPage implements Comparable<CatalogPage>, ISerialize
-{
+public abstract class CatalogPage implements Comparable<CatalogPage>, ISerialize {
+
     protected int id;
     protected int parentId;
     protected int rank;
@@ -34,13 +34,16 @@ public abstract class CatalogPage implements Comparable<CatalogPage>, ISerialize
     protected String textDetails;
     protected String textTeaser;
     protected TIntArrayList offerIds = new TIntArrayList();
-    protected THashMap<Integer, CatalogPage> childPages = new THashMap<Integer, CatalogPage>();;
-    private TIntObjectMap<CatalogItem> catalogItems = TCollections.synchronizedMap(new TIntObjectHashMap<CatalogItem>());;
+    protected THashMap<Integer, CatalogPage> childPages = new THashMap<Integer, CatalogPage>();
+    ;
+    private TIntObjectMap<CatalogItem> catalogItems = TCollections.synchronizedMap(new TIntObjectHashMap<CatalogItem>());
 
-    public CatalogPage(ResultSet set) throws SQLException
-    {
-        if (set == null)
+    ;
+
+    public CatalogPage(ResultSet set) throws SQLException {
+        if (set == null) {
             return;
+        }
 
         this.id = set.getInt("id");
         this.parentId = set.getInt("parent_id");
@@ -63,133 +66,107 @@ public abstract class CatalogPage implements Comparable<CatalogPage>, ISerialize
         this.textTeaser = set.getString("page_text_teaser");
     }
 
-    public int getId()
-    {
+    public int getId() {
         return this.id;
     }
 
-    public int getParentId()
-    {
+    public int getParentId() {
         return this.parentId;
     }
 
-    public int getRank()
-    {
+    public int getRank() {
         return this.rank;
     }
 
-    public String getCaption()
-    {
+    public String getCaption() {
         return this.caption;
     }
 
-    public String getPageName()
-    {
+    public String getPageName() {
         return this.pageName;
     }
 
-    public int getIconColor()
-    {
+    public int getIconColor() {
         return this.iconColor;
     }
 
-    public int getIconImage()
-    {
+    public int getIconImage() {
         return this.iconImage;
     }
 
-    public int getOrderNum()
-    {
+    public int getOrderNum() {
         return this.orderNum;
     }
 
-    public boolean isVisible()
-    {
+    public boolean isVisible() {
         return this.visible;
     }
 
-    public boolean isEnabled()
-    {
+    public boolean isEnabled() {
         return this.enabled;
     }
 
-    public boolean isClubOnly()
-    {
+    public boolean isClubOnly() {
         return this.clubOnly;
     }
 
-    public String getLayout()
-    {
+    public String getLayout() {
         return this.layout;
     }
 
-    public String getHeaderImage()
-    {
+    public String getHeaderImage() {
         return this.headerImage;
     }
 
-    public String getTeaserImage()
-    {
+    public String getTeaserImage() {
         return this.teaserImage;
     }
 
-    public String getSpecialImage()
-    {
+    public String getSpecialImage() {
         return this.specialImage;
     }
 
-    public String getTextOne()
-    {
+    public String getTextOne() {
         return this.textOne;
     }
 
-    public String getTextTwo()
-    {
+    public String getTextTwo() {
         return this.textTwo;
     }
 
-    public String getTextDetails()
-    {
+    public String getTextDetails() {
         return this.textDetails;
     }
 
-    public String getTextTeaser()
-    {
+    public String getTextTeaser() {
         return this.textTeaser;
     }
 
-    public TIntArrayList getOfferIds()
-    {
+    public TIntArrayList getOfferIds() {
         return this.offerIds;
     }
 
-    public void addOfferId(int offerId)
-    {
+    public void addOfferId(int offerId) {
         this.offerIds.add(offerId);
     }
 
-    public void addItem(CatalogItem item)
-    {
+    public void addItem(CatalogItem item) {
         this.catalogItems.put(item.getId(), item);
     }
 
-    public TIntObjectMap<CatalogItem> getCatalogItems()
-    {
+    public TIntObjectMap<CatalogItem> getCatalogItems() {
         return this.catalogItems;
     }
 
-    public CatalogItem getCatalogItem(int id)
-    {
+    public CatalogItem getCatalogItem(int id) {
         return this.catalogItems.get(id);
     }
 
-    public THashMap<Integer, CatalogPage> getChildPages()
-    {
+    public THashMap<Integer, CatalogPage> getChildPages() {
         return this.childPages;
     }
 
-    public void addChildPage(CatalogPage page)
-    {
+    public void addChildPage(CatalogPage page) {
         this.childPages.put(page.getId(), page);
     }
 

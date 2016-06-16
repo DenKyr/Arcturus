@@ -5,8 +5,8 @@ import gnu.trove.map.hash.THashMap;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Achievement
-{
+public class Achievement {
+
     /**
      * Id of the Achievement.
      */
@@ -29,11 +29,11 @@ public class Achievement
 
     /**
      * Creates an new achievement.
+     *
      * @param set The ResultSet it should fetch the data from.
      * @throws SQLException
      */
-    public Achievement(ResultSet set) throws SQLException
-    {
+    public Achievement(ResultSet set) throws SQLException {
         levels = new THashMap<Integer, AchievementLevel>();
 
         id = set.getInt("id");
@@ -45,29 +45,26 @@ public class Achievement
 
     /**
      * Adds an new AchievementLevel to the Achievement.
+     *
      * @param level The AchievementLevel to be added.
      */
-    public void addLevel(AchievementLevel level)
-    {
-        synchronized (this.levels)
-        {
+    public void addLevel(AchievementLevel level) {
+        synchronized (this.levels) {
             this.levels.put(level.level, level);
         }
     }
 
     /**
      * Calculates the AchievementLevel for the given progress.
+     *
      * @param progress The amount of progress.
      * @return The AchievementLevel that matches the amount of progress.
      */
-    public AchievementLevel getLevelForProgress(int progress)
-    {
+    public AchievementLevel getLevelForProgress(int progress) {
         AchievementLevel l = null;
 
-        for(AchievementLevel level : this.levels.values())
-        {
-            if(level.progress >= progress && (l == null || level.level < l.level))
-            {
+        for (AchievementLevel level : this.levels.values()) {
+            if (level.progress >= progress && (l == null || level.level < l.level)) {
                 l = level;
             }
         }

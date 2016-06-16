@@ -5,8 +5,8 @@ import com.eu.habbo.habbohotel.items.interactions.InteractionWiredTrigger;
 import com.eu.habbo.habbohotel.rooms.RoomUnit;
 import com.eu.habbo.plugin.events.roomunit.RoomUnitEvent;
 
-public class WiredConditionFailedEvent extends RoomUnitEvent
-{
+public class WiredConditionFailedEvent extends RoomUnitEvent {
+
     /**
      * The wired trigger item.
      */
@@ -18,13 +18,14 @@ public class WiredConditionFailedEvent extends RoomUnitEvent
     public final InteractionWiredCondition condition;
 
     /**
-     * Cancelling this event equals the condition being met and therefor allows further execution.
+     * Cancelling this event equals the condition being met and therefor allows
+     * further execution.
+     *
      * @param roomUnit The RoomUnit this event applies to.
      * @param trigger The wired trigger item.
      * @param condition The condition that failed to be met.
      */
-    public WiredConditionFailedEvent(RoomUnit roomUnit, InteractionWiredTrigger trigger, InteractionWiredCondition condition)
-    {
+    public WiredConditionFailedEvent(RoomUnit roomUnit, InteractionWiredTrigger trigger, InteractionWiredCondition condition) {
         super(roomUnit);
         this.trigger = trigger;
         this.condition = condition;

@@ -11,16 +11,15 @@ import com.eu.habbo.messages.outgoing.rooms.items.FloorItemUpdateComposer;
 import com.eu.habbo.messages.outgoing.rooms.users.RoomUserStatusComposer;
 import com.eu.habbo.threading.runnables.HabboItemNewState;
 
-class HopperActionThree implements Runnable
-{
+class HopperActionThree implements Runnable {
+
     private final HabboItem teleportOne;
     private final Room room;
     private final GameClient client;
     private final int targetRoomId;
     private final int targetItemId;
 
-    public HopperActionThree(HabboItem teleportOne, Room room, GameClient client, int targetRoomId, int targetItemId)
-    {
+    public HopperActionThree(HabboItem teleportOne, Room room, GameClient client, int targetRoomId, int targetItemId) {
         this.teleportOne = teleportOne;
         this.room = room;
         this.client = client;
@@ -29,21 +28,18 @@ class HopperActionThree implements Runnable
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
         HabboItem targetTeleport;
         Room targetRoom = room;
 
-        if(this.teleportOne.getRoomId() != targetRoomId)
-        {
+        if (this.teleportOne.getRoomId() != targetRoomId) {
             targetRoom = Emulator.getGameEnvironment().getRoomManager().loadRoom(this.targetRoomId);
             Emulator.getGameEnvironment().getRoomManager().enterRoom(this.client.getHabbo(), targetRoom);
         }
 
         targetTeleport = targetRoom.getHabboItem(this.targetItemId);
 
-        if(targetTeleport == null)
-        {
+        if (targetTeleport == null) {
             this.client.getHabbo().getRoomUnit().getStatus().remove("mv");
             this.client.getHabbo().getRoomUnit().setCanWalk(true);
             return;
@@ -61,8 +57,7 @@ class HopperActionThree implements Runnable
         Emulator.getThreading().run(new HabboItemNewState(this.teleportOne, room, "0"), 500);
         Emulator.getThreading().run(new HopperActionFour(targetTeleport, targetRoom, this.client), 500);
 
-        if(targetTeleport instanceof InteractionCostumeHopper)
-        {
+        if (targetTeleport instanceof InteractionCostumeHopper) {
             AchievementManager.progressAchievement(this.client.getHabbo(), Emulator.getGameEnvironment().getAchievementManager().achievements.get("CostumeHopper"));
         }
     }

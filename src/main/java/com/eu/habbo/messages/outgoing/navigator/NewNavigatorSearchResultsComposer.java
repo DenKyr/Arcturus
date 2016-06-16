@@ -10,44 +10,38 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class NewNavigatorSearchResultsComposer extends MessageComposer
-{
+public class NewNavigatorSearchResultsComposer extends MessageComposer {
+
     private String searchCode;
     private String searchQuery;
     private final List<SearchResultList> resultList;
 
-    public NewNavigatorSearchResultsComposer(String searchCode, String searchQuery, List<SearchResultList> resultList)
-    {
-        this.searchCode  = searchCode;
+    public NewNavigatorSearchResultsComposer(String searchCode, String searchQuery, List<SearchResultList> resultList) {
+        this.searchCode = searchCode;
         this.searchQuery = searchQuery;
-        this.resultList  = resultList;
+        this.resultList = resultList;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.NewNavigatorSearchResultsComposer);
         this.response.appendString(this.searchCode);
         this.response.appendString(this.searchQuery);
 
-        Collections.sort(this.resultList, new Comparator<SearchResultList>()
-        {
+        Collections.sort(this.resultList, new Comparator<SearchResultList>() {
             @Override
-            public int compare(SearchResultList o1, SearchResultList o2)
-            {
+            public int compare(SearchResultList o1, SearchResultList o2) {
                 return o1.order - o2.order;
             }
         });
 
         this.response.appendInt32(this.resultList.size()); //Count
 
-        for (SearchResultList item : resultList)
-        {
+        for (SearchResultList item : resultList) {
             item.serialize(this.response);
         }
 
         return this.response;
     }
-
 
 }

@@ -5,18 +5,16 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class EasterCrickeyComposer extends MessageComposer
-{
+public class EasterCrickeyComposer extends MessageComposer {
+
     private final Habbo habbo;
 
-    public EasterCrickeyComposer(Habbo habbo)
-    {
+    public EasterCrickeyComposer(Habbo habbo) {
         this.habbo = habbo;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.RoomUsersComposer);
         this.response.appendInt32(1);
         this.response.appendInt32(this.habbo.getHabboInfo().getId());

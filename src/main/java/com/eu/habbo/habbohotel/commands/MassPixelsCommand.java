@@ -11,41 +11,34 @@ import com.eu.habbo.messages.outgoing.users.UserCurrencyComposer;
 import java.util.Collection;
 import java.util.Map;
 
-public class MassPixelsCommand extends Command
-{
-    public MassPixelsCommand()
-    {
+public class MassPixelsCommand extends Command {
+
+    public MassPixelsCommand() {
         super("cmd_massduckets", Emulator.getTexts().getValue("commands.keys.cmd_massduckets").split(";"));
     }
 
     @Override
-    public boolean handle(GameClient gameClient, String[] params) throws Exception
-    {
-        if(params.length == 2)
-        {
+    public boolean handle(GameClient gameClient, String[] params) throws Exception {
+        if (params.length == 2) {
             int amount;
 
-            try
-            {
+            try {
                 amount = Integer.valueOf(params[1]);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 gameClient.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.error.cmd_massduckets.invalid_amount"), gameClient.getHabbo(), gameClient.getHabbo(), RoomChatMessageBubbles.ALERT)));
                 return true;
             }
 
-            if(amount != 0)
-            {
-                for(Map.Entry<Integer, Habbo> set : Emulator.getGameEnvironment().getHabboManager().getOnlineHabbos().entrySet())
-                {
+            if (amount != 0) {
+                for (Map.Entry<Integer, Habbo> set : Emulator.getGameEnvironment().getHabboManager().getOnlineHabbos().entrySet()) {
                     Habbo habbo = set.getValue();
 
                     habbo.getHabboInfo().addPixels(amount);
                     habbo.getClient().sendResponse(new UserCurrencyComposer(habbo));
 
-                    if(habbo.getHabboInfo().getCurrentRoom() != null)
+                    if (habbo.getHabboInfo().getCurrentRoom() != null) {
                         habbo.getClient().sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.generic.cmd_duckets.received").replace("%amount%", amount + ""), habbo, habbo, RoomChatMessageBubbles.ALERT)));
+                    }
                 }
             }
             return true;

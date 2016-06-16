@@ -5,15 +5,14 @@ import com.eu.habbo.habbohotel.users.Habbo;
 import com.eu.habbo.habbohotel.users.HabboItem;
 import com.eu.habbo.messages.outgoing.rooms.items.FloorItemUpdateComposer;
 
-public class BanzaiRandomTeleport implements Runnable
-{
+public class BanzaiRandomTeleport implements Runnable {
+
     private HabboItem item;
     private HabboItem toItem;
     private Habbo habbo;
     private Room room;
 
-    public BanzaiRandomTeleport(HabboItem item, HabboItem toItem, Habbo habbo, Room room)
-    {
+    public BanzaiRandomTeleport(HabboItem item, HabboItem toItem, Habbo habbo, Room room) {
         this.item = item;
         this.toItem = toItem;
         this.habbo = habbo;
@@ -21,8 +20,7 @@ public class BanzaiRandomTeleport implements Runnable
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
         this.item.setExtradata("0");
         this.toItem.setExtradata("0");
         this.room.updateItem(this.item);

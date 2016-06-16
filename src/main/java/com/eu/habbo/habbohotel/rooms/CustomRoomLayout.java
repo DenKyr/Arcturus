@@ -6,29 +6,25 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class CustomRoomLayout extends RoomLayout implements Runnable
-{
+public class CustomRoomLayout extends RoomLayout implements Runnable {
+
     private boolean needsUpdate;
     private Room room;
 
-    public CustomRoomLayout(ResultSet set, Room room) throws SQLException
-    {
+    public CustomRoomLayout(ResultSet set, Room room) throws SQLException {
         super(set);
 
         this.room = room;
     }
 
     @Override
-    public void run()
-    {
-        if(this.needsUpdate)
-        {
+    public void run() {
+        if (this.needsUpdate) {
             this.needsUpdate = false;
 
             PreparedStatement statement = Emulator.getDatabase().prepare("UPDATE room_models_custom SET door_x = ?, door_y = ?, door_dir = ?, heightmap = ? WHERE id = ? LIMIT 1");
 
-            try
-            {
+            try {
                 statement.setInt(1, this.getDoorX());
                 statement.setInt(2, this.getDoorY());
                 statement.setInt(3, this.getDoorDirection());
@@ -37,25 +33,19 @@ public class CustomRoomLayout extends RoomLayout implements Runnable
                 statement.execute();
                 statement.close();
                 statement.getConnection().close();
-            }
-            catch (SQLException e)
-            {
+            } catch (SQLException e) {
                 Emulator.getLogging().logSQLException(e);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 Emulator.getLogging().logErrorLine(e);
             }
         }
     }
 
-    public boolean needsUpdate()
-    {
+    public boolean needsUpdate() {
         return this.needsUpdate;
     }
 
-    public void needsUpdate(boolean needsUpdate)
-    {
+    public void needsUpdate(boolean needsUpdate) {
         this.needsUpdate = needsUpdate;
     }
 }

@@ -7,26 +7,22 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class TradeUpdateComposer extends MessageComposer
-{
+public class TradeUpdateComposer extends MessageComposer {
+
     private RoomTrade roomTrade;
 
-    public TradeUpdateComposer(RoomTrade roomTrade)
-    {
+    public TradeUpdateComposer(RoomTrade roomTrade) {
         this.roomTrade = roomTrade;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.TradeUpdateComposer);
-        for(RoomTradeUser roomTradeUser : this.roomTrade.getRoomTradeUsers())
-        {
+        for (RoomTradeUser roomTradeUser : this.roomTrade.getRoomTradeUsers()) {
             this.response.appendInt32(roomTradeUser.getHabbo().getHabboInfo().getId());
             this.response.appendInt32(roomTradeUser.getItems().size());
 
-            for(HabboItem item : roomTradeUser.getItems())
-            {
+            for (HabboItem item : roomTradeUser.getItems()) {
                 this.response.appendInt32(item.getId());
                 this.response.appendString(item.getBaseItem().getType().toLowerCase());
                 this.response.appendInt32(item.getId());
@@ -38,8 +34,9 @@ public class TradeUpdateComposer extends MessageComposer
                 this.response.appendInt32(0);
                 this.response.appendInt32(0);
 
-                if(item.getBaseItem().getType().toLowerCase().equals("s"))
+                if (item.getBaseItem().getType().toLowerCase().equals("s")) {
                     this.response.appendInt32(0);
+                }
             }
         }
         return this.response;

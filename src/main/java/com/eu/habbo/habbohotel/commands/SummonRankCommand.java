@@ -10,36 +10,29 @@ import com.eu.habbo.messages.outgoing.rooms.users.RoomUserWhisperComposer;
 
 import java.util.Map;
 
-public class SummonRankCommand extends Command
-{
-    public SummonRankCommand()
-    {
+public class SummonRankCommand extends Command {
+
+    public SummonRankCommand() {
         super("cmd_summonrank", Emulator.getTexts().getValue("commands.keys.cmd_summonrank").split(";"));
     }
 
     @Override
-    public boolean handle(GameClient gameClient, String[] params) throws Exception
-    {
+    public boolean handle(GameClient gameClient, String[] params) throws Exception {
         int minRank = 1;
 
-        if(params.length >= 2)
-        {
-            try
-            {
+        if (params.length >= 2) {
+            try {
                 minRank = Integer.valueOf(params[1]);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 gameClient.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.generic.cmd_summonrank.error"), gameClient.getHabbo(), gameClient.getHabbo(), RoomChatMessageBubbles.ALERT)));
                 return true;
             }
 
-            for(Map.Entry<Integer, Habbo> set : Emulator.getGameEnvironment().getHabboManager().getOnlineHabbos().entrySet())
-            {
-                if(set.getValue().getHabboInfo().getRank() >= minRank)
-                {
-                    if(set.getValue() == gameClient.getHabbo())
+            for (Map.Entry<Integer, Habbo> set : Emulator.getGameEnvironment().getHabboManager().getOnlineHabbos().entrySet()) {
+                if (set.getValue().getHabboInfo().getRank() >= minRank) {
+                    if (set.getValue() == gameClient.getHabbo()) {
                         continue;
+                    }
 
                     set.getValue().getClient().sendResponse(new ForwardToRoomComposer(gameClient.getHabbo().getHabboInfo().getCurrentRoom().getId()));
                     Emulator.getGameEnvironment().getRoomManager().enterRoom(set.getValue(), gameClient.getHabbo().getHabboInfo().getCurrentRoom().getId(), "", true);

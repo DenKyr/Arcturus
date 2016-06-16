@@ -3,8 +3,8 @@ package com.eu.habbo.plugin.events.guilds;
 import com.eu.habbo.habbohotel.guilds.Guild;
 import com.eu.habbo.plugin.Event;
 
-public abstract class GuildEvent extends Event
-{
+public abstract class GuildEvent extends Event {
+
     /**
      * The guild this applies to.
      */
@@ -13,8 +13,7 @@ public abstract class GuildEvent extends Event
     /**
      * @param guild The guild this applies to.
      */
-    public GuildEvent(Guild guild)
-    {
+    public GuildEvent(Guild guild) {
         this.guild = guild;
     }
 }

@@ -16,161 +16,127 @@ import gnu.trove.set.hash.THashSet;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class InteractionWiredHighscore extends HabboItem
-{
+public class InteractionWiredHighscore extends HabboItem {
+
     public WiredHighscoreScoreType scoreType;
     public WiredHighscoreClearType clearType;
 
     private THashSet<WiredHighscoreData> data;
     private int lastUpdate;
 
-    public InteractionWiredHighscore(ResultSet set, Item baseItem) throws SQLException
-    {
+    public InteractionWiredHighscore(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
 
         this.scoreType = WiredHighscoreScoreType.CLASSIC;
         this.clearType = WiredHighscoreClearType.ALLTIME;
 
-        try
-        {
+        try {
             String name = this.getBaseItem().getName().split("_")[1].toUpperCase().split("\\*")[0];
             int ctype = Integer.valueOf(this.getBaseItem().getName().split("\\*")[1]) - 1;
             this.scoreType = WiredHighscoreScoreType.valueOf(name);
             this.clearType = WiredHighscoreClearType.values()[ctype];
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Emulator.getLogging().logErrorLine(e);
         }
 
-        if(this.getRoomId() > 0)
-        {
+        if (this.getRoomId() > 0) {
             Room room = Emulator.getGameEnvironment().getRoomManager().getRoom(this.getRoomId());
 
-            if(room != null)
-            {
+            if (room != null) {
                 this.reloadData(room);
             }
         }
     }
 
-    public InteractionWiredHighscore(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public InteractionWiredHighscore(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
 
         this.scoreType = WiredHighscoreScoreType.CLASSIC;
         this.clearType = WiredHighscoreClearType.ALLTIME;
 
-        try
-        {
+        try {
             String name = this.getBaseItem().getName().split("_")[1].toUpperCase().split("\\*")[0];
             int ctype = Integer.valueOf(this.getBaseItem().getName().split("\\*")[1]) - 1;
             this.scoreType = WiredHighscoreScoreType.valueOf(name);
             this.clearType = WiredHighscoreClearType.values()[ctype];
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Emulator.getLogging().logErrorLine(e);
         }
     }
 
     @Override
-    public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects)
-    {
+    public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects) {
         return true;
     }
 
     @Override
-    public boolean isWalkable()
-    {
+    public boolean isWalkable() {
         return true;
     }
 
     @Override
-    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception
-    {
+    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception {
 
     }
 
     @Override
-    public void onClick(GameClient client, Room room, Object[] objects) throws Exception
-    {
-        if(this.getExtradata() == null || this.getExtradata().isEmpty() || this.getExtradata().length() == 0)
-        {
+    public void onClick(GameClient client, Room room, Object[] objects) throws Exception {
+        if (this.getExtradata() == null || this.getExtradata().isEmpty() || this.getExtradata().length() == 0) {
             this.setExtradata("0");
         }
 
-        try
-        {
+        try {
             int state = Integer.valueOf(this.getExtradata());
             this.setExtradata(Math.abs(state - 1) + "");
             this.reloadData(room);
             room.updateItem(this);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Emulator.getLogging().logErrorLine(e);
         }
     }
 
     /*
 
-    FUCK OFF
+     FUCK OFF
      */
     @Override
-    public void serializeExtradata(ServerMessage serverMessage)
-    {
+    public void serializeExtradata(ServerMessage serverMessage) {
         serverMessage.appendInt32(6);
         serverMessage.appendString(this.getExtradata());
         serverMessage.appendInt32(this.scoreType.type); //score type
         serverMessage.appendInt32(this.clearType.type); //clear type
 
-        if(this.getRoomId() == 0)
-        {
+        if (this.getRoomId() == 0) {
             serverMessage.appendInt32(0);
-        }
-        else
-        {
+        } else {
             Room room = Emulator.getGameEnvironment().getRoomManager().getRoom(this.getRoomId());
 
-            if(room == null)
-            {
+            if (room == null) {
                 serverMessage.appendInt32(0);
-            }
-            else
-            {
-                if(Emulator.getIntUnixTimestamp() - this.lastUpdate > 60 * 60)
-                {
+            } else {
+                if (Emulator.getIntUnixTimestamp() - this.lastUpdate > 60 * 60) {
                     this.reloadData(room);
                 }
 
-                if(this.data != null)
-                {
+                if (this.data != null) {
                     serverMessage.appendInt32(this.data.size()); //count
 
-                    for (WiredHighscoreData dataSet : this.data)
-                    {
-                        if (this.scoreType == WiredHighscoreScoreType.PERTEAM)
-                        {
+                    for (WiredHighscoreData dataSet : this.data) {
+                        if (this.scoreType == WiredHighscoreScoreType.PERTEAM) {
                             serverMessage.appendInt32(dataSet.teamScore); //Team score
-                        } else if (dataSet.usernames.length == 1)
-                        {
+                        } else if (dataSet.usernames.length == 1) {
                             serverMessage.appendInt32(dataSet.score);
-                        } else
-                        {
+                        } else {
                             serverMessage.appendInt32(dataSet.totalScore);
                         }
 
                         serverMessage.appendInt32(dataSet.usernames.length); //Users count
 
-                        for (String codeDragon : dataSet.usernames)
-                        {
+                        for (String codeDragon : dataSet.usernames) {
                             serverMessage.appendString(codeDragon);
                         }
                     }
-                }
-                else
-                {
+                } else {
                     serverMessage.appendInt32(0);
                 }
             }
@@ -180,25 +146,21 @@ public class InteractionWiredHighscore extends HabboItem
     }
 
     @Override
-    public void onPlace()
-    {
+    public void onPlace() {
         Room room = Emulator.getGameEnvironment().getRoomManager().getRoom(this.getRoomId());
 
-        if(room != null)
-        {
+        if (room != null) {
             this.reloadData(room);
         }
     }
 
     @Override
-    public void onPickUp()
-    {
+    public void onPickUp() {
         this.data.clear();
         this.lastUpdate = 0;
     }
 
-    private void reloadData(Room room)
-    {
+    private void reloadData(Room room) {
         this.data = room.getWiredHighscoreData(this.scoreType, this.clearType);
         this.lastUpdate = Emulator.getIntUnixTimestamp();
     }

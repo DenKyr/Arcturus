@@ -12,11 +12,10 @@ import com.eu.habbo.messages.outgoing.inventory.InventoryRefreshComposer;
 import com.eu.habbo.messages.outgoing.users.*;
 import gnu.trove.procedure.TObjectProcedure;
 
-public class CatalogBuyItemEvent extends MessageHandler
-{
+public class CatalogBuyItemEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         int pageId = this.packet.readInt();
         int itemId = this.packet.readInt();
         String extraData = this.packet.readString();
@@ -24,52 +23,39 @@ public class CatalogBuyItemEvent extends MessageHandler
 
         CatalogPage page = null;
 
-        if(pageId == -12345678)
-        {
-            for(CatalogPage p : Emulator.getGameEnvironment().getCatalogManager().getCatalogPages(-1, this.client.getHabbo()))
-            {
-                if(p.getCatalogItem(itemId) != null)
-                {
+        if (pageId == -12345678) {
+            for (CatalogPage p : Emulator.getGameEnvironment().getCatalogManager().getCatalogPages(-1, this.client.getHabbo())) {
+                if (p.getCatalogItem(itemId) != null) {
                     page = p;
                     break;
-                }
-                else
-                {
-                    for(CatalogPage p2 : Emulator.getGameEnvironment().getCatalogManager().getCatalogPages(p.getId(), this.client.getHabbo()))
-                    {
-                        if(p2.getCatalogItem(itemId) != null)
-                        {
+                } else {
+                    for (CatalogPage p2 : Emulator.getGameEnvironment().getCatalogManager().getCatalogPages(p.getId(), this.client.getHabbo())) {
+                        if (p2.getCatalogItem(itemId) != null) {
                             page = p2;
                             break;
                         }
                     }
                 }
             }
-        }
-        else
-        {
+        } else {
             page = Emulator.getGameEnvironment().getCatalogManager().catalogPages.get(pageId);
 
-            if(page instanceof RoomBundleLayout)
-            {
+            if (page instanceof RoomBundleLayout) {
                 final CatalogItem[] item = new CatalogItem[1];
-                page.getCatalogItems().forEachValue(new TObjectProcedure<CatalogItem>()
-                {
+                page.getCatalogItems().forEachValue(new TObjectProcedure<CatalogItem>() {
                     @Override
-                    public boolean execute(CatalogItem object)
-                    {
+                    public boolean execute(CatalogItem object) {
                         item[0] = object;
                         return false;
                     }
                 });
 
-                if(item[0] == null || item[0].getCredits() > this.client.getHabbo().getHabboInfo().getCredits() || item[0].getPoints() > this.client.getHabbo().getHabboInfo().getCurrencyAmount(item[0].getPointsType()))
-                {
+                if (item[0] == null || item[0].getCredits() > this.client.getHabbo().getHabboInfo().getCredits() || item[0].getPoints() > this.client.getHabbo().getHabboInfo().getCurrencyAmount(item[0].getPointsType())) {
                     this.client.sendResponse(new AlertPurchaseFailedComposer(AlertPurchaseFailedComposer.SERVER_ERROR));
                     return;
                 }
 
-                ((RoomBundleLayout)page).buyRoom(this.client.getHabbo());
+                ((RoomBundleLayout) page).buyRoom(this.client.getHabbo());
 
                 this.client.getHabbo().getHabboInfo().addCredits(-item[0].getCredits());
                 this.client.getHabbo().getHabboInfo().addCurrencyAmount(item[0].getPointsType(), -item[0].getPoints());
@@ -78,24 +64,20 @@ public class CatalogBuyItemEvent extends MessageHandler
             }
         }
 
-        if(page == null)
-        {
+        if (page == null) {
             this.client.sendResponse(new AlertPurchaseFailedComposer(AlertPurchaseFailedComposer.SERVER_ERROR).compose());
             return;
         }
 
-        if(page.getRank() > this.client.getHabbo().getHabboInfo().getRank())
-        {
+        if (page.getRank() > this.client.getHabbo().getHabboInfo().getRank()) {
             this.client.sendResponse(new AlertPurchaseUnavailableComposer(AlertPurchaseUnavailableComposer.ILLEGAL));
             return;
         }
 
-        if(page instanceof ClubBuyLayout)
-        {
+        if (page instanceof ClubBuyLayout) {
             CatalogItem item = Emulator.getGameEnvironment().getCatalogManager().getClubItem(itemId);
 
-            if(item == null)
-            {
+            if (item == null) {
                 this.client.sendResponse(new AlertPurchaseFailedComposer(AlertPurchaseFailedComposer.SERVER_ERROR).compose());
                 return;
             }
@@ -104,20 +86,14 @@ public class CatalogBuyItemEvent extends MessageHandler
             int totalCredits = 0;
             int totalDuckets = 0;
 
-            for(int i = 0; i < count; i++)
-            {
+            for (int i = 0; i < count; i++) {
                 String[] data = item.getName().split("_");
 
-                if(data[2].equalsIgnoreCase("day"))
-                {
+                if (data[2].equalsIgnoreCase("day")) {
                     totalDays = Integer.valueOf(data[3]);
-                }
-                else if(data[2].equalsIgnoreCase("month"))
-                {
+                } else if (data[2].equalsIgnoreCase("month")) {
                     totalDays = Integer.valueOf(data[3]) * 31;
-                }
-                else if(data[2].equalsIgnoreCase("year"))
-                {
+                } else if (data[2].equalsIgnoreCase("year")) {
                     totalDays = Integer.valueOf(data[3]) * 365;
                 }
 
@@ -125,30 +101,34 @@ public class CatalogBuyItemEvent extends MessageHandler
                 totalDuckets += item.getPoints();
             }
 
-            if(totalDays > 0)
-            {
-                if(this.client.getHabbo().getHabboInfo().getCurrencyAmount(item.getPointsType()) < totalDuckets)
+            if (totalDays > 0) {
+                if (this.client.getHabbo().getHabboInfo().getCurrencyAmount(item.getPointsType()) < totalDuckets) {
                     return;
+                }
 
-                if (this.client.getHabbo().getHabboInfo().getCredits() < totalCredits)
+                if (this.client.getHabbo().getHabboInfo().getCredits() < totalCredits) {
                     return;
+                }
 
                 this.client.getHabbo().getHabboInfo().addCurrencyAmount(item.getPointsType(), -totalDuckets);
 
                 this.client.getHabbo().getHabboInfo().addCredits(-totalCredits);
 
-                if(this.client.getHabbo().getHabboStats().getClubExpireTimestamp() <= Emulator.getIntUnixTimestamp())
+                if (this.client.getHabbo().getHabboStats().getClubExpireTimestamp() <= Emulator.getIntUnixTimestamp()) {
                     this.client.getHabbo().getHabboStats().setClubExpireTimestamp(Emulator.getIntUnixTimestamp());
+                }
 
                 this.client.getHabbo().getHabboStats().setClubExpireTimestamp(this.client.getHabbo().getHabboStats().getClubExpireTimestamp() + (totalDays * 86400));
                 this.client.sendResponse(new UserPermissionsComposer(this.client.getHabbo()));
                 this.client.sendResponse(new UserClubComposer(this.client.getHabbo()));
 
-                if (totalCredits > 0)
+                if (totalCredits > 0) {
                     this.client.sendResponse(new UserCreditsComposer(this.client.getHabbo()));
+                }
 
-                if (totalDuckets > 0)
+                if (totalDuckets > 0) {
                     this.client.sendResponse(new UserCurrencyComposer(this.client.getHabbo()));
+                }
 
                 this.client.sendResponse(new PurchaseOKComposer(item, null));
                 this.client.sendResponse(new InventoryRefreshComposer());
@@ -158,10 +138,11 @@ public class CatalogBuyItemEvent extends MessageHandler
 
         CatalogItem item;
 
-        if(page instanceof RecentPurchasesLayout)
+        if (page instanceof RecentPurchasesLayout) {
             item = this.client.getHabbo().getHabboStats().getRecentPurchases().get(itemId);
-        else
+        } else {
             item = page.getCatalogItem(itemId);
+        }
 
         Emulator.getGameEnvironment().getCatalogManager().purchaseItem(page, item, this.client.getHabbo(), count, extraData);
 

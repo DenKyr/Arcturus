@@ -9,24 +9,19 @@ import com.eu.habbo.messages.outgoing.users.UserHomeRoomComposer;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class NewNavigatorActionEvent extends MessageHandler
-{
+public class NewNavigatorActionEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         String data = this.packet.readString();
 
-        if(data.equals("random_friending_room"))
-        {
+        if (data.equals("random_friending_room")) {
             ArrayList<Room> rooms = Emulator.getGameEnvironment().getRoomManager().getActiveRooms();
-            if(!rooms.isEmpty())
-            {
+            if (!rooms.isEmpty()) {
                 Collections.shuffle(rooms);
                 this.client.sendResponse(new ForwardToRoomComposer(rooms.get(0).getId()));
             }
-        }
-        else
-        {
+        } else {
             this.client.sendResponse(new UserHomeRoomComposer(this.client.getHabbo().getHabboInfo().getHomeRoom(), this.client.getHabbo().getHabboInfo().getHomeRoom()));
         }
     }

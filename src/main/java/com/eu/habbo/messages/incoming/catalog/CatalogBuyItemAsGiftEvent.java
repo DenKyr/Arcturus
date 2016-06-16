@@ -24,11 +24,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
 
-public class CatalogBuyItemAsGiftEvent extends MessageHandler
-{
+public class CatalogBuyItemAsGiftEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         int pageId = this.packet.readInt();
         int itemId = this.packet.readInt();
         String extraData = this.packet.readString();
@@ -42,8 +41,7 @@ public class CatalogBuyItemAsGiftEvent extends MessageHandler
         int count = 1;
         int userId = 0;
 
-        if(!Emulator.getGameEnvironment().getCatalogManager().giftWrappers.containsKey(spriteId) && !Emulator.getGameEnvironment().getCatalogManager().giftFurnis.containsKey(spriteId))
-        {
+        if (!Emulator.getGameEnvironment().getCatalogManager().giftWrappers.containsKey(spriteId) && !Emulator.getGameEnvironment().getCatalogManager().giftFurnis.containsKey(spriteId)) {
             this.client.sendResponse(new AlertPurchaseFailedComposer(AlertPurchaseFailedComposer.SERVER_ERROR).compose());
             return;
         }
@@ -53,23 +51,21 @@ public class CatalogBuyItemAsGiftEvent extends MessageHandler
 
         Integer iItemId = Emulator.getGameEnvironment().getCatalogManager().giftWrappers.get(spriteId);
 
-        if(iItemId == null)
+        if (iItemId == null) {
             iItemId = Emulator.getGameEnvironment().getCatalogManager().giftFurnis.get(spriteId);
+        }
 
-        if(iItemId == null)
-        {
+        if (iItemId == null) {
             this.client.sendResponse(new AlertPurchaseFailedComposer(AlertPurchaseFailedComposer.SERVER_ERROR).compose());
             return;
         }
 
         Item giftItem = Emulator.getGameEnvironment().getItemManager().getItem(iItemId);
 
-        if(giftItem == null)
-        {
-            giftItem = Emulator.getGameEnvironment().getItemManager().getItem((Integer)Emulator.getGameEnvironment().getCatalogManager().giftFurnis.values().toArray()[Emulator.getRandom().nextInt(Emulator.getGameEnvironment().getCatalogManager().giftFurnis.size())]);
+        if (giftItem == null) {
+            giftItem = Emulator.getGameEnvironment().getItemManager().getItem((Integer) Emulator.getGameEnvironment().getCatalogManager().giftFurnis.values().toArray()[Emulator.getRandom().nextInt(Emulator.getGameEnvironment().getCatalogManager().giftFurnis.size())]);
 
-            if(giftItem == null)
-            {
+            if (giftItem == null) {
                 this.client.sendResponse(new AlertPurchaseFailedComposer(AlertPurchaseFailedComposer.SERVER_ERROR).compose());
                 return;
             }
@@ -77,49 +73,40 @@ public class CatalogBuyItemAsGiftEvent extends MessageHandler
 
         Habbo habbo = Emulator.getGameEnvironment().getHabboManager().getHabbo(username);
 
-        if(habbo == null)
-        {
-            try
-            {
+        if (habbo == null) {
+            try {
                 PreparedStatement s = Emulator.getDatabase().prepare("SELECT id FROM users WHERE username = ?");
                 s.setString(1, username);
 
                 ResultSet set = s.executeQuery();
 
-                if (set.next())
-                {
+                if (set.next()) {
                     userId = set.getInt(1);
                 }
 
                 set.close();
                 s.close();
                 s.getConnection().close();
-            } catch (SQLException e)
-            {
+            } catch (SQLException e) {
                 Emulator.getLogging().logSQLException(e);
             }
-        }
-        else
-        {
+        } else {
             userId = habbo.getHabboInfo().getId();
         }
 
-        if(userId == 0)
-        {
+        if (userId == 0) {
             this.client.sendResponse(new GiftReceiverNotFoundComposer());
             return;
         }
 
         CatalogPage page = Emulator.getGameEnvironment().getCatalogManager().catalogPages.get(pageId);
 
-        if(page == null)
-        {
+        if (page == null) {
             this.client.sendResponse(new AlertPurchaseFailedComposer(AlertPurchaseFailedComposer.SERVER_ERROR).compose());
             return;
         }
 
-        if(page.getRank() > this.client.getHabbo().getHabboInfo().getRank() || !page.isEnabled() || !page.isVisible())
-        {
+        if (page.getRank() > this.client.getHabbo().getHabboInfo().getRank() || !page.isEnabled() || !page.isVisible()) {
             this.client.sendResponse(new AlertPurchaseUnavailableComposer(AlertPurchaseUnavailableComposer.ILLEGAL));
             return;
         }
@@ -128,33 +115,26 @@ public class CatalogBuyItemAsGiftEvent extends MessageHandler
 
         Item cBaseItem = null;
 
-        if(item == null)
-        {
+        if (item == null) {
             this.client.sendResponse(new AlertPurchaseFailedComposer(AlertPurchaseFailedComposer.SERVER_ERROR).compose());
             return;
         }
 
-        if(item.isClubOnly() && !this.client.getHabbo().getHabboStats().hasActiveClub())
-        {
+        if (item.isClubOnly() && !this.client.getHabbo().getHabboStats().hasActiveClub()) {
             this.client.sendResponse(new AlertPurchaseUnavailableComposer(AlertPurchaseUnavailableComposer.REQUIRES_CLUB));
             return;
         }
 
-        for(Item baseItem : item.getBaseItems())
-        {
-            if(!baseItem.allowGift())
-            {
+        for (Item baseItem : item.getBaseItems()) {
+            if (!baseItem.allowGift()) {
                 this.client.sendResponse(new AlertPurchaseUnavailableComposer(AlertPurchaseUnavailableComposer.ILLEGAL));
                 return;
             }
         }
 
-        try
-        {
-            if (item.isLimited())
-            {
-                if (item.getLimitedSells() == item.getLimitedStack())
-                {
+        try {
+            if (item.isLimited()) {
+                if (item.getLimitedSells() == item.getLimitedStack()) {
                     this.client.sendResponse(new AlertLimitedSoldOutComposer());
                     return;
                 }
@@ -166,75 +146,52 @@ public class CatalogBuyItemAsGiftEvent extends MessageHandler
 
             THashSet<HabboItem> itemsList = new THashSet<HabboItem>();
 
-            for(int i = 0; i < count; i++)
-            {
-                if (item.getCredits() <= this.client.getHabbo().getHabboInfo().getCredits() - totalCredits)
-                {
-                    if(
-                            item.getPoints() <= this.client.getHabbo().getHabboInfo().getCurrencyAmount(item.getPointsType()) - totalPoints)
-                            //item.getPointsType() == 0 && item.getPoints() <= this.client.getHabbo().getHabboInfo().getPixels() - totalPoints ||
-                            //        item.getPoints() <= this.client.getHabbo().getHabboInfo().getPoints())
+            for (int i = 0; i < count; i++) {
+                if (item.getCredits() <= this.client.getHabbo().getHabboInfo().getCredits() - totalCredits) {
+                    if (item.getPoints() <= this.client.getHabbo().getHabboInfo().getCurrencyAmount(item.getPointsType()) - totalPoints) //item.getPointsType() == 0 && item.getPoints() <= this.client.getHabbo().getHabboInfo().getPixels() - totalPoints ||
+                    //        item.getPoints() <= this.client.getHabbo().getHabboInfo().getPoints())
                     {
-                        if ((i + 1) % 6 != 0 && item.isHaveOffer())
-                        {
+                        if ((i + 1) % 6 != 0 && item.isHaveOffer()) {
                             totalCredits += item.getCredits();
                             totalPoints += item.getPoints();
                         }
 
-                        for (int j = 0; j < item.getAmount(); j++)
-                        {
-                            for (Item baseItem : item.getBaseItems())
-                            {
-                                for(int k = 0; k < item.getItemAmount(baseItem.getId()); k++)
-                                {
+                        for (int j = 0; j < item.getAmount(); j++) {
+                            for (Item baseItem : item.getBaseItems()) {
+                                for (int k = 0; k < item.getItemAmount(baseItem.getId()); k++) {
                                     cBaseItem = baseItem;
-                                    if (!baseItem.getName().contains("avatar_effect"))
-                                    {
-                                        if(item.getName().startsWith("rentable_bot_"))
-                                        {
+                                    if (!baseItem.getName().contains("avatar_effect")) {
+                                        if (item.getName().startsWith("rentable_bot_")) {
                                             this.client.sendResponse(new AlertPurchaseFailedComposer(AlertPurchaseFailedComposer.SERVER_ERROR).compose());
                                             return;
-                                        }
-                                        else if(Item.isPet(baseItem))
-                                        {
+                                        } else if (Item.isPet(baseItem)) {
                                             this.client.sendResponse(new AlertPurchaseFailedComposer(AlertPurchaseFailedComposer.SERVER_ERROR).compose());
                                             return;
-                                        }
-                                        else
-                                        {
-                                            if (baseItem.getInteractionType().getType() == InteractionTrophy.class || baseItem.getInteractionType().getType() == InteractionBadgeDisplay.class)
-                                            {
+                                        } else {
+                                            if (baseItem.getInteractionType().getType() == InteractionTrophy.class || baseItem.getInteractionType().getType() == InteractionBadgeDisplay.class) {
                                                 extraData = this.client.getHabbo().getHabboInfo().getUsername() + (char) 9 + Calendar.getInstance().get(Calendar.DAY_OF_MONTH) + "-" + (Calendar.getInstance().get(Calendar.MONTH) + 1) + "-" + Calendar.getInstance().get(Calendar.YEAR) + (char) 9 + extraData;
                                             }
 
-                                            if (baseItem.getInteractionType().getType() == InteractionTeleport.class)
-                                            {
+                                            if (baseItem.getInteractionType().getType() == InteractionTeleport.class) {
                                                 HabboItem teleportOne = Emulator.getGameEnvironment().getItemManager().createItem(0, baseItem, item.getLimitedStack(), item.getLimitedSells(), extraData);
                                                 HabboItem teleportTwo = Emulator.getGameEnvironment().getItemManager().createItem(0, baseItem, item.getLimitedStack(), item.getLimitedSells(), extraData);
                                                 Emulator.getGameEnvironment().getItemManager().insertTeleportPair(teleportOne.getId(), teleportTwo.getId());
                                                 itemsList.add(teleportOne);
                                                 itemsList.add(teleportTwo);
-                                            }
-                                            else if(baseItem.getInteractionType().getType() == InteractionHopper.class)
-                                            {
+                                            } else if (baseItem.getInteractionType().getType() == InteractionHopper.class) {
                                                 HabboItem hopper = Emulator.getGameEnvironment().getItemManager().createItem(0, baseItem, item.getLimitedSells(), item.getLimitedSells(), extraData);
 
                                                 Emulator.getGameEnvironment().getItemManager().insertHopper(hopper);
 
                                                 itemsList.add(hopper);
-                                            }
-                                            else if(baseItem.getInteractionType().getType() == InteractionGuildFurni.class || baseItem.getInteractionType().getType() == InteractionGuildGate.class)
-                                            {
-                                                InteractionGuildFurni habboItem = (InteractionGuildFurni)Emulator.getGameEnvironment().getItemManager().createItem(0, baseItem, item.getLimitedStack(), item.getLimitedSells(), extraData);
+                                            } else if (baseItem.getInteractionType().getType() == InteractionGuildFurni.class || baseItem.getInteractionType().getType() == InteractionGuildGate.class) {
+                                                InteractionGuildFurni habboItem = (InteractionGuildFurni) Emulator.getGameEnvironment().getItemManager().createItem(0, baseItem, item.getLimitedStack(), item.getLimitedSells(), extraData);
                                                 habboItem.setExtradata("");
                                                 habboItem.needsUpdate(true);
                                                 int guildId;
-                                                try
-                                                {
+                                                try {
                                                     guildId = Integer.parseInt(extraData);
-                                                }
-                                                catch (Exception e)
-                                                {
+                                                } catch (Exception e) {
                                                     Emulator.getLogging().logErrorLine(e);
                                                     this.client.sendResponse(new AlertPurchaseFailedComposer(AlertPurchaseFailedComposer.SERVER_ERROR));
                                                     return;
@@ -242,16 +199,12 @@ public class CatalogBuyItemAsGiftEvent extends MessageHandler
                                                 Emulator.getThreading().run(habboItem);
                                                 Emulator.getGameEnvironment().getGuildManager().setGuild(habboItem, guildId);
                                                 itemsList.add(habboItem);
-                                            }
-                                            else
-                                            {
+                                            } else {
                                                 HabboItem habboItem = Emulator.getGameEnvironment().getItemManager().createItem(0, baseItem, item.getLimitedStack(), item.getLimitedSells(), extraData);
                                                 itemsList.add(habboItem);
                                             }
                                         }
-                                    }
-                                    else
-                                    {
+                                    } else {
                                         this.client.sendResponse(new AlertPurchaseFailedComposer(AlertPurchaseFailedComposer.SERVER_ERROR));
                                         this.client.sendResponse(new GenericAlertComposer(Emulator.getTexts().getValue("error.catalog.buy.not_yet")));
                                         return;
@@ -265,8 +218,7 @@ public class CatalogBuyItemAsGiftEvent extends MessageHandler
 
             String giftData = itemsList.size() + "\t";
 
-            for(HabboItem i : itemsList)
-            {
+            for (HabboItem i : itemsList) {
                 giftData += i.getId() + "\t";
             }
 
@@ -274,47 +226,37 @@ public class CatalogBuyItemAsGiftEvent extends MessageHandler
 
             HabboItem gift = Emulator.getGameEnvironment().getItemManager().createGift(username, giftItem, giftData, 0, 0);
 
-            if(gift == null)
-            {
+            if (gift == null) {
                 this.client.sendResponse(new AlertPurchaseFailedComposer(AlertPurchaseFailedComposer.SERVER_ERROR));
                 return;
             }
 
             AchievementManager.progressAchievement(this.client.getHabbo(), Emulator.getGameEnvironment().getAchievementManager().achievements.get("GiftGiver"));
-            if(habbo != null)
-            {
+            if (habbo != null) {
                 habbo.getClient().sendResponse(new AddHabboItemComposer(gift));
                 habbo.getClient().getHabbo().getHabboInventory().getItemsComponent().addItem(gift);
                 habbo.getClient().sendResponse(new InventoryRefreshComposer());
                 AchievementManager.progressAchievement(habbo, Emulator.getGameEnvironment().getAchievementManager().achievements.get("GiftReceiver"));
 
-                if(item.hasBadge())
-                {
-                    if(!habbo.getHabboInventory().getBadgesComponent().hasBadge(item.getBadge()))
-                    {
+                if (item.hasBadge()) {
+                    if (!habbo.getHabboInventory().getBadgesComponent().hasBadge(item.getBadge())) {
                         HabboBadge badge = new HabboBadge(0, item.getBadge(), 0, habbo);
                         Emulator.getThreading().run(badge);
                         habbo.getHabboInventory().getBadgesComponent().addBadge(badge);
-                    }
-                    else
-                    {
+                    } else {
                         this.client.sendResponse(new AlertPurchaseFailedComposer(AlertPurchaseFailedComposer.ALREADY_HAVE_BADGE));
                     }
                 }
-            }
-            else
-            {
+            } else {
                 //TODO; Mooier maken :$
-                if(item.hasBadge())
-                {
+                if (item.hasBadge()) {
                     int c = 0;
                     PreparedStatement s = Emulator.getDatabase().prepare("SELECT COUNT(*) as c FROM users_badges WHERE user_id = ? AND badge_code LIKE ?");
                     s.setInt(1, userId);
                     s.setString(2, item.getBadge());
                     ResultSet rSet = s.executeQuery();
 
-                    if(rSet.next())
-                    {
+                    if (rSet.next()) {
                         c = rSet.getInt("c");
                     }
 
@@ -322,8 +264,7 @@ public class CatalogBuyItemAsGiftEvent extends MessageHandler
                     s.close();
                     s.getConnection().close();
 
-                    if(c == 0)
-                    {
+                    if (c == 0) {
                         PreparedStatement stmt = Emulator.getDatabase().prepare("INSERT INTO users_badges (user_id, badge_code) VALUES (?, ?)");
                         stmt.setInt(1, userId);
                         stmt.setString(2, item.getBadge());
@@ -334,28 +275,23 @@ public class CatalogBuyItemAsGiftEvent extends MessageHandler
                 }
             }
 
-            if(!this.client.getHabbo().hasPermission("acc_infinite_credits"))
-            {
-                if (totalCredits > 0)
-                {
+            if (!this.client.getHabbo().hasPermission("acc_infinite_credits")) {
+                if (totalCredits > 0) {
                     this.client.getHabbo().getHabboInfo().addCredits(-totalCredits);
                     this.client.sendResponse(new UserCreditsComposer(this.client.getHabbo()));
                 }
             }
-            if(totalPoints > 0)
-            {
-                if(item.getPointsType() == 0 && !this.client.getHabbo().hasPermission("acc_infinite_pixels")) {
+            if (totalPoints > 0) {
+                if (item.getPointsType() == 0 && !this.client.getHabbo().hasPermission("acc_infinite_pixels")) {
                     this.client.getHabbo().getHabboInfo().addPixels(-totalPoints);
-                }else if(!this.client.getHabbo().hasPermission("acc_infinite_points")) {
+                } else if (!this.client.getHabbo().hasPermission("acc_infinite_points")) {
                     this.client.getHabbo().getHabboInfo().addCurrencyAmount(item.getPointsType(), -totalPoints);
                 }
                 this.client.sendResponse(new UserPointsComposer(this.client.getHabbo().getHabboInfo().getCurrencyAmount(item.getPointsType()), -totalPoints, item.getPointsType()));
             }
 
             this.client.sendResponse(new PurchaseOKComposer(item, cBaseItem));
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             Emulator.getLogging().logPacketError(e);
             this.client.sendResponse(new AlertPurchaseFailedComposer(AlertPurchaseFailedComposer.SERVER_ERROR));
             return;

@@ -6,13 +6,12 @@ import com.eu.habbo.messages.incoming.MessageHandler;
 import java.io.ByteArrayOutputStream;
 import java.util.zip.Inflater;
 
-public class CameraParserShit extends MessageHandler
-{
+public class CameraParserShit extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         this.packet.getBuffer().readFloat();
-        byte[] buffer = new byte[4096*3];
+        byte[] buffer = new byte[4096 * 3];
         byte[] data = this.packet.getBuffer().readBytes(this.packet.getBuffer().readableBytes()).array();
 
         Inflater inflater = new Inflater();

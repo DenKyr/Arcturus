@@ -11,22 +11,20 @@ import com.eu.habbo.messages.outgoing.Outgoing;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class ModToolIssueChatlogComposer extends MessageComposer
-{
+public class ModToolIssueChatlogComposer extends MessageComposer {
+
     private ModToolIssue issue;
     private ArrayList<ModToolChatLog> chatlog;
     private String roomName;
 
-    public ModToolIssueChatlogComposer(ModToolIssue issue, ArrayList<ModToolChatLog> chatlog, String roomName)
-    {
+    public ModToolIssueChatlogComposer(ModToolIssue issue, ArrayList<ModToolChatLog> chatlog, String roomName) {
         this.issue = issue;
         this.chatlog = chatlog;
         this.roomName = roomName;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.ModToolIssueChatlogComposer);
         this.response.appendInt32(this.issue.id);
         this.response.appendInt32(this.issue.senderId);
@@ -35,15 +33,16 @@ public class ModToolIssueChatlogComposer extends MessageComposer
 
         Collections.sort(chatlog);
 
-        if(chatlog.isEmpty())
+        if (chatlog.isEmpty()) {
             return null;
+        }
 
         //ChatRecordData
         //for(ModToolRoomVisit visit : chatlog)
         //{
-            this.response.appendByte(1); //Report Type
+        this.response.appendByte(1); //Report Type
 
-            this.response.appendShort(3); //Context Count
+        this.response.appendShort(3); //Context Count
 
         ModToolChatRecordDataContext.ROOM_NAME.append(this.response);
         this.response.appendString(this.roomName); //Value
@@ -54,15 +53,14 @@ public class ModToolIssueChatlogComposer extends MessageComposer
         ModToolChatRecordDataContext.GROUP_ID.append(this.response);
         this.response.appendInt32(12); //Value
 
-            this.response.appendShort(this.chatlog.size());
-            for(ModToolChatLog chatLog : this.chatlog)
-            {
-                this.response.appendInt32(Emulator.getIntUnixTimestamp() - chatLog.timestamp);
-                this.response.appendInt32(chatLog.habboId);
-                this.response.appendString(chatLog.username);
-                this.response.appendString(chatLog.message);
-                this.response.appendBoolean(false);
-            }
+        this.response.appendShort(this.chatlog.size());
+        for (ModToolChatLog chatLog : this.chatlog) {
+            this.response.appendInt32(Emulator.getIntUnixTimestamp() - chatLog.timestamp);
+            this.response.appendInt32(chatLog.habboId);
+            this.response.appendString(chatLog.username);
+            this.response.appendString(chatLog.message);
+            this.response.appendBoolean(false);
+        }
         //}
 
         return this.response;

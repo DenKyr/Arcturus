@@ -3,8 +3,8 @@ package com.eu.habbo.habbohotel.modtool;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ModToolPreset
-{
+public class ModToolPreset {
+
     public final int id;
     public final String name;
     public final String message;
@@ -12,8 +12,7 @@ public class ModToolPreset
     public final int banLength;
     public final int muteLength;
 
-    public ModToolPreset(ResultSet set) throws SQLException
-    {
+    public ModToolPreset(ResultSet set) throws SQLException {
         this.id = set.getInt("id");
         this.name = set.getString("name");
         this.message = set.getString("message");

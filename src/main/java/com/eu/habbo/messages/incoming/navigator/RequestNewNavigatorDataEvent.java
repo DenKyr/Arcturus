@@ -4,11 +4,10 @@ import com.eu.habbo.Emulator;
 import com.eu.habbo.messages.incoming.MessageHandler;
 import com.eu.habbo.messages.outgoing.navigator.*;
 
-public class RequestNewNavigatorDataEvent extends MessageHandler
-{
+public class RequestNewNavigatorDataEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         this.client.sendResponse(new NewNavigatorMetaDataComposer());
         this.client.sendResponse(new NewNavigatorLiftedRoomsComposer());
         this.client.sendResponse(new NewNavigatorCollapsedCategoriesComposer());

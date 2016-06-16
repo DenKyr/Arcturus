@@ -6,22 +6,20 @@ import com.eu.habbo.habbohotel.pets.Pet;
 import com.eu.habbo.messages.incoming.MessageHandler;
 import com.eu.habbo.messages.outgoing.rooms.pets.RoomPetRespectComposer;
 
-public class ScratchPetEvent extends MessageHandler
-{
+public class ScratchPetEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         int petId = this.packet.readInt();
 
-        if(this.client.getHabbo().getHabboInfo().getCurrentRoom() == null)
+        if (this.client.getHabbo().getHabboInfo().getCurrentRoom() == null) {
             return;
+        }
 
-        if(this.client.getHabbo().getHabboStats().petRespectPointsToGive > 0)
-        {
-            Pet pet = (Pet)this.client.getHabbo().getHabboInfo().getCurrentRoom().getPet(petId);
+        if (this.client.getHabbo().getHabboStats().petRespectPointsToGive > 0) {
+            Pet pet = (Pet) this.client.getHabbo().getHabboInfo().getCurrentRoom().getPet(petId);
 
-            if(pet != null)
-            {
+            if (pet != null) {
                 this.client.getHabbo().getHabboStats().petRespectPointsToGive--;
                 pet.addExperience(10);
                 pet.addRespect();

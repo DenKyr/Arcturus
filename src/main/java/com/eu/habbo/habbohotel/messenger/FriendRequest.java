@@ -3,38 +3,33 @@ package com.eu.habbo.habbohotel.messenger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class FriendRequest
-{
+public class FriendRequest {
+
     private int id;
     private String username;
     private String look;
 
-    public FriendRequest(ResultSet set) throws SQLException
-    {
+    public FriendRequest(ResultSet set) throws SQLException {
         this.id = set.getInt("id");
         this.username = set.getString("username");
         this.look = set.getString("look");
     }
 
-    public FriendRequest(int id, String username, String look)
-    {
+    public FriendRequest(int id, String username, String look) {
         this.id = id;
         this.username = username;
         this.look = look;
     }
 
-    public int getId()
-    {
+    public int getId() {
         return id;
     }
 
-    public String getUsername()
-    {
+    public String getUsername() {
         return username;
     }
 
-    public String getLook()
-    {
+    public String getLook() {
         return look;
     }
 }

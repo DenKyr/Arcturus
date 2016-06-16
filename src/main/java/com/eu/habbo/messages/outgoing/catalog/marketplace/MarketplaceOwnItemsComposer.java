@@ -8,30 +8,24 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class MarketplaceOwnItemsComposer extends MessageComposer
-{
+public class MarketplaceOwnItemsComposer extends MessageComposer {
+
     private Habbo habbo;
 
-    public MarketplaceOwnItemsComposer(Habbo habbo)
-    {
+    public MarketplaceOwnItemsComposer(Habbo habbo) {
         this.habbo = habbo;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.MarketplaceOwnItemsComposer);
         this.response.appendInt32(habbo.getHabboInventory().getSoldPriceTotal());
         this.response.appendInt32(habbo.getHabboInventory().getMarketplaceItems().size());
 
-        for(MarketPlaceOffer offer : habbo.getHabboInventory().getMarketplaceItems())
-        {
-            try
-            {
-                if (offer.getState() == MarketPlaceState.OPEN)
-                {
-                    if ((offer.getTimestamp() + 172800) - Emulator.getIntUnixTimestamp() <= 0)
-                    {
+        for (MarketPlaceOffer offer : habbo.getHabboInventory().getMarketplaceItems()) {
+            try {
+                if (offer.getState() == MarketPlaceState.OPEN) {
+                    if ((offer.getTimestamp() + 172800) - Emulator.getIntUnixTimestamp() <= 0) {
                         offer.setState(MarketPlaceState.CLOSED);
                         Emulator.getThreading().run(offer);
                     }
@@ -42,27 +36,24 @@ public class MarketplaceOwnItemsComposer extends MessageComposer
                 this.response.appendInt32(offer.getType());
                 this.response.appendInt32(offer.getItemId());
 
-                if (offer.getType() == 3)
-                {
+                if (offer.getType() == 3) {
                     this.response.appendInt32(offer.getLimitedNumber());
                     this.response.appendInt32(offer.getLimitedStack());
-                } else
-                {
+                } else {
                     this.response.appendInt32(0);
                     this.response.appendString("");
                 }
 
                 this.response.appendInt32(offer.getPrice() - (int) Math.ceil(offer.getPrice() / 100.0));
 
-                if (offer.getState() == MarketPlaceState.OPEN)
+                if (offer.getState() == MarketPlaceState.OPEN) {
                     this.response.appendInt32((((offer.getTimestamp() + 172800) - Emulator.getIntUnixTimestamp()) / 60));
-                else
+                } else {
                     this.response.appendInt32(0);
+                }
 
                 this.response.appendInt32(0);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

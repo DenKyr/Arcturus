@@ -9,15 +9,14 @@ import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 import com.eu.habbo.util.pathfinding.Tile;
 
-public class RoomUnitOnRollerComposer extends MessageComposer
-{
+public class RoomUnitOnRollerComposer extends MessageComposer {
+
     private final RoomUnit roomUnit;
     private final HabboItem roller;
     private final Tile newLocation;
     private final Room room;
 
-    public RoomUnitOnRollerComposer(RoomUnit roomUnit, HabboItem roller, Tile newLocation, Room room)
-    {
+    public RoomUnitOnRollerComposer(RoomUnit roomUnit, HabboItem roller, Tile newLocation, Room room) {
         this.roomUnit = roomUnit;
         this.roller = roller;
         this.newLocation = newLocation;
@@ -25,10 +24,10 @@ public class RoomUnitOnRollerComposer extends MessageComposer
     }
 
     @Override
-    public ServerMessage compose()
-    {
-        if(!this.room.isLoaded())
+    public ServerMessage compose() {
+        if (!this.room.isLoaded()) {
             return null;
+        }
 
         this.response.init(Outgoing.ObjectOnRollerComposer);
         this.response.appendInt32(this.roomUnit.getX());
@@ -46,18 +45,15 @@ public class RoomUnitOnRollerComposer extends MessageComposer
         this.roomUnit.setY(newLocation.Y);
         this.roomUnit.setZ(newLocation.Z);
 
-        try
-        {
-            if(roller != null)
-            {
+        try {
+            if (roller != null) {
                 HabboItem item = this.room.getTopItemAt(this.newLocation.X, this.newLocation.Y);
 
-                if(item != null)
+                if (item != null) {
                     item.onWalkOn(this.roomUnit, this.room, new Object[]{this.roller});
+                }
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Emulator.getLogging().logErrorLine(e);
         }
 

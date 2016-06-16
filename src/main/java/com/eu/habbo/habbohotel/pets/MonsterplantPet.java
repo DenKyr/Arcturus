@@ -6,8 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class MonsterplantPet extends Pet
-{
+public class MonsterplantPet extends Pet {
+
     private int type;
     private int hue;
     private int nose;
@@ -16,8 +16,7 @@ public class MonsterplantPet extends Pet
 
     public String look;
 
-    public MonsterplantPet(ResultSet set) throws SQLException
-    {
+    public MonsterplantPet(ResultSet set) throws SQLException {
         super(set);
         this.type = set.getInt("mp_type");
         this.hue = set.getInt("mp_color");
@@ -26,8 +25,7 @@ public class MonsterplantPet extends Pet
         this.mouth = set.getInt("mp_mouth");
     }
 
-    public MonsterplantPet(int userId, int type, int hue, int nose, int eyes, int mouth)
-    {
+    public MonsterplantPet(int userId, int type, int hue, int nose, int eyes, int mouth) {
         super(16, 0, "", "", userId);
 
         this.type = type;
@@ -39,12 +37,9 @@ public class MonsterplantPet extends Pet
     }
 
     @Override
-    public void run()
-    {
-        if(this.needsUpdate)
-        {
-            try
-            {
+    public void run() {
+        if (this.needsUpdate) {
+            try {
                 PreparedStatement statement = Emulator.getDatabase().prepare("UPDATE users_pets SET mp_type = ?, mp_color = ?, mp_nose = ?, mp_eyes = ?, mp_mouth = ? WHERE id = ?");
                 statement.setInt(1, this.type);
                 statement.setInt(2, this.hue);
@@ -55,9 +50,7 @@ public class MonsterplantPet extends Pet
                 statement.execute();
                 statement.close();
                 statement.getConnection().close();
-            }
-            catch (SQLException e)
-            {
+            } catch (SQLException e) {
                 Emulator.getLogging().logSQLException(e);
             }
 
@@ -66,34 +59,28 @@ public class MonsterplantPet extends Pet
     }
 
     @Override
-    public boolean cycle()
-    {
+    public boolean cycle() {
 
         return true;
     }
 
-    public int getType()
-    {
+    public int getType() {
         return type;
     }
 
-    public int getHue()
-    {
+    public int getHue() {
         return hue;
     }
 
-    public int getNose()
-    {
+    public int getNose() {
         return nose;
     }
 
-    public int getEyes()
-    {
+    public int getEyes() {
         return eyes;
     }
 
-    public int getMouth()
-    {
+    public int getMouth() {
         return mouth;
     }
 }

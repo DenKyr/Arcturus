@@ -14,29 +14,28 @@ import com.eu.habbo.plugin.events.bots.BotSavedNameEvent;
 
 import java.util.ArrayList;
 
-public class BotSaveSettingsEvent extends MessageHandler
-{
+public class BotSaveSettingsEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         Room room = this.client.getHabbo().getHabboInfo().getCurrentRoom();
 
-        if(room == null)
+        if (room == null) {
             return;
+        }
 
-        if(room.getOwnerId() == this.client.getHabbo().getHabboInfo().getId() || this.client.getHabbo().hasPermission("acc_anyroomowner"))
-        {
+        if (room.getOwnerId() == this.client.getHabbo().getHabboInfo().getId() || this.client.getHabbo().hasPermission("acc_anyroomowner")) {
             int botId = this.packet.readInt();
 
             Bot bot = room.getBot(Math.abs(botId));
 
-            if(bot == null)
+            if (bot == null) {
                 return;
+            }
 
             int settingId = this.packet.readInt();
 
-            switch(settingId)
-            {
+            switch (settingId) {
                 case 1:
                     String look = this.client.getHabbo().getHabboInfo().getLook();
                     HabboGender gender = this.client.getHabbo().getHabboInfo().getGender();
@@ -44,8 +43,9 @@ public class BotSaveSettingsEvent extends MessageHandler
                     BotSavedLookEvent lookEvent = new BotSavedLookEvent(bot, gender, look);
                     Emulator.getPluginManager().fireEvent(lookEvent);
 
-                    if(lookEvent.isCancelled())
+                    if (lookEvent.isCancelled()) {
                         break;
+                    }
 
                     bot.setFigure(lookEvent.newLook);
                     bot.setGender(lookEvent.gender);
@@ -55,16 +55,15 @@ public class BotSaveSettingsEvent extends MessageHandler
                 case 2:
                     String messageString = this.packet.readString();
 
-                    if(messageString.length() > 5112)
+                    if (messageString.length() > 5112) {
                         break;
+                    }
 
                     String[] data = messageString.split(";#;");
 
                     ArrayList<String> chat = new ArrayList<String>();
-                    for(int i = 0; i < data.length - 3; i++)
-                    {
-                        for(String s : data[i].split("\r"))
-                        {
+                    for (int i = 0; i < data.length - 3; i++) {
+                        for (String s : data[i].split("\r")) {
                             chat.add(Emulator.getGameEnvironment().getWordFilter().filter(s, this.client.getHabbo()));
                         }
                     }
@@ -72,8 +71,9 @@ public class BotSaveSettingsEvent extends MessageHandler
                     BotSavedChatEvent chatEvent = new BotSavedChatEvent(bot, Boolean.valueOf(data[data.length - 3]), Boolean.valueOf(data[data.length - 1]), Integer.valueOf(data[data.length - 2]), chat);
                     Emulator.getPluginManager().fireEvent(chatEvent);
 
-                    if(chatEvent.isCancelled())
+                    if (chatEvent.isCancelled()) {
                         break;
+                    }
 
                     bot.setChatAuto(chatEvent.autoChat);
                     bot.setChatRandom(chatEvent.randomChat);
@@ -89,7 +89,7 @@ public class BotSaveSettingsEvent extends MessageHandler
                     break;
 
                 case 4:
-                    bot.getRoomUnit().setDanceType(DanceType.values()[(bot.getRoomUnit().getDanceType().getType() + 1) %DanceType.values().length]);
+                    bot.getRoomUnit().setDanceType(DanceType.values()[(bot.getRoomUnit().getDanceType().getType() + 1) % DanceType.values().length]);
                     room.sendComposer(new RoomUserDanceComposer(bot.getRoomUnit()).compose());
                     bot.needsUpdate(true);
                     break;
@@ -97,12 +97,12 @@ public class BotSaveSettingsEvent extends MessageHandler
                 case 5:
                     BotSavedNameEvent nameEvent = new BotSavedNameEvent(bot, this.packet.readString());
 
-                    if(nameEvent.name.length() <= 25)
-                    {
+                    if (nameEvent.name.length() <= 25) {
                         Emulator.getPluginManager().fireEvent(nameEvent);
 
-                        if (nameEvent.isCancelled())
+                        if (nameEvent.isCancelled()) {
                             break;
+                        }
 
                         bot.setName(nameEvent.name);
                         bot.needsUpdate(true);
@@ -111,8 +111,7 @@ public class BotSaveSettingsEvent extends MessageHandler
                     break;
             }
 
-            if(bot.needsUpdate())
-            {
+            if (bot.needsUpdate()) {
                 Emulator.getThreading().run(bot);
             }
         }

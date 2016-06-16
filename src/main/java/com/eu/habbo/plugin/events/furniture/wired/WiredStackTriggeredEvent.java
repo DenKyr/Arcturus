@@ -7,8 +7,8 @@ import com.eu.habbo.habbohotel.rooms.RoomUnit;
 import com.eu.habbo.plugin.events.roomunit.RoomUnitEvent;
 import gnu.trove.set.hash.THashSet;
 
-public class WiredStackTriggeredEvent extends RoomUnitEvent
-{
+public class WiredStackTriggeredEvent extends RoomUnitEvent {
+
     /**
      * The item that triggered this stack.
      */
@@ -26,13 +26,13 @@ public class WiredStackTriggeredEvent extends RoomUnitEvent
 
     /**
      * This event triggers when a WiredStack is about to be executed.
+     *
      * @param roomUnit The RoomUnit that triggered this stack.
      * @param trigger The item that triggered this stack.
      * @param effects The effects in this stack.
      * @param conditions The conditions in this stack.
      */
-    public WiredStackTriggeredEvent(RoomUnit roomUnit, InteractionWiredTrigger trigger, THashSet<InteractionWiredEffect> effects, THashSet<InteractionWiredCondition> conditions)
-    {
+    public WiredStackTriggeredEvent(RoomUnit roomUnit, InteractionWiredTrigger trigger, THashSet<InteractionWiredEffect> effects, THashSet<InteractionWiredCondition> conditions) {
         super(roomUnit);
 
         this.trigger = trigger;

@@ -5,26 +5,23 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class CraftingResultComposer extends MessageComposer
-{
+public class CraftingResultComposer extends MessageComposer {
+
     private final CraftingRecipe recipe;
     private final boolean succes;
 
-    public CraftingResultComposer(CraftingRecipe recipe, boolean succes)
-    {
+    public CraftingResultComposer(CraftingRecipe recipe, boolean succes) {
         this.recipe = recipe;
         this.succes = succes;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.CraftingResultComposer);
 
         this.response.appendBoolean(this.succes); //succes
 
-        if(this.succes)
-        {
+        if (this.succes) {
             this.response.appendString(this.recipe.result);
             this.response.appendString(this.recipe.result);
         }

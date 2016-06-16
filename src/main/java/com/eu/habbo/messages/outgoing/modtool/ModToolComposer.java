@@ -13,39 +13,31 @@ import gnu.trove.procedure.TObjectProcedure;
 
 import java.util.NoSuchElementException;
 
-public class ModToolComposer extends MessageComposer implements TObjectProcedure<ModToolCategory>
-{
+public class ModToolComposer extends MessageComposer implements TObjectProcedure<ModToolCategory> {
+
     private final Habbo habbo;
 
-    public ModToolComposer(Habbo habbo)
-    {
+    public ModToolComposer(Habbo habbo) {
         this.habbo = habbo;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.ModToolComposer);
 
-        if(this.habbo.hasPermission("acc_modtool_ticket_q"))
-        {
+        if (this.habbo.hasPermission("acc_modtool_ticket_q")) {
             this.response.appendInt32(Emulator.getGameEnvironment().getModToolManager().getTickets().size()); //tickets
 
-            for (ModToolIssue issue : Emulator.getGameEnvironment().getModToolManager().getTickets().values())
-            {
+            for (ModToolIssue issue : Emulator.getGameEnvironment().getModToolManager().getTickets().values()) {
                 issue.serialize(this.response);
             }
-        }
-        else
-        {
+        } else {
             this.response.appendInt32(0);
         }
 
-        synchronized (Emulator.getGameEnvironment().getModToolManager().getPresets())
-        {
+        synchronized (Emulator.getGameEnvironment().getModToolManager().getPresets()) {
             this.response.appendInt32(Emulator.getGameEnvironment().getModToolManager().getPresets().get("user").size());
-            for (String s : Emulator.getGameEnvironment().getModToolManager().getPresets().get("user"))
-            {
+            for (String s : Emulator.getGameEnvironment().getModToolManager().getPresets().get("user")) {
                 this.response.appendString(s);
             }
         }
@@ -62,11 +54,9 @@ public class ModToolComposer extends MessageComposer implements TObjectProcedure
         this.response.appendBoolean(this.habbo.hasPermission("acc_modtool_room_info")); //room info ??Not sure
         this.response.appendBoolean(this.habbo.hasPermission("acc_modtool_room_logs")); //room chatlogs ??Not sure
 
-        synchronized (Emulator.getGameEnvironment().getModToolManager().getPresets())
-        {
+        synchronized (Emulator.getGameEnvironment().getModToolManager().getPresets()) {
             this.response.appendInt32(Emulator.getGameEnvironment().getModToolManager().getPresets().get("room").size());
-            for (String s : Emulator.getGameEnvironment().getModToolManager().getPresets().get("room"))
-            {
+            for (String s : Emulator.getGameEnvironment().getModToolManager().getPresets().get("room")) {
                 this.response.appendString(s);
             }
         }
@@ -75,22 +65,17 @@ public class ModToolComposer extends MessageComposer implements TObjectProcedure
     }
 
     @Override
-    public boolean execute(ModToolCategory category)
-    {
+    public boolean execute(ModToolCategory category) {
         this.response.appendString(category.getName());
         this.response.appendBoolean(false);
         this.response.appendInt32(category.getPresets().size());
 
         TIntObjectIterator<ModToolPreset> iterator = category.getPresets().iterator();
 
-        for(int i = category.getPresets().size(); i-- > 0;)
-        {
-            try
-            {
+        for (int i = category.getPresets().size(); i-- > 0;) {
+            try {
                 iterator.advance();
-            }
-            catch (NoSuchElementException e)
-            {
+            } catch (NoSuchElementException e) {
                 break;
             }
             this.response.appendString(iterator.value().name);

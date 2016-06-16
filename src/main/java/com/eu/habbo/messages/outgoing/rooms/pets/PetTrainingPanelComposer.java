@@ -10,18 +10,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class PetTrainingPanelComposer extends MessageComposer
-{
+public class PetTrainingPanelComposer extends MessageComposer {
+
     private final Pet pet;
 
-    public PetTrainingPanelComposer(Pet pet)
-    {
+    public PetTrainingPanelComposer(Pet pet) {
         this.pet = pet;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         List<PetCommand> enabled = new ArrayList<PetCommand>();
         Collections.sort(this.pet.getPetData().getPetCommands());
 
@@ -29,12 +27,10 @@ public class PetTrainingPanelComposer extends MessageComposer
         this.response.appendInt32(this.pet.getId());
         this.response.appendInt32(this.pet.getPetData().getPetCommands().size());
 
-        for(PetCommand petCommand : this.pet.getPetData().getPetCommands())
-        {
+        for (PetCommand petCommand : this.pet.getPetData().getPetCommands()) {
             this.response.appendInt32(petCommand.id);
 
-            if(this.pet.getLevel() >= petCommand.level)
-            {
+            if (this.pet.getLevel() >= petCommand.level) {
                 enabled.add(petCommand);
             }
         }
@@ -43,8 +39,7 @@ public class PetTrainingPanelComposer extends MessageComposer
 
         this.response.appendInt32(enabled.size());
 
-        for(PetCommand petCommand : enabled)
-        {
+        for (PetCommand petCommand : enabled) {
             this.response.appendInt32(petCommand.id);
         }
 

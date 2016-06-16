@@ -15,23 +15,20 @@ import com.eu.habbo.threading.runnables.RandomDiceNumber;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class InteractionDice extends HabboItem
-{
+public class InteractionDice extends HabboItem {
+
     private Runnable rollTaks = null;
 
-    public InteractionDice(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public InteractionDice(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
 
-    public InteractionDice(ResultSet set, Item baseItem) throws SQLException
-    {
+    public InteractionDice(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
 
     @Override
-    public void serializeExtradata(ServerMessage serverMessage)
-    {
+    public void serializeExtradata(ServerMessage serverMessage) {
         serverMessage.appendInt32((this.isLimited() ? 256 : 0));
         serverMessage.appendString(this.getExtradata());
 
@@ -39,58 +36,49 @@ public class InteractionDice extends HabboItem
     }
 
     @Override
-    public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects)
-    {
+    public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects) {
         return true;
     }
 
     @Override
-    public boolean isWalkable()
-    {
+    public boolean isWalkable() {
         return false;
     }
 
     @Override
-    public void onClick(GameClient client, Room room, Object[] objects) throws Exception
-    {
+    public void onClick(GameClient client, Room room, Object[] objects) throws Exception {
         super.onClick(client, room, objects);
 
-        if(this.rollTaks == null)
-        {
+        if (this.rollTaks == null) {
             FurnitureDiceRolledEvent event = (FurnitureDiceRolledEvent) Emulator.getPluginManager().fireEvent(new FurnitureDiceRolledEvent(this, client.getHabbo(), -1));
 
-            if(event.isCancelled())
+            if (event.isCancelled()) {
                 return;
+            }
 
             this.setExtradata("-1");
             room.updateItem(this);
             Emulator.getThreading().run(this);
 
-            if(event.result > 0)
-            {
+            if (event.result > 0) {
                 Emulator.getThreading().run(new RandomDiceNumber(room, this, event.result), 1500);
-            }
-            else
-            {
+            } else {
                 Emulator.getThreading().run(new RandomDiceNumber(this, room, this.getBaseItem().getStateCount()), 1500);
             }
         }
     }
 
     @Override
-    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception
-    {
+    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception {
 
     }
 
     @Override
-    public void onPickUp()
-    {
+    public void onPickUp() {
         this.setExtradata("0");
     }
 
-    public void clearRunnable()
-    {
+    public void clearRunnable() {
         this.rollTaks = null;
     }
 }

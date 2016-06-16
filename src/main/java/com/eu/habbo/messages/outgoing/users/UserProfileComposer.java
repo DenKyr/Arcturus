@@ -13,27 +13,26 @@ import gnu.trove.set.hash.THashSet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class UserProfileComposer extends MessageComposer{
+public class UserProfileComposer extends MessageComposer {
 
     private final HabboInfo habboInfo;
     private Habbo habbo;
 
-    public UserProfileComposer(HabboInfo habboInfo)
-    {
+    public UserProfileComposer(HabboInfo habboInfo) {
         this.habboInfo = habboInfo;
     }
 
-    public UserProfileComposer(Habbo habbo)
-    {
+    public UserProfileComposer(Habbo habbo) {
         this.habbo = habbo;
         this.habboInfo = habbo.getHabboInfo();
     }
 
     @Override
-    public ServerMessage compose()    {
+    public ServerMessage compose() {
 
-        if(this.habboInfo == null)
+        if (this.habboInfo == null) {
             return null;
+        }
 
         this.response.init(Outgoing.UserProfileComposer);
 
@@ -48,20 +47,18 @@ public class UserProfileComposer extends MessageComposer{
         this.response.appendBoolean(false);
         this.response.appendBoolean(this.habboInfo.isOnline());
 
-        if(habbo != null)
-        {
+        if (habbo != null) {
             THashSet<Guild> guilds = new THashSet<Guild>();
-            for (int i : this.habbo.getHabboStats().guilds)
-            {
-                if(i == 0)
+            for (int i : this.habbo.getHabboStats().guilds) {
+                if (i == 0) {
                     break;
+                }
 
                 guilds.add(Emulator.getGameEnvironment().getGuildManager().getGuild(i));
             }
 
             this.response.appendInt32(guilds.size());
-            for(Guild guild : guilds)
-            {
+            for (Guild guild : guilds) {
                 this.response.appendInt32(guild.getId());
                 this.response.appendString(guild.getName());
                 this.response.appendString(guild.getBadge());
@@ -71,10 +68,9 @@ public class UserProfileComposer extends MessageComposer{
                 this.response.appendInt32(0);
                 this.response.appendBoolean(guild.getOwnerId() == this.habbo.getHabboInfo().getId());
             }
-        }
-        else
+        } else {
             this.response.appendInt32(0); //Guild Size!
-
+        }
         this.response.appendInt32(Emulator.getIntUnixTimestamp() - this.habboInfo.getLastOnline()); //Secs ago.
         this.response.appendBoolean(true);
 

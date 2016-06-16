@@ -4,20 +4,18 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class GuildConfirmRemoveMemberComposer extends MessageComposer
-{
+public class GuildConfirmRemoveMemberComposer extends MessageComposer {
+
     private int userId;
     private int furniCount;
 
-    public GuildConfirmRemoveMemberComposer(int userId, int furniCount)
-    {
+    public GuildConfirmRemoveMemberComposer(int userId, int furniCount) {
         this.userId = userId;
         this.furniCount = furniCount;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.GuildConfirmRemoveMemberComposer);
         this.response.appendInt32(this.userId);
         this.response.appendInt32(this.furniCount);

@@ -7,20 +7,18 @@ import com.eu.habbo.habbohotel.users.HabboItem;
 import com.eu.habbo.messages.outgoing.rooms.items.AddFloorItemComposer;
 import com.eu.habbo.messages.outgoing.rooms.items.RemoveFloorItemComposer;
 
-public class CrackableExplode implements Runnable
-{
+public class CrackableExplode implements Runnable {
+
     private final Room room;
     private final HabboItem habboItem;
 
-    public CrackableExplode(Room room, HabboItem item)
-    {
+    public CrackableExplode(Room room, HabboItem item) {
         this.room = room;
         this.habboItem = item;
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
         this.room.sendComposer(new RemoveFloorItemComposer(this.habboItem).compose());
         this.room.removeHabboItem(this.habboItem);
         Emulator.getGameEnvironment().getItemManager().deleteItem(this.habboItem);

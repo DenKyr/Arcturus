@@ -12,8 +12,8 @@ import io.netty.channel.Channel;
 
 import java.util.ArrayList;
 
-public class GameClient
-{
+public class GameClient {
+
     /**
      * The Channel this client is using.
      */
@@ -24,25 +24,21 @@ public class GameClient
      */
     private Habbo habbo;
 
-    public GameClient(Channel channel)
-    {
+    public GameClient(Channel channel) {
         this.channel = channel;
     }
 
     /**
      * Sends an composer to the client.
+     *
      * @param composer The composer to send.
      */
-    public void sendResponse(MessageComposer composer)
-    {
-        if(this.channel.isOpen())
-        {
-            try
-            {
+    public void sendResponse(MessageComposer composer) {
+        if (this.channel.isOpen()) {
+            try {
                 ServerMessage msg = composer.compose();
                 sendResponse(msg);
-            } catch (Exception e)
-            {
+            } catch (Exception e) {
                 Emulator.getLogging().logPacketError(e);
             }
         }
@@ -50,19 +46,18 @@ public class GameClient
 
     /**
      * Sends an response to the client.
+     *
      * @param response The response to send.
      */
-    public void sendResponse(ServerMessage response)
-    {
-        if(this.channel.isOpen())
-        {
-            if (response == null || response.getHeader() <= 0)
-            {
+    public void sendResponse(ServerMessage response) {
+        if (this.channel.isOpen()) {
+            if (response == null || response.getHeader() <= 0) {
                 return;
             }
 
-            if (Emulator.getConfig().getBoolean("debug.show.packets"))
+            if (Emulator.getConfig().getBoolean("debug.show.packets")) {
                 Emulator.getLogging().logPacketLine("[" + Logging.ANSI_PURPLE + "SERVER" + Logging.ANSI_RESET + "] => [" + response.getHeader() + "] -> " + response.getBodyString());
+            }
 
             this.channel.write(response.get().copy(), this.channel.voidPromise());
             this.channel.flush();
@@ -71,23 +66,21 @@ public class GameClient
 
     /**
      * Sends multiple responses to the client.
+     *
      * @param responses The responses to send.
      */
-    public void sendResponses(ArrayList<ServerMessage> responses)
-    {
+    public void sendResponses(ArrayList<ServerMessage> responses) {
         ByteBuf buffer = Unpooled.buffer();
 
-        if(this.channel.isOpen())
-        {
-            for(ServerMessage response : responses)
-            {
-                if (response == null || response.getHeader() <= 0)
-                {
+        if (this.channel.isOpen()) {
+            for (ServerMessage response : responses) {
+                if (response == null || response.getHeader() <= 0) {
                     return;
                 }
 
-                if (Emulator.getConfig().getBoolean("debug.show.packets"))
+                if (Emulator.getConfig().getBoolean("debug.show.packets")) {
                     Emulator.getLogging().logPacketLine("[" + Logging.ANSI_PURPLE + "SERVER" + Logging.ANSI_RESET + "] => [" + response.getHeader() + "] -> " + response.getBodyString());
+                }
 
                 buffer.writeBytes(response.get());
             }
@@ -100,38 +93,31 @@ public class GameClient
     /**
      * Disposes the client. Disconnection mostly.
      */
-    public void dispose()
-    {
-        try
-        {
+    public void dispose() {
+        try {
             this.channel.close();
 
-            if(this.habbo != null)
-            {
-                if(this.habbo.isOnline())
+            if (this.habbo != null) {
+                if (this.habbo.isOnline()) {
                     this.habbo.disconnect();
+                }
 
                 this.habbo = null;
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Emulator.getLogging().logErrorLine(e);
         }
     }
 
-    public Channel getChannel()
-    {
+    public Channel getChannel() {
         return this.channel;
     }
 
-    public Habbo getHabbo()
-    {
+    public Habbo getHabbo() {
         return this.habbo;
     }
 
-    public void setHabbo(Habbo habbo)
-    {
+    public void setHabbo(Habbo habbo) {
         this.habbo = habbo;
     }
 }

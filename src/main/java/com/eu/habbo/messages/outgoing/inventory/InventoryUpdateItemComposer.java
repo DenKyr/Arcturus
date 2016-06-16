@@ -5,18 +5,16 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class InventoryUpdateItemComposer extends MessageComposer
-{
+public class InventoryUpdateItemComposer extends MessageComposer {
+
     private final HabboItem habboItem;
 
-    public InventoryUpdateItemComposer(HabboItem item)
-    {
+    public InventoryUpdateItemComposer(HabboItem item) {
         this.habboItem = item;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.InventoryItemUpdateComposer);
         this.response.appendInt32(2);
         this.response.appendInt32(habboItem.getId());
@@ -24,23 +22,21 @@ public class InventoryUpdateItemComposer extends MessageComposer
         this.response.appendInt32(habboItem.getId());
         this.response.appendInt32(habboItem.getBaseItem().getSpriteId());
 
-        if (habboItem.getBaseItem().getName().equals("landscape"))
+        if (habboItem.getBaseItem().getName().equals("landscape")) {
             this.response.appendInt32(4);
-        else if (habboItem.getBaseItem().getName().equals("floor"))
+        } else if (habboItem.getBaseItem().getName().equals("floor")) {
             this.response.appendInt32(3);
-        else if (habboItem.getBaseItem().getName().equals("wallpaper"))
+        } else if (habboItem.getBaseItem().getName().equals("wallpaper")) {
             this.response.appendInt32(2);
+        }
 
-        if(habboItem.isLimited())
-        {
+        if (habboItem.isLimited()) {
             this.response.appendInt32(1);
             this.response.appendInt32(256);
             this.response.appendString(habboItem.getExtradata());
             this.response.appendInt32(habboItem.getLimitedSells());
             this.response.appendInt32(habboItem.getLimitedStack());
-        }
-        else
-        {
+        } else {
             this.response.appendInt32(1);
             this.response.appendInt32(0);
             this.response.appendString(habboItem.getExtradata());

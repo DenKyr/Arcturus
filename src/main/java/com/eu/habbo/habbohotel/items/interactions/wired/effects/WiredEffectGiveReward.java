@@ -16,8 +16,8 @@ import gnu.trove.set.hash.THashSet;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class WiredEffectGiveReward extends InteractionWiredEffect
-{
+public class WiredEffectGiveReward extends InteractionWiredEffect {
+
     public final static WiredEffectType type = WiredEffectType.GIVE_REWARD;
 
     public int limit;
@@ -27,37 +27,29 @@ public class WiredEffectGiveReward extends InteractionWiredEffect
 
     public THashSet<WiredGiveRewardItem> rewardItems = new THashSet<WiredGiveRewardItem>();
 
-    public WiredEffectGiveReward(ResultSet set, Item baseItem) throws SQLException
-    {
+    public WiredEffectGiveReward(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
 
-    public WiredEffectGiveReward(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public WiredEffectGiveReward(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
 
     @Override
-    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff)
-    {
+    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff) {
         Habbo habbo = room.getHabbo(roomUnit);
 
         return habbo != null && WiredHandler.getReward(habbo, this);
     }
 
     @Override
-    public String getWiredData()
-    {
-        String data = limit + ":" + given + ":"+ rewardTime + ":" + (uniqueRewards ? 1 : 0) + ":";
+    public String getWiredData() {
+        String data = limit + ":" + given + ":" + rewardTime + ":" + (uniqueRewards ? 1 : 0) + ":";
 
-        if(this.rewardItems.isEmpty())
-        {
+        if (this.rewardItems.isEmpty()) {
             data += "\t";
-        }
-        else
-        {
-            for (WiredGiveRewardItem item : this.rewardItems)
-            {
+        } else {
+            for (WiredGiveRewardItem item : this.rewardItems) {
                 data += item.toString() + ";";
             }
         }
@@ -66,26 +58,21 @@ public class WiredEffectGiveReward extends InteractionWiredEffect
     }
 
     @Override
-    public void loadWiredData(ResultSet set, Room room) throws SQLException
-    {
+    public void loadWiredData(ResultSet set, Room room) throws SQLException {
         String[] data = set.getString("wired_data").split(":");
-        if(data.length > 0)
-        {
+        if (data.length > 0) {
             this.limit = Integer.valueOf(data[0]);
             this.given = Integer.valueOf(data[1]);
             this.rewardTime = Integer.valueOf(data[2]);
             this.uniqueRewards = data[3].equals("1");
 
-            if(data.length > 4)
-            {
-                if(!data[4].equalsIgnoreCase("\t"))
-                {
+            if (data.length > 4) {
+                if (!data[4].equalsIgnoreCase("\t")) {
                     String[] items = data[4].split(";");
 
                     this.rewardItems.clear();
 
-                    for (String s : items)
-                    {
+                    for (String s : items) {
                         this.rewardItems.add(new WiredGiveRewardItem(s));
                     }
                 }
@@ -94,8 +81,7 @@ public class WiredEffectGiveReward extends InteractionWiredEffect
     }
 
     @Override
-    public void onPickUp()
-    {
+    public void onPickUp() {
         this.limit = 0;
         this.given = 0;
         this.rewardTime = 0;
@@ -104,14 +90,12 @@ public class WiredEffectGiveReward extends InteractionWiredEffect
     }
 
     @Override
-    public WiredEffectType getType()
-    {
+    public WiredEffectType getType() {
         return type;
     }
 
     @Override
-    public void serializeWiredData(ServerMessage message)
-    {
+    public void serializeWiredData(ServerMessage message) {
         message.appendBoolean(false);
         message.appendInt32(this.rewardItems.size());
         message.appendInt32(0);
@@ -119,15 +103,14 @@ public class WiredEffectGiveReward extends InteractionWiredEffect
         message.appendInt32(this.getId());
         String s = "";
 
-        for(WiredGiveRewardItem item : this.rewardItems)
-        {
+        for (WiredGiveRewardItem item : this.rewardItems) {
             s += item.wiredString() + ";";
         }
         message.appendString(s);
         message.appendInt32(3);
-            message.appendInt32(this.rewardTime);
-            message.appendInt32(this.uniqueRewards);
-            message.appendInt32(this.limit);
+        message.appendInt32(this.rewardTime);
+        message.appendInt32(this.uniqueRewards);
+        message.appendInt32(this.limit);
         message.appendInt32(this.limit > 0);
         message.appendInt32(this.getType().code);
         message.appendInt32(0);
@@ -135,8 +118,7 @@ public class WiredEffectGiveReward extends InteractionWiredEffect
     }
 
     @Override
-    public boolean saveData(ClientMessage packet)
-    {
+    public boolean saveData(ClientMessage packet) {
         packet.readInt();
 
         this.rewardTime = packet.readInt();
@@ -151,16 +133,12 @@ public class WiredEffectGiveReward extends InteractionWiredEffect
         this.rewardItems.clear();
 
         int i = 1;
-        for(String s : items)
-        {
+        for (String s : items) {
             String[] d = s.split(",");
 
-            if(d.length == 3)
-            {
+            if (d.length == 3) {
                 this.rewardItems.add(new WiredGiveRewardItem(i, d[0].equalsIgnoreCase("0"), d[1], Integer.valueOf(d[2])));
-            }
-            else
-            {
+            } else {
                 Emulator.getLogging().logErrorLine("Incorrect WiredEffectGiveReward data: " + s);
             }
         }

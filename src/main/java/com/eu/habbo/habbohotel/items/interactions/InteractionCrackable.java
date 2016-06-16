@@ -15,23 +15,21 @@ import com.eu.habbo.threading.runnables.CrackableExplode;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class InteractionCrackable extends HabboItem
-{
-    public InteractionCrackable(ResultSet set, Item baseItem) throws SQLException
-    {
+public class InteractionCrackable extends HabboItem {
+
+    public InteractionCrackable(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
 
-    public InteractionCrackable(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public InteractionCrackable(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
 
     @Override
-    public void serializeExtradata(ServerMessage serverMessage)
-    {
-        if(this.getExtradata().length() == 0)
+    public void serializeExtradata(ServerMessage serverMessage) {
+        if (this.getExtradata().length() == 0) {
             this.setExtradata("0");
+        }
 
         serverMessage.appendInt32(7 + (this.isLimited() ? 256 : 0));
 
@@ -43,27 +41,26 @@ public class InteractionCrackable extends HabboItem
     }
 
     @Override
-    public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects)
-    {
+    public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects) {
         return true;
     }
 
     @Override
-    public boolean isWalkable()
-    {
+    public boolean isWalkable() {
         return false;
     }
 
     @Override
-    public void onClick(GameClient client, Room room, Object[] objects) throws Exception
-    {
+    public void onClick(GameClient client, Room room, Object[] objects) throws Exception {
         super.onClick(client, room, objects);
 
-        if(client == null)
+        if (client == null) {
             return;
+        }
 
-        if(this.getExtradata().length() == 0)
+        if (this.getExtradata().length() == 0) {
             this.setExtradata("0");
+        }
 
         this.setExtradata(Integer.valueOf(this.getExtradata()) + 1 + "");
         this.needsUpdate(true);
@@ -71,36 +68,30 @@ public class InteractionCrackable extends HabboItem
 
         CrackableReward rewardData = Emulator.getGameEnvironment().getItemManager().getCrackableData(this.getBaseItem().getId());
 
-        if(rewardData != null && !rewardData.achievementTick.isEmpty())
-        {
+        if (rewardData != null && !rewardData.achievementTick.isEmpty()) {
             AchievementManager.progressAchievement(client.getHabbo(), Emulator.getGameEnvironment().getAchievementManager().achievements.get(rewardData.achievementTick));
         }
-        if(Integer.valueOf(this.getExtradata()) >= Emulator.getGameEnvironment().getItemManager().getCrackableCount(this.getBaseItem().getId()))
-        {
+        if (Integer.valueOf(this.getExtradata()) >= Emulator.getGameEnvironment().getItemManager().getCrackableCount(this.getBaseItem().getId())) {
             Emulator.getThreading().run(new CrackableExplode(room, this), 1500);
 
-            if(rewardData != null && !rewardData.achievementCracked.isEmpty())
-            {
+            if (rewardData != null && !rewardData.achievementCracked.isEmpty()) {
                 AchievementManager.progressAchievement(client.getHabbo(), Emulator.getGameEnvironment().getAchievementManager().achievements.get(rewardData.achievementCracked));
             }
         }
     }
 
     @Override
-    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception
-    {
+    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception {
 
     }
 
     @Override
-    public void onWalkOn(RoomUnit client, Room room, Object[] objects) throws Exception
-    {
+    public void onWalkOn(RoomUnit client, Room room, Object[] objects) throws Exception {
 
     }
 
     @Override
-    public void onWalkOff(RoomUnit client, Room room, Object[] objects) throws Exception
-    {
+    public void onWalkOff(RoomUnit client, Room room, Object[] objects) throws Exception {
 
     }
 }

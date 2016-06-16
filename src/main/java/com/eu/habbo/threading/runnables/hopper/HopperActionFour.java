@@ -6,22 +6,20 @@ import com.eu.habbo.habbohotel.rooms.Room;
 import com.eu.habbo.habbohotel.users.HabboItem;
 import com.eu.habbo.messages.outgoing.rooms.items.FloorItemUpdateComposer;
 
-class HopperActionFour implements Runnable
-{
+class HopperActionFour implements Runnable {
+
     private final HabboItem currentTeleport;
     private final Room room;
     private final GameClient client;
 
-    public HopperActionFour(HabboItem currentTeleport, Room room, GameClient client)
-    {
+    public HopperActionFour(HabboItem currentTeleport, Room room, GameClient client) {
         this.currentTeleport = currentTeleport;
         this.client = client;
         this.room = room;
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
         this.currentTeleport.setExtradata("3");
         this.room.updateItem(this.currentTeleport);
 

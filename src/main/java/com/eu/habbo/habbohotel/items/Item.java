@@ -35,18 +35,15 @@ public class Item {
 
     private ItemInteraction interactionType;
 
-    public Item(ResultSet set) throws SQLException
-    {
+    public Item(ResultSet set) throws SQLException {
         this.load(set);
     }
 
-    public void update(ResultSet set) throws SQLException
-    {
+    public void update(ResultSet set) throws SQLException {
         this.load(set);
     }
 
-    private void load(ResultSet set) throws SQLException
-    {
+    private void load(ResultSet set) throws SQLException {
         this.id = set.getInt("id");
         this.spriteId = set.getInt("sprite_id");
         this.name = set.getString("item_name");
@@ -70,30 +67,23 @@ public class Item {
         this.effectM = set.getShort("effect_id_male");
         this.effectF = set.getShort("effect_id_female");
 
-        if(this.interactionType.getType() == InteractionVendingMachine.class)
-        {
+        if (this.interactionType.getType() == InteractionVendingMachine.class) {
             this.vendingItems = new TIntArrayList();
             String[] vendingIds = set.getString("vending_ids").replace(";", ",").split(",");
-            for (String s : vendingIds)
-            {
+            for (String s : vendingIds) {
                 this.vendingItems.add(Integer.valueOf(s.replace(" ", "")));
             }
         }
 
-        if(this.interactionType.getType() == InteractionMultiHeight.class)
-        {
-            if(set.getString("multiheight").contains(";"))
-            {
+        if (this.interactionType.getType() == InteractionMultiHeight.class) {
+            if (set.getString("multiheight").contains(";")) {
                 String[] s = set.getString("multiheight").split(";");
                 this.multiHeights = new double[s.length];
 
-                for(int i = 0; i < s.length - 1; i++)
-                {
+                for (int i = 0; i < s.length - 1; i++) {
                     this.multiHeights[i] = Double.parseDouble(s[i]);
                 }
-            }
-            else
-            {
+            } else {
                 this.multiHeights = new double[0];
             }
         }
@@ -111,8 +101,7 @@ public class Item {
         return this.name;
     }
 
-    public String getType()
-    {
+    public String getType() {
         return this.type;
     }
 
@@ -176,39 +165,30 @@ public class Item {
         return this.effectF;
     }
 
-    public ItemInteraction getInteractionType()
-    {
+    public ItemInteraction getInteractionType() {
         return this.interactionType;
     }
 
-    public TIntArrayList getVendingItems()
-    {
+    public TIntArrayList getVendingItems() {
         return this.vendingItems;
     }
 
-    public int getRandomVendingItem()
-    {
+    public int getRandomVendingItem() {
         return this.vendingItems.get(Emulator.getRandom().nextInt(this.vendingItems.size()));
     }
 
-    public double[] getMultiHeights()
-    {
+    public double[] getMultiHeights() {
         return this.multiHeights;
     }
 
-    public static boolean isPet(Item item)
-    {
+    public static boolean isPet(Item item) {
         return item.getName().toLowerCase().startsWith("a0 pet");
     }
 
-    public static double getCurrentHeight(HabboItem item)
-    {
-        if(item instanceof InteractionMultiHeight)
-        {
+    public static double getCurrentHeight(HabboItem item) {
+        if (item instanceof InteractionMultiHeight) {
             return item.getBaseItem().getMultiHeights()[(item.getExtradata().isEmpty() ? 0 : Integer.valueOf(item.getExtradata()) % item.getBaseItem().getMultiHeights().length)];
-        }
-        else
-        {
+        } else {
             return item.getBaseItem().getHeight();
         }
     }

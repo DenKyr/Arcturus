@@ -11,11 +11,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
 
-public class RequestNewNavigatorRoomsEvent extends MessageHandler
-{
+public class RequestNewNavigatorRoomsEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
 //        String searchCode = this.packet.readString();
 //        String text = this.packet.readString();
 //
@@ -154,65 +153,50 @@ public class RequestNewNavigatorRoomsEvent extends MessageHandler
 //
 //            this.client.sendResponse(new NewNavigatorSearchResultsComposer(view, query, filter.getResult(rooms, part)));
 //        }
-
         String view = this.packet.readString();
         String query = this.packet.readString();
 
         NavigatorFilter filter = Emulator.getGameEnvironment().getNavigatorManager().filters.get(view);
 
-        if (filter != null)
-        {
+        if (filter != null) {
             List<SearchResultList> resultLists = filter.getResult(this.client.getHabbo());
 
             Method field = null;
             String part = query;
-            if (query.contains(":"))
-            {
+            if (query.contains(":")) {
                 String[] parts = query.split(":");
 
                 String filterField = "";
-                if (parts.length > 1)
-                {
+                if (parts.length > 1) {
                     filterField = parts[0];
                     part = parts[1];
-                }
-                else
-                {
-                    filterField = parts[0].replace(":","");
-                    if (Emulator.getGameEnvironment().getNavigatorManager().filterSettings.containsKey(filterField))
-                    {
+                } else {
+                    filterField = parts[0].replace(":", "");
+                    if (Emulator.getGameEnvironment().getNavigatorManager().filterSettings.containsKey(filterField)) {
                         filterField = "";
                     }
                 }
 
-                if (Emulator.getGameEnvironment().getNavigatorManager().filterSettings.get(filterField) != null)
-                {
+                if (Emulator.getGameEnvironment().getNavigatorManager().filterSettings.get(filterField) != null) {
                     field = Emulator.getGameEnvironment().getNavigatorManager().filterSettings.get(filterField).getKey();
                 }
             }
 
-            if (field != null)
-            {
+            if (field != null) {
                 filter.filter(field, part, resultLists);
-            }
-            else
-            {
-                if (!part.isEmpty())
-                {
+            } else {
+                if (!part.isEmpty()) {
                     filter(resultLists, filter, part);
                 }
             }
 
             this.client.sendResponse(new NewNavigatorSearchResultsComposer(view, query, resultLists));
-        }
-        else
-        {
+        } else {
             RoomCategory category = Emulator.getGameEnvironment().getRoomManager().getCategory(view);
 
             List<SearchResultList> resultLists = new ArrayList<SearchResultList>();
 
-            if (category != null)
-            {
+            if (category != null) {
                 resultLists.add(new SearchResultList(1, view, view, SearchAction.BACK, SearchMode.LIST, false, Emulator.getGameEnvironment().getRoomManager().getPopularRooms(50, category.getId()), true));
             }
 
@@ -224,47 +208,37 @@ public class RequestNewNavigatorRoomsEvent extends MessageHandler
         }
     }
 
-    private void filter(List<SearchResultList> resultLists, NavigatorFilter filter, String part)
-    {
+    private void filter(List<SearchResultList> resultLists, NavigatorFilter filter, String part) {
         List<SearchResultList> toRemove = new ArrayList<SearchResultList>();
         Map<Integer, HashMap<Integer, Room>> filteredRooms = new HashMap<Integer, HashMap<Integer, Room>>();
 
-        for (Map.Entry<Method, NavigatorFilterComparator> set : Emulator.getGameEnvironment().getNavigatorManager().filterSettings.values())
-        {
+        for (Map.Entry<Method, NavigatorFilterComparator> set : Emulator.getGameEnvironment().getNavigatorManager().filterSettings.values()) {
             System.out.println(set.getKey().getName());
 
-            for (SearchResultList result : resultLists)
-            {
-                if (result.filter)
-                {
+            for (SearchResultList result : resultLists) {
+                if (result.filter) {
                     List<Room> rooms = new ArrayList<Room>();
                     rooms.addAll(result.rooms.subList(0, result.rooms.size()));
                     filter.filterRooms(set.getKey(), part, rooms);
 
-                    if (!filteredRooms.containsKey(result.order))
-                    {
+                    if (!filteredRooms.containsKey(result.order)) {
                         filteredRooms.put(result.order, new HashMap<Integer, Room>());
                     }
 
-                    for (Room room : rooms)
-                    {
+                    for (Room room : rooms) {
                         filteredRooms.get(result.order).put(room.getId(), room);
                     }
                 }
             }
         }
 
-        for (Map.Entry<Integer, HashMap<Integer, Room>> set : filteredRooms.entrySet())
-        {
-            for (SearchResultList resultList : resultLists)
-            {
-                if (resultList.filter)
-                {
+        for (Map.Entry<Integer, HashMap<Integer, Room>> set : filteredRooms.entrySet()) {
+            for (SearchResultList resultList : resultLists) {
+                if (resultList.filter) {
                     resultList.rooms.clear();
                     resultList.rooms.addAll(set.getValue().values());
 
-                    if (resultList.rooms.isEmpty())
-                    {
+                    if (resultList.rooms.isEmpty()) {
                         toRemove.add(resultList);
                     }
                 }

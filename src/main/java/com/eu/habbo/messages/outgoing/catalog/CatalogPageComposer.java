@@ -14,42 +14,35 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class CatalogPageComposer extends MessageComposer
-{
+public class CatalogPageComposer extends MessageComposer {
+
     private final CatalogPage page;
     private final Habbo habbo;
 
-    public CatalogPageComposer(CatalogPage page, Habbo habbo)
-    {
+    public CatalogPageComposer(CatalogPage page, Habbo habbo) {
         this.page = page;
         this.habbo = habbo;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.CatalogPageComposer);
         this.response.appendInt32(this.page.getId());
         this.response.appendString(CatalogPageType.NORMAL.name().toUpperCase());
         this.page.serialize(this.response);
 
-        if(page instanceof RecentPurchasesLayout)
-        {
+        if (page instanceof RecentPurchasesLayout) {
             this.response.appendInt32(this.habbo.getHabboStats().getRecentPurchases().size());
 
-            for(Map.Entry<Integer, CatalogItem> item : this.habbo.getHabboStats().getRecentPurchases().entrySet())
-            {
+            for (Map.Entry<Integer, CatalogItem> item : this.habbo.getHabboStats().getRecentPurchases().entrySet()) {
                 item.getValue().serialize(this.response);
             }
-        }
-        else
-        {
+        } else {
             this.response.appendInt32(this.page.getCatalogItems().size());
             List<CatalogItem> items = new ArrayList<CatalogItem>();
             items.addAll(this.page.getCatalogItems().valueCollection());
             Collections.sort(items);
-            for (CatalogItem item : items)
-            {
+            for (CatalogItem item : items) {
                 item.serialize(this.response);
             }
         }

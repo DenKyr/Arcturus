@@ -7,37 +7,29 @@ import com.eu.habbo.habbohotel.rooms.RoomChatMessage;
 import com.eu.habbo.habbohotel.rooms.RoomChatMessageBubbles;
 import com.eu.habbo.messages.outgoing.rooms.users.RoomUserWhisperComposer;
 
-public class SetSpeedCommand extends Command
-{
-    public SetSpeedCommand()
-    {
+public class SetSpeedCommand extends Command {
+
+    public SetSpeedCommand() {
         super("cmd_setspeed", Emulator.getTexts().getValue("commands.keys.cmd_setspeed").split(";"));
     }
 
     @Override
-    public boolean handle(GameClient gameClient, String[] params) throws Exception
-    {
-        if(gameClient.getHabbo().getHabboInfo().getCurrentRoom() != null)
-        {
-            if(gameClient.getHabbo().getHabboInfo().getCurrentRoom().hasRights(gameClient.getHabbo()))
-            {
+    public boolean handle(GameClient gameClient, String[] params) throws Exception {
+        if (gameClient.getHabbo().getHabboInfo().getCurrentRoom() != null) {
+            if (gameClient.getHabbo().getHabboInfo().getCurrentRoom().hasRights(gameClient.getHabbo())) {
                 Room room = gameClient.getHabbo().getHabboInfo().getCurrentRoom();
 
                 int oldSpeed = room.getRollerSpeed();
                 int newSpeed;
 
-                try
-                {
+                try {
                     newSpeed = Integer.valueOf(params[1]);
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     gameClient.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.error.cmd_setspeed.invalid_amount"), gameClient.getHabbo(), gameClient.getHabbo(), RoomChatMessageBubbles.ALERT)));
                     return true;
                 }
 
-                if(newSpeed < 0 || newSpeed > 100)
-                {
+                if (newSpeed < 0 || newSpeed > 100) {
                     gameClient.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.error.cmd_setspeed.bounds"), gameClient.getHabbo(), gameClient.getHabbo(), RoomChatMessageBubbles.ALERT)));
                     return true;
                 }

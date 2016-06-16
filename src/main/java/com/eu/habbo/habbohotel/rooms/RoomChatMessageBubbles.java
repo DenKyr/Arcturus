@@ -1,7 +1,7 @@
 package com.eu.habbo.habbohotel.rooms;
 
-public enum RoomChatMessageBubbles
-{
+public enum RoomChatMessageBubbles {
+
     NORMAL(0),
     ALERT(1),
     BOT(2),
@@ -42,24 +42,18 @@ public enum RoomChatMessageBubbles
 
     private int type;
 
-    RoomChatMessageBubbles(int type)
-    {
+    RoomChatMessageBubbles(int type) {
         this.type = type;
     }
 
-    public int getType()
-    {
+    public int getType() {
         return this.type;
     }
 
-    public static RoomChatMessageBubbles getBubble(int bubbleId)
-    {
-        try
-        {
+    public static RoomChatMessageBubbles getBubble(int bubbleId) {
+        try {
             return values()[bubbleId];
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return NORMAL;
         }
     }

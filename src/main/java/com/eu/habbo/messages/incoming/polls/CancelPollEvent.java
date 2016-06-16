@@ -8,20 +8,16 @@ import com.eu.habbo.messages.incoming.MessageHandler;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class CancelPollEvent extends MessageHandler
-{
-    @Override
-    public void handle() throws Exception
-    {
-        int pollId = this.packet.readInt();
+public class CancelPollEvent extends MessageHandler {
 
+    @Override
+    public void handle() throws Exception {
+        int pollId = this.packet.readInt();
 
         Poll poll = PollManager.getPoll(pollId);
 
-        if(poll != null)
-        {
-            try
-            {
+        if (poll != null) {
+            try {
                 PreparedStatement statement = Emulator.getDatabase().prepare("INSERT INTO polls_answers (poll_id, user_id, question_id, answer) VALUES (?, ?, ?, ?)");
                 statement.setInt(1, pollId);
                 statement.setInt(2, this.client.getHabbo().getHabboInfo().getId());
@@ -30,9 +26,7 @@ public class CancelPollEvent extends MessageHandler
                 statement.execute();
                 statement.close();
                 statement.getConnection().close();
-            }
-            catch (SQLException e)
-            {
+            } catch (SQLException e) {
                 Emulator.getLogging().logSQLException(e);
             }
         }

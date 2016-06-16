@@ -8,19 +8,16 @@ import com.eu.habbo.messages.outgoing.rooms.ForwardToRoomComposer;
 
 import java.util.List;
 
-public class FindNewFriendsEvent extends MessageHandler
-{
+public class FindNewFriendsEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         List<Room> rooms = Emulator.getGameEnvironment().getRoomManager().getActiveRooms(Emulator.getConfig().getInt("hotel.friendcategory", 0));
 
-        if(!rooms.isEmpty())
-        {
+        if (!rooms.isEmpty()) {
             Room room = rooms.get(0);
 
-            if (room != null)
-            {
+            if (room != null) {
                 this.client.sendResponse(new ForwardToRoomComposer(room.getId()));
                 this.client.sendResponse(new FriendFindingRoomComposer(FriendFindingRoomComposer.ROOM_FOUND));
                 return;

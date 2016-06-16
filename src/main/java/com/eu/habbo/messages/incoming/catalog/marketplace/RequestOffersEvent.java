@@ -4,11 +4,10 @@ import com.eu.habbo.habbohotel.catalog.marketplace.MarketPlace;
 import com.eu.habbo.messages.incoming.MessageHandler;
 import com.eu.habbo.messages.outgoing.catalog.marketplace.MarketplaceOffersComposer;
 
-public class RequestOffersEvent extends MessageHandler
-{
+public class RequestOffersEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         int min = this.packet.readInt();
         int max = this.packet.readInt();
         String query = this.packet.readString();

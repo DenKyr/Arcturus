@@ -9,24 +9,18 @@ import com.eu.habbo.messages.outgoing.modtool.ModToolIssueChatlogComposer;
 
 import java.util.ArrayList;
 
-public class ModToolRequestIssueChatlogEvent extends MessageHandler
-{
+public class ModToolRequestIssueChatlogEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
-        if(this.client.getHabbo().hasPermission("acc_supporttool"))
-        {
+    public void handle() throws Exception {
+        if (this.client.getHabbo().hasPermission("acc_supporttool")) {
             ModToolIssue issue = Emulator.getGameEnvironment().getModToolManager().getTicket(this.packet.readInt());
 
-            if(issue != null)
-            {
+            if (issue != null) {
                 ArrayList<ModToolChatLog> chatlog;
-                if(issue.roomId > 0)
-                {
+                if (issue.roomId > 0) {
                     chatlog = Emulator.getGameEnvironment().getModToolManager().getRoomChatlog(issue.roomId);
-                }
-                else
-                {
+                } else {
                     chatlog = new ArrayList<ModToolChatLog>();
                     chatlog.addAll(Emulator.getGameEnvironment().getModToolManager().getUserChatlog(issue.reportedId));
                     chatlog.addAll(Emulator.getGameEnvironment().getModToolManager().getUserChatlog(issue.senderId));
@@ -35,15 +29,12 @@ public class ModToolRequestIssueChatlogEvent extends MessageHandler
                 Room room = Emulator.getGameEnvironment().getRoomManager().getRoom(issue.roomId);
                 String roomName = "";
 
-                if(room != null)
-                {
+                if (room != null) {
                     roomName = room.getName();
                 }
                 this.client.sendResponse(new ModToolIssueChatlogComposer(issue, chatlog, roomName));
             }
-        }
-        else
-        {
+        } else {
             Emulator.getGameEnvironment().getModToolManager().quickTicket(this.client.getHabbo(), "Scripter", Emulator.getTexts().getValue("scripter.warning.modtools.chatlog").replace("%username%", this.client.getHabbo().getHabboInfo().getUsername()));
         }
     }

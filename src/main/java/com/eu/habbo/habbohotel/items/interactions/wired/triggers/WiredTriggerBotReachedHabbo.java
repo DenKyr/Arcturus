@@ -13,31 +13,27 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class WiredTriggerBotReachedHabbo extends InteractionWiredTrigger
-{
+public class WiredTriggerBotReachedHabbo extends InteractionWiredTrigger {
+
     public final static WiredTriggerType type = WiredTriggerType.BOT_REACHED_AVTR;
 
     private String botName = "";
 
-    public WiredTriggerBotReachedHabbo(ResultSet set, Item baseItem) throws SQLException
-    {
+    public WiredTriggerBotReachedHabbo(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
 
-    public WiredTriggerBotReachedHabbo(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public WiredTriggerBotReachedHabbo(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
 
     @Override
-    public WiredTriggerType getType()
-    {
+    public WiredTriggerType getType() {
         return type;
     }
 
     @Override
-    public void serializeWiredData(ServerMessage message)
-    {
+    public void serializeWiredData(ServerMessage message) {
         message.appendBoolean(false);
         message.appendInt32(5);
         message.appendInt32(0);
@@ -52,8 +48,7 @@ public class WiredTriggerBotReachedHabbo extends InteractionWiredTrigger
     }
 
     @Override
-    public boolean saveData(ClientMessage packet)
-    {
+    public boolean saveData(ClientMessage packet) {
         packet.readInt();
 
         this.botName = packet.readString();
@@ -62,36 +57,33 @@ public class WiredTriggerBotReachedHabbo extends InteractionWiredTrigger
     }
 
     @Override
-    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff)
-    {
-        if(stuff.length == 0)
+    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff) {
+        if (stuff.length == 0) {
             return false;
+        }
 
         List<Bot> bots = room.getBots(this.botName);
 
-        for(Bot bot : bots)
-        {
-            if(bot.getRoomUnit().equals(stuff[0]))
+        for (Bot bot : bots) {
+            if (bot.getRoomUnit().equals(stuff[0])) {
                 return true;
+            }
         }
         return false;
     }
 
     @Override
-    protected String getWiredData()
-    {
+    protected String getWiredData() {
         return this.botName;
     }
 
     @Override
-    public void loadWiredData(ResultSet set, Room room) throws SQLException
-    {
+    public void loadWiredData(ResultSet set, Room room) throws SQLException {
         this.botName = set.getString("wired_data");
     }
 
     @Override
-    public void onPickUp()
-    {
+    public void onPickUp() {
         this.botName = "";
     }
 }

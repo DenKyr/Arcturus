@@ -5,20 +5,18 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class RoomUserUnbannedComposer extends MessageComposer
-{
+public class RoomUserUnbannedComposer extends MessageComposer {
+
     private final Room room;
     private final int userId;
 
-    public RoomUserUnbannedComposer(Room room, int userId)
-    {
+    public RoomUserUnbannedComposer(Room room, int userId) {
         this.room = room;
         this.userId = userId;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.RoomUserUnbannedComposer);
         this.response.appendInt32(this.room.getId());
         this.response.appendInt32(this.userId);

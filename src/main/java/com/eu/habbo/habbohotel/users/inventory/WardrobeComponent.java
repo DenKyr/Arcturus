@@ -10,79 +10,64 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class WardrobeComponent
-{
+public class WardrobeComponent {
+
     private final THashMap<Integer, WardrobeItem> looks;
     private final THashSet<Integer> clothing;
 
-    public WardrobeComponent(Habbo habbo)
-    {
+    public WardrobeComponent(Habbo habbo) {
         this.looks = new THashMap<Integer, WardrobeItem>();
 
-        try
-        {
+        try {
             PreparedStatement statement = Emulator.getDatabase().prepare("SELECT * FROM users_wardrobe WHERE user_id = ?");
             statement.setInt(1, habbo.getHabboInfo().getId());
             ResultSet set = statement.executeQuery();
 
-            while (set.next())
-            {
+            while (set.next()) {
                 this.looks.put(set.getInt("slot_id"), new WardrobeItem(set, habbo));
             }
 
             set.close();
             statement.close();
             statement.getConnection().close();
-        }
-        catch(SQLException e)
-        {
+        } catch (SQLException e) {
             Emulator.getLogging().logSQLException(e);
         }
 
         this.clothing = new THashSet<Integer>();
 
-        try
-        {
+        try {
             PreparedStatement statement = Emulator.getDatabase().prepare("SELECT * FROM users_clothing WHERE user_id = ?");
             statement.setInt(1, habbo.getHabboInfo().getId());
             ResultSet set = statement.executeQuery();
 
-            while (set.next())
-            {
+            while (set.next()) {
                 this.clothing.add(set.getInt("clothing_id"));
             }
 
             set.close();
             statement.close();
             statement.getConnection().close();
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             Emulator.getLogging().logSQLException(e);
         }
     }
 
-    public WardrobeItem createLook(Habbo habbo, int slotId, String look)
-    {
+    public WardrobeItem createLook(Habbo habbo, int slotId, String look) {
         return new WardrobeItem(habbo.getHabboInfo().getGender(), look, slotId, habbo);
     }
 
-    public THashMap<Integer, WardrobeItem> getLooks()
-    {
+    public THashMap<Integer, WardrobeItem> getLooks() {
         return this.looks;
     }
 
-    public THashSet<Integer> getClothing()
-    {
+    public THashSet<Integer> getClothing() {
         return this.clothing;
     }
 
-    public void dispose()
-    {
-        for(WardrobeItem item : looks.values())
-        {
-            if(item.needsInsert || item.needsUpdate)
-            {
+    public void dispose() {
+        for (WardrobeItem item : looks.values()) {
+            if (item.needsInsert || item.needsUpdate) {
                 Emulator.getThreading().run(item);
             }
         }
@@ -90,8 +75,8 @@ public class WardrobeComponent
         looks.clear();
     }
 
-    public class WardrobeItem implements Runnable
-    {
+    public class WardrobeItem implements Runnable {
+
         private int slotId;
         private HabboGender gender;
         private Habbo habbo;
@@ -99,8 +84,7 @@ public class WardrobeComponent
         private boolean needsInsert;
         private boolean needsUpdate;
 
-        private WardrobeItem(ResultSet set, Habbo habbo) throws SQLException
-        {
+        private WardrobeItem(ResultSet set, Habbo habbo) throws SQLException {
             this.gender = HabboGender.valueOf(set.getString("gender"));
             this.look = set.getString("look");
             this.slotId = set.getInt("slot_id");
@@ -109,8 +93,7 @@ public class WardrobeComponent
             this.needsUpdate = false;
         }
 
-        private WardrobeItem(HabboGender gender, String look, int slotId, Habbo habbo)
-        {
+        private WardrobeItem(HabboGender gender, String look, int slotId, Habbo habbo) {
             this.gender = gender;
             this.look = look;
             this.slotId = slotId;
@@ -119,8 +102,7 @@ public class WardrobeComponent
             this.needsUpdate = false;
         }
 
-        public synchronized HabboGender getGender()
-        {
+        public synchronized HabboGender getGender() {
             return gender;
         }
 
@@ -148,8 +130,7 @@ public class WardrobeComponent
             this.needsInsert = needsInsert;
         }
 
-        public void setNeedsUpdate(boolean needsUpdate)
-        {
+        public void setNeedsUpdate(boolean needsUpdate) {
             this.needsUpdate = needsUpdate;
         }
 
@@ -157,18 +138,14 @@ public class WardrobeComponent
             return slotId;
         }
 
-        public void setSlotId(int slotId)
-        {
+        public void setSlotId(int slotId) {
             this.slotId = slotId;
         }
 
         @Override
-        public void run()
-        {
-            try
-            {
-                if(this.needsInsert)
-                {
+        public void run() {
+            try {
+                if (this.needsInsert) {
                     this.needsInsert = false;
                     this.needsUpdate = false;
                     PreparedStatement statement = Emulator.getDatabase().prepare("INSERT INTO users_wardrobe (slot_id, look, user_id, gender) VALUES (?, ?, ?, ?)");
@@ -180,7 +157,7 @@ public class WardrobeComponent
                     statement.close();
                     statement.getConnection().close();
                 }
-                if(this.needsUpdate) {
+                if (this.needsUpdate) {
                     this.needsUpdate = false;
                     PreparedStatement statement = Emulator.getDatabase().prepare("UPDATE users_wardrobe SET look = ? WHERE slot_id = ? AND user_id = ?");
                     statement.setString(1, this.look);
@@ -190,9 +167,7 @@ public class WardrobeComponent
                     statement.close();
                     statement.getConnection().close();
                 }
-            }
-            catch(SQLException e)
-            {
+            } catch (SQLException e) {
                 Emulator.getLogging().logSQLException(e);
             }
         }

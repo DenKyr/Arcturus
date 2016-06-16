@@ -7,20 +7,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class InsertModToolIssue implements Runnable
-{
+public class InsertModToolIssue implements Runnable {
+
     private final ModToolIssue issue;
 
-    public InsertModToolIssue(ModToolIssue issue)
-    {
+    public InsertModToolIssue(ModToolIssue issue) {
         this.issue = issue;
     }
 
     @Override
-    public void run()
-    {
-        try
-        {
+    public void run() {
+        try {
             PreparedStatement statement = Emulator.getDatabase().prepare("INSERT INTO support_tickets (state, timestamp, score, sender_id, reported_id, room_id, mod_id, issue) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             statement.setInt(1, this.issue.state.getState());
             statement.setInt(2, this.issue.timestamp);
@@ -40,9 +37,7 @@ public class InsertModToolIssue implements Runnable
             key.close();
             statement.close();
             statement.getConnection().close();
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             Emulator.getLogging().logSQLException(e);
         }
     }

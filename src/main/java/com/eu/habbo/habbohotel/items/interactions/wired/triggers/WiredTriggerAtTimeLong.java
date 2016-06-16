@@ -14,45 +14,38 @@ import com.eu.habbo.threading.runnables.WiredExecuteTask;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class WiredTriggerAtTimeLong extends InteractionWiredTrigger implements WiredTriggerReset
-{
+public class WiredTriggerAtTimeLong extends InteractionWiredTrigger implements WiredTriggerReset {
+
     private static final WiredTriggerType type = WiredTriggerType.AT_GIVEN_TIME;
 
     private int executeTime;
     public int taskId;
 
-    public WiredTriggerAtTimeLong(ResultSet set, Item baseItem) throws SQLException
-    {
+    public WiredTriggerAtTimeLong(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
 
-    public WiredTriggerAtTimeLong(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public WiredTriggerAtTimeLong(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
 
     @Override
-    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff)
-    {
+    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff) {
         return true;
     }
 
     @Override
-    public String getWiredData()
-    {
+    public String getWiredData() {
         return this.executeTime + "";
     }
 
     @Override
-    public void loadWiredData(ResultSet set, Room room) throws SQLException
-    {
-        if(set.getString("wired_data").length() >= 1)
-        {
+    public void loadWiredData(ResultSet set, Room room) throws SQLException {
+        if (set.getString("wired_data").length() >= 1) {
             this.executeTime = (Integer.valueOf(set.getString("wired_data")));
         }
 
-        if(this.executeTime < 500)
-        {
+        if (this.executeTime < 500) {
             this.executeTime = 20 * 500;
         }
         this.taskId = 1;
@@ -60,21 +53,18 @@ public class WiredTriggerAtTimeLong extends InteractionWiredTrigger implements W
     }
 
     @Override
-    public void onPickUp()
-    {
+    public void onPickUp() {
         this.executeTime = 0;
         this.taskId = 0;
     }
 
     @Override
-    public WiredTriggerType getType()
-    {
+    public WiredTriggerType getType() {
         return type;
     }
 
     @Override
-    public void serializeWiredData(ServerMessage message)
-    {
+    public void serializeWiredData(ServerMessage message) {
         message.appendBoolean(false);
         message.appendInt32(5);
         message.appendInt32(0);
@@ -90,8 +80,7 @@ public class WiredTriggerAtTimeLong extends InteractionWiredTrigger implements W
     }
 
     @Override
-    public boolean saveData(ClientMessage packet)
-    {
+    public boolean saveData(ClientMessage packet) {
         packet.readInt();
 
         this.executeTime = packet.readInt() * 500;
@@ -100,8 +89,7 @@ public class WiredTriggerAtTimeLong extends InteractionWiredTrigger implements W
     }
 
     @Override
-    public void resetTimer()
-    {
+    public void resetTimer() {
         this.taskId++;
 
         Emulator.getThreading().run(new WiredExecuteTask(this, Emulator.getGameEnvironment().getRoomManager().getRoom(this.getRoomId())), executeTime);

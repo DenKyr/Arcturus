@@ -1,7 +1,7 @@
 package com.eu.habbo.util.pathfinding;
 
-public abstract class AbstractNode
-{
+public abstract class AbstractNode {
+
     protected static final int BASICMOVEMENTCOST = 10;
     protected static final int DIAGONALMOVEMENTCOST = 14;
     private int xPosition;
@@ -13,148 +13,119 @@ public abstract class AbstractNode
     private int gCosts;
     private int hCosts;
 
-    AbstractNode(int xPosition, int yPosition)
-    {
+    AbstractNode(int xPosition, int yPosition) {
         this.xPosition = xPosition;
         this.yPosition = yPosition;
         this.walkable = true;
         this.movementPanelty = 0;
     }
 
-    public boolean isDiagonaly()
-    {
+    public boolean isDiagonaly() {
         return this.diagonally;
     }
 
-    public void setIsDiagonaly(boolean isDiagonaly)
-    {
+    public void setIsDiagonaly(boolean isDiagonaly) {
         this.diagonally = isDiagonaly;
     }
 
-    public void setCoordinates(int x, int y)
-    {
+    public void setCoordinates(int x, int y) {
         this.xPosition = x;
         this.yPosition = y;
     }
 
-    public int getX()
-    {
+    public int getX() {
         return this.xPosition;
     }
 
-    public int getY()
-    {
+    public int getY() {
         return this.yPosition;
     }
 
-    public boolean isWalkable()
-    {
+    public boolean isWalkable() {
         return this.walkable;
     }
 
-    public void setWalkable(boolean walkable)
-    {
+    public void setWalkable(boolean walkable) {
         this.walkable = walkable;
     }
 
-    public AbstractNode getPrevious()
-    {
+    public AbstractNode getPrevious() {
         return this.previous;
     }
 
-    public void setPrevious(AbstractNode previous)
-    {
+    public void setPrevious(AbstractNode previous) {
         this.previous = previous;
     }
 
-    public void setMovementPanelty(int movementPanelty)
-    {
+    public void setMovementPanelty(int movementPanelty) {
         this.movementPanelty = movementPanelty;
     }
 
-    public int getfCosts()
-    {
+    public int getfCosts() {
         return this.gCosts + this.hCosts;
     }
 
-    public int getgCosts()
-    {
+    public int getgCosts() {
         return this.gCosts;
     }
 
-    private void setgCosts(int gCosts)
-    {
+    private void setgCosts(int gCosts) {
         this.gCosts = (gCosts + this.movementPanelty);
     }
 
-    void setgCosts(AbstractNode previousAbstractNode, int basicCost)
-    {
+    void setgCosts(AbstractNode previousAbstractNode, int basicCost) {
         setgCosts(previousAbstractNode.getgCosts() + basicCost);
     }
 
-    public void setgCosts(AbstractNode previousAbstractNode)
-    {
-        if (this.diagonally)
-        {
+    public void setgCosts(AbstractNode previousAbstractNode) {
+        if (this.diagonally) {
             setgCosts(previousAbstractNode, 14);
-        }
-        else
-        {
+        } else {
             setgCosts(previousAbstractNode, 10);
         }
     }
 
-    public int calculategCosts(AbstractNode previousAbstractNode)
-    {
-        if (this.diagonally)
-        {
+    public int calculategCosts(AbstractNode previousAbstractNode) {
+        if (this.diagonally) {
             return previousAbstractNode.getgCosts() + 14 + this.movementPanelty;
         }
 
         return previousAbstractNode.getgCosts() + 10 + this.movementPanelty;
     }
 
-    public int calculategCosts(AbstractNode previousAbstractNode, int movementCost)
-    {
+    public int calculategCosts(AbstractNode previousAbstractNode, int movementCost) {
         return previousAbstractNode.getgCosts() + movementCost + this.movementPanelty;
     }
 
-    int gethCosts()
-    {
+    int gethCosts() {
         return this.hCosts;
     }
 
-    void sethCosts(int hCosts)
-    {
+    void sethCosts(int hCosts) {
         this.hCosts = hCosts;
     }
 
     public abstract void sethCosts(AbstractNode paramAbstractNode);
 
-    public String toString()
-    {
+    public String toString() {
         return "(" + getX() + ", " + getY() + "): h: " + gethCosts() + " g: " + getgCosts() + " f: " + getfCosts();
     }
 
-    public boolean equals(Object obj)
-    {
-        if (obj == null)
-        {
+    public boolean equals(Object obj) {
+        if (obj == null) {
             return false;
         }
 
-        if (getClass() != obj.getClass())
-        {
+        if (getClass() != obj.getClass()) {
             return false;
         }
 
-        AbstractNode other = (AbstractNode)obj;
+        AbstractNode other = (AbstractNode) obj;
 
         return this.xPosition == other.xPosition && this.yPosition == other.yPosition;
     }
 
-    public int hashCode()
-    {
+    public int hashCode() {
         int hash = 3;
         hash = 17 * hash + this.xPosition;
         hash = 17 * hash + this.yPosition;

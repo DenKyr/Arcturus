@@ -7,22 +7,23 @@ import com.eu.habbo.messages.incoming.MessageHandler;
 import com.eu.habbo.messages.outgoing.rooms.items.RemoveWallItemComposer;
 import com.eu.habbo.threading.runnables.QueryDeleteHabboItem;
 
-public class PostItDeleteEvent extends MessageHandler
-{
+public class PostItDeleteEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         int itemId = this.packet.readInt();
 
         Room room = this.client.getHabbo().getHabboInfo().getCurrentRoom();
 
-        if(room == null)
+        if (room == null) {
             return;
+        }
 
         HabboItem item = room.getHabboItem(itemId);
 
-        if(item == null || item.getUserId() != this.client.getHabbo().getHabboInfo().getId())
+        if (item == null || item.getUserId() != this.client.getHabbo().getHabboInfo().getId()) {
             return;
+        }
 
         item.setRoomId(0);
         room.removeHabboItem(item);

@@ -7,22 +7,20 @@ import com.eu.habbo.habbohotel.rooms.RoomUserRotation;
 import com.eu.habbo.habbohotel.users.HabboItem;
 import com.eu.habbo.messages.outgoing.rooms.users.RoomUserStatusComposer;
 
-public class HopperActionOne implements Runnable
-{
+public class HopperActionOne implements Runnable {
+
     private final HabboItem teleportOne;
     private final Room room;
     private final GameClient client;
 
-    public HopperActionOne(HabboItem teleportOne, Room room, GameClient client)
-    {
+    public HopperActionOne(HabboItem teleportOne, Room room, GameClient client) {
         this.teleportOne = teleportOne;
         this.room = room;
         this.client = client;
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
         this.client.getHabbo().getRoomUnit().setGoalLocation(this.teleportOne.getX(), this.teleportOne.getY());
         this.client.getHabbo().getRoomUnit().setRotation(RoomUserRotation.values()[(this.teleportOne.getRotation() + 4) % 8]);
         this.client.getHabbo().getRoomUnit().getStatus().put("mv", this.teleportOne.getX() + "," + this.teleportOne.getY() + "," + this.teleportOne.getZ());

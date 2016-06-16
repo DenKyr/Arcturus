@@ -4,11 +4,10 @@ import com.eu.habbo.messages.incoming.MessageHandler;
 import com.eu.habbo.messages.outgoing.users.UserClothesComposer;
 import com.eu.habbo.messages.outgoing.users.UserWardrobeComposer;
 
-public class RequestUserWardrobeEvent extends MessageHandler
-{
+public class RequestUserWardrobeEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         this.client.sendResponse(new UserWardrobeComposer(this.client.getHabbo().getHabboInventory().getWardrobeComponent()));
     }
 }

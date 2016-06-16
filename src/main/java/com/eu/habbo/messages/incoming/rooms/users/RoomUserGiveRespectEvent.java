@@ -7,19 +7,16 @@ import com.eu.habbo.messages.incoming.MessageHandler;
 import com.eu.habbo.messages.outgoing.rooms.users.RoomUserActionComposer;
 import com.eu.habbo.messages.outgoing.rooms.users.RoomUserRespectComposer;
 
-public class RoomUserGiveRespectEvent extends MessageHandler
-{
+public class RoomUserGiveRespectEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         int userId = this.packet.readInt();
 
-        if(this.client.getHabbo().getHabboStats().respectPointsToGive > 0)
-        {
+        if (this.client.getHabbo().getHabboStats().respectPointsToGive > 0) {
             Habbo target = this.client.getHabbo().getHabboInfo().getCurrentRoom().getHabbo(userId);
 
-            if(target != null && target != this.client.getHabbo())
-            {
+            if (target != null && target != this.client.getHabbo()) {
                 target.getHabboStats().respectPointsReceived++;
                 this.client.getHabbo().getHabboStats().respectPointsGiven++;
                 this.client.getHabbo().getHabboStats().respectPointsToGive--;

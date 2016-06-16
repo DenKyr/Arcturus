@@ -19,40 +19,34 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
 
-public class InteractionLoveLock extends HabboItem
-{
+public class InteractionLoveLock extends HabboItem {
+
     public int userOneId;
     public int userTwoId;
 
-    public InteractionLoveLock(ResultSet set, Item baseItem) throws SQLException
-    {
+    public InteractionLoveLock(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
 
-    public InteractionLoveLock(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public InteractionLoveLock(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
 
     @Override
-    public void serializeExtradata(ServerMessage serverMessage)
-    {
+    public void serializeExtradata(ServerMessage serverMessage) {
         serverMessage.appendInt32(2 + (this.isLimited() ? 256 : 0));
         serverMessage.appendInt32(6);
 
         String[] data = this.getExtradata().split("\t");
 
-        if(data.length == 6)
-        {
+        if (data.length == 6) {
             serverMessage.appendString("1");
             serverMessage.appendString(data[1]);
             serverMessage.appendString(data[2]);
             serverMessage.appendString(data[3]);
             serverMessage.appendString(data[4]);
             serverMessage.appendString(data[5]);
-        }
-        else
-        {
+        } else {
             serverMessage.appendString("0");
             serverMessage.appendString("");
             serverMessage.appendString("");
@@ -65,47 +59,39 @@ public class InteractionLoveLock extends HabboItem
     }
 
     @Override
-    public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects)
-    {
+    public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects) {
         return false;
     }
 
     @Override
-    public boolean isWalkable()
-    {
+    public boolean isWalkable() {
         return false;
     }
 
     @Override
-    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception
-    {
+    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception {
 
     }
 
     @Override
-    public void onClick(GameClient client, Room room, Object[] objects) throws Exception
-    {
-        if(this.getExtradata().contains("\t"))
+    public void onClick(GameClient client, Room room, Object[] objects) throws Exception {
+        if (this.getExtradata().contains("\t")) {
             return;
+        }
 
-        if(client == null)
+        if (client == null) {
             return;
+        }
 
-        if(PathFinder.tilesAdjecent(client.getHabbo().getRoomUnit().getX(), client.getHabbo().getRoomUnit().getY(), this.getX(), this.getY()))
-        {
-            if(this.userOneId == 0)
-            {
+        if (PathFinder.tilesAdjecent(client.getHabbo().getRoomUnit().getX(), client.getHabbo().getRoomUnit().getY(), this.getX(), this.getY())) {
+            if (this.userOneId == 0) {
                 this.userOneId = client.getHabbo().getHabboInfo().getId();
                 client.sendResponse(new LoveLockFurniStartComposer(this));
-            }
-            else
-            {
-                if(this.userOneId != client.getHabbo().getHabboInfo().getId())
-                {
+            } else {
+                if (this.userOneId != client.getHabbo().getHabboInfo().getId()) {
                     Habbo habbo = room.getHabbo(this.userOneId);
 
-                    if (habbo != null)
-                    {
+                    if (habbo != null) {
                         this.userTwoId = client.getHabbo().getHabboInfo().getId();
                     }
                 }
@@ -113,10 +99,8 @@ public class InteractionLoveLock extends HabboItem
         }
     }
 
-    public boolean lock(Habbo userOne, Habbo userTwo, Room room)
-    {
-        if(PathFinder.tilesAdjecent(userOne.getRoomUnit().getX(), userOne.getRoomUnit().getY(), this.getX(), this.getY()) && PathFinder.tilesAdjecent(userTwo.getRoomUnit().getX(), userTwo.getRoomUnit().getY(), this.getX(), this.getY()))
-        {
+    public boolean lock(Habbo userOne, Habbo userTwo, Room room) {
+        if (PathFinder.tilesAdjecent(userOne.getRoomUnit().getX(), userOne.getRoomUnit().getY(), this.getX(), this.getY()) && PathFinder.tilesAdjecent(userTwo.getRoomUnit().getX(), userTwo.getRoomUnit().getY(), this.getX(), this.getY())) {
             String data = "1";
             data += "\t";
             data += userOne.getHabboInfo().getUsername();

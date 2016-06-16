@@ -9,15 +9,14 @@ import com.eu.habbo.messages.outgoing.rooms.UpdateStackHeightComposer;
 import com.eu.habbo.util.pathfinding.PathFinder;
 import com.eu.habbo.util.pathfinding.Tile;
 
-public class FloorItemOnRollerComposer extends MessageComposer
-{
+public class FloorItemOnRollerComposer extends MessageComposer {
+
     private final HabboItem item;
     private final HabboItem roller;
     private final Tile newLocation;
     private final Room room;
 
-    public FloorItemOnRollerComposer(HabboItem item, HabboItem roller, Tile newLocation, Room room)
-    {
+    public FloorItemOnRollerComposer(HabboItem item, HabboItem roller, Tile newLocation, Room room) {
         this.item = item;
         this.roller = roller;
         this.newLocation = newLocation;
@@ -25,8 +24,7 @@ public class FloorItemOnRollerComposer extends MessageComposer
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         int oldX = this.item.getX();
         int oldY = this.item.getY();
 

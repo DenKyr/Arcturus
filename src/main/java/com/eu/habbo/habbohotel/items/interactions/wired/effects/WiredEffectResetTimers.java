@@ -13,25 +13,22 @@ import com.eu.habbo.threading.runnables.WiredResetTimers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class WiredEffectResetTimers extends InteractionWiredEffect
-{
+public class WiredEffectResetTimers extends InteractionWiredEffect {
+
     public static final WiredEffectType type = WiredEffectType.RESET_TIMERS;
 
     private int delay = 0;
 
-    public WiredEffectResetTimers(ResultSet set, Item baseItem) throws SQLException
-    {
+    public WiredEffectResetTimers(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
 
-    public WiredEffectResetTimers(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public WiredEffectResetTimers(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
 
     @Override
-    public void serializeWiredData(ServerMessage message)
-    {
+    public void serializeWiredData(ServerMessage message) {
         message.appendBoolean(false);
         message.appendInt32(5);
         message.appendInt32(0);
@@ -47,8 +44,7 @@ public class WiredEffectResetTimers extends InteractionWiredEffect
     }
 
     @Override
-    public boolean saveData(ClientMessage packet)
-    {
+    public boolean saveData(ClientMessage packet) {
         packet.readInt();
         packet.readString();
         packet.readInt();
@@ -58,44 +54,37 @@ public class WiredEffectResetTimers extends InteractionWiredEffect
     }
 
     @Override
-    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff)
-    {
+    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff) {
         Emulator.getThreading().run(new WiredResetTimers(room), this.delay);
 
         return true;
     }
 
     @Override
-    public String getWiredData()
-    {
+    public String getWiredData() {
         return this.delay + "";
     }
 
     @Override
-    public void loadWiredData(ResultSet set, Room room) throws SQLException
-    {
+    public void loadWiredData(ResultSet set, Room room) throws SQLException {
         String data = set.getString("wired_data");
 
-        try
-        {
-            if (!data.equals(""))
+        try {
+            if (!data.equals("")) {
                 this.delay = Integer.valueOf(data);
-        }
-        catch (Exception e)
-        {
+            }
+        } catch (Exception e) {
             Emulator.getLogging().logErrorLine(e);
         }
     }
 
     @Override
-    public void onPickUp()
-    {
+    public void onPickUp() {
         this.delay = 0;
     }
 
     @Override
-    public WiredEffectType getType()
-    {
+    public WiredEffectType getType() {
         return type;
     }
 }

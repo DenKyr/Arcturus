@@ -5,17 +5,15 @@ import com.eu.habbo.habbohotel.polls.PollManager;
 import com.eu.habbo.messages.incoming.MessageHandler;
 import com.eu.habbo.messages.outgoing.polls.PollQuestionsComposer;
 
-public class GetPollDataEvent extends MessageHandler
-{
+public class GetPollDataEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         int pollId = this.packet.readInt();
 
         Poll poll = PollManager.getPoll(pollId);
 
-        if(poll != null)
-        {
+        if (poll != null) {
             this.client.sendResponse(new PollQuestionsComposer(poll));
         }
     }

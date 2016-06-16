@@ -14,35 +14,29 @@ import com.eu.habbo.messages.ServerMessage;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class WiredEffectJoinTeam extends InteractionWiredEffect
-{
+public class WiredEffectJoinTeam extends InteractionWiredEffect {
+
     public static final WiredEffectType type = WiredEffectType.JOIN_TEAM;
 
     private GameTeamColors teamColor = GameTeamColors.RED;
 
-    public WiredEffectJoinTeam(ResultSet set, Item baseItem) throws SQLException
-    {
+    public WiredEffectJoinTeam(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
 
-    public WiredEffectJoinTeam(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public WiredEffectJoinTeam(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
 
     @Override
-    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff)
-    {
+    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff) {
         Habbo habbo = room.getHabbo(roomUnit);
 
-        if(habbo != null)
-        {
-            if(habbo.getHabboInfo().getGamePlayer() == null)
-            {
+        if (habbo != null) {
+            if (habbo.getHabboInfo().getGamePlayer() == null) {
                 Game game = room.getGame(Game.class);
 
-                if(game != null)
-                {
+                if (game != null) {
                     return game.addHabbo(habbo, this.teamColor);
                 }
             }
@@ -52,32 +46,27 @@ public class WiredEffectJoinTeam extends InteractionWiredEffect
     }
 
     @Override
-    public String getWiredData()
-    {
+    public String getWiredData() {
         return this.teamColor.type + "";
     }
 
     @Override
-    public void loadWiredData(ResultSet set, Room room) throws SQLException
-    {
+    public void loadWiredData(ResultSet set, Room room) throws SQLException {
         this.teamColor = GameTeamColors.values()[Integer.valueOf(set.getString("wired_data"))];
     }
 
     @Override
-    public void onPickUp()
-    {
+    public void onPickUp() {
         this.teamColor = GameTeamColors.RED;
     }
 
     @Override
-    public WiredEffectType getType()
-    {
+    public WiredEffectType getType() {
         return type;
     }
 
     @Override
-    public void serializeWiredData(ServerMessage message)
-    {
+    public void serializeWiredData(ServerMessage message) {
         message.appendBoolean(false);
         message.appendInt32(5);
         message.appendInt32(0);
@@ -93,8 +82,7 @@ public class WiredEffectJoinTeam extends InteractionWiredEffect
     }
 
     @Override
-    public boolean saveData(ClientMessage packet)
-    {
+    public boolean saveData(ClientMessage packet) {
         packet.readInt();
 
         this.teamColor = GameTeamColors.values()[packet.readInt() - 1];

@@ -11,15 +11,14 @@ import java.sql.SQLException;
 /**
  * Created on 12-11-2015 19:16.
  */
-public class ErrorLog
-{
+public class ErrorLog {
+
     public final static String insertQuery = "INSERT INTO emulator_errors (timestamp, type, stacktrace) VALUES (?, ?, ?)";
     public final int timeStamp;
     public final String type;
     public final String stackTrace;
 
-    public ErrorLog(String type, Throwable e)
-    {
+    public ErrorLog(String type, Throwable e) {
         this.timeStamp = Emulator.getIntUnixTimestamp();
         this.type = type;
 
@@ -28,25 +27,21 @@ public class ErrorLog
         e.printStackTrace(pw);
         this.stackTrace = sw.toString();
 
-        try
-        {
+        try {
             pw.close();
             sw.close();
-        } catch (IOException e1)
-        {
+        } catch (IOException e1) {
             Emulator.getLogging().logErrorLine(e1);
         }
     }
 
-    public ErrorLog(String type, String message)
-    {
+    public ErrorLog(String type, String message) {
         this.timeStamp = Emulator.getIntUnixTimestamp();
         this.type = type;
         this.stackTrace = message;
     }
 
-    public void log(PreparedStatement statement) throws SQLException
-    {
+    public void log(PreparedStatement statement) throws SQLException {
         statement.setInt(1, this.timeStamp);
         statement.setString(2, this.type);
         statement.setString(3, this.stackTrace);

@@ -4,27 +4,26 @@ import com.eu.habbo.habbohotel.rooms.RoomUnit;
 import com.eu.habbo.habbohotel.users.Habbo;
 import com.eu.habbo.util.pathfinding.Tile;
 
-public class RoomUnitSetGoalEvent extends RoomUnitEvent
-{
+public class RoomUnitSetGoalEvent extends RoomUnitEvent {
+
     /**
      * Target goal that the Habbo has set.
      */
     public final Tile goal;
 
-    public RoomUnitSetGoalEvent(RoomUnit roomUnit, Tile goal)
-    {
+    public RoomUnitSetGoalEvent(RoomUnit roomUnit, Tile goal) {
         super(roomUnit);
 
         this.goal = goal;
     }
 
     /**
-     * Sets a new walk goal location for the Habbo.
-     * This will trigger an new event instance of this class.
+     * Sets a new walk goal location for the Habbo. This will trigger an new
+     * event instance of this class.
+     *
      * @param t an location.
      */
-    public void setGoal(Tile t)
-    {
+    public void setGoal(Tile t) {
         super.roomUnit.setGoalLocation(t);
     }
 }

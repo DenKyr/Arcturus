@@ -6,29 +6,25 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class UserCurrencyComposer extends MessageComposer{
+public class UserCurrencyComposer extends MessageComposer {
 
     private final Habbo habbo;
 
-    public UserCurrencyComposer(Habbo habbo)
-    {
+    public UserCurrencyComposer(Habbo habbo) {
         this.habbo = habbo;
     }
 
     @Override
-    public ServerMessage compose()    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.UserCurrencyComposer);
 
         String[] pointsTypes = Emulator.getConfig().getValue("seasonal.types").split(";");
         this.response.appendInt32(pointsTypes.length);
-        for(String s : pointsTypes)
-        {
+        for (String s : pointsTypes) {
             int type = 0;
-            try
-            {
+            try {
                 type = Integer.valueOf(s);
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 Emulator.getLogging().logErrorLine(e);
                 return null;
             }
@@ -73,7 +69,6 @@ public class UserCurrencyComposer extends MessageComposer{
 //
 //        this.response.appendInt32(105);
 //        this.response.appendInt32(this.habbo.getHabboInfo().getPoints());
-
         return this.response;
     }
 }

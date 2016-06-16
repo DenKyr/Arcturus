@@ -14,14 +14,13 @@ import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 
-public class NavigatorManager
-{
+public class NavigatorManager {
+
     public final THashMap<Integer, NavigatorPublicCategory> publicCategories = new THashMap<Integer, NavigatorPublicCategory>();
     public final THashMap<String, Map.Entry<Method, NavigatorFilterComparator>> filterSettings = new THashMap<String, Map.Entry<Method, NavigatorFilterComparator>>();
     public final THashMap<String, NavigatorFilter> filters = new THashMap<String, NavigatorFilter>();
 
-    public NavigatorManager()
-    {
+    public NavigatorManager() {
         long millis = System.currentTimeMillis();
         loadNavigator();
 
@@ -33,42 +32,33 @@ public class NavigatorManager
         Emulator.getLogging().logStart("Navigator Manager -> Loaded! (" + (System.currentTimeMillis() - millis) + " MS)");
     }
 
-    public void loadNavigator()
-    {
-        synchronized (this.publicCategories)
-        {
+    public void loadNavigator() {
+        synchronized (this.publicCategories) {
             this.publicCategories.clear();
 
-            try
-            {
+            try {
                 PreparedStatement statement = Emulator.getDatabase().prepare("SELECT * FROM navigator_publiccats WHERE visible = '1'");
                 ResultSet set = statement.executeQuery();
 
-                while(set.next())
-                {
+                while (set.next()) {
                     this.publicCategories.put(set.getInt("id"), new NavigatorPublicCategory(set));
                 }
 
                 set.close();
                 statement.getConnection().close();
                 statement.close();
-            }
-            catch (SQLException e)
-            {
+            } catch (SQLException e) {
                 Emulator.getLogging().logSQLException(e);
             }
 
-            try
-            {
+            try {
                 PreparedStatement statement = Emulator.getDatabase().prepare("SELECT * FROM navigator_publics WHERE visible = '1'");
                 ResultSet set = statement.executeQuery();
 
-                while (set.next())
-                {
+                while (set.next()) {
                     NavigatorPublicCategory category = this.publicCategories.get(set.getInt("public_cat_id"));
 
-                    if (category != null)
-                    {
+                    if (category != null) {
                         category.addRoom(Emulator.getGameEnvironment().getRoomManager().loadRoom(set.getInt("room_id")));
                     }
                 }
@@ -76,56 +66,40 @@ public class NavigatorManager
                 set.close();
                 statement.getConnection().close();
                 statement.close();
-            }
-            catch (SQLException e)
-            {
+            } catch (SQLException e) {
                 Emulator.getLogging().logSQLException(e);
             }
         }
 
-        synchronized (this.filterSettings)
-        {
-            try
-            {
+        synchronized (this.filterSettings) {
+            try {
                 PreparedStatement statement = Emulator.getDatabase().prepare("SELECT * FROM navigator_filter");
                 ResultSet set = statement.executeQuery();
 
-                while(set.next())
-                {
+                while (set.next()) {
                     Method field = null;
                     Class clazz = Room.class;
 
-                    if (set.getString("field").contains("."))
-                    {
-                        for (String s : (set.getString("field")).split("."))
-                        {
+                    if (set.getString("field").contains(".")) {
+                        for (String s : (set.getString("field")).split(".")) {
                             System.out.println("2");
-                            try
-                            {
+                            try {
                                 field = clazz.getDeclaredMethod(s);
                                 clazz = field.getReturnType();
-                            }
-                            catch (Exception e)
-                            {
+                            } catch (Exception e) {
                                 break;
                             }
                         }
-                    }
-                    else
-                    {
-                        try
-                        {
+                    } else {
+                        try {
                             field = clazz.getDeclaredMethod(set.getString("field"));
                             clazz = field.getReturnType();
-                        }
-                        catch (Exception e)
-                        {
+                        } catch (Exception e) {
                             continue;
                         }
                     }
 
-                    if (field != null)
-                    {
+                    if (field != null) {
                         this.filterSettings.put(set.getString("key"), new AbstractMap.SimpleEntry<Method, NavigatorFilterComparator>(field, NavigatorFilterComparator.valueOf(set.getString("compare").toUpperCase())));
                     }
                 }
@@ -133,22 +107,16 @@ public class NavigatorManager
                 set.close();
                 statement.getConnection().close();
                 statement.close();
-            }
-            catch (SQLException e)
-            {
+            } catch (SQLException e) {
                 Emulator.getLogging().logSQLException(e);
             }
         }
     }
 
-    public NavigatorFilterComparator comperatorForField(Method field)
-    {
-        synchronized (this.filterSettings)
-        {
-            for (Map.Entry<String, Map.Entry<Method, NavigatorFilterComparator>> set : this.filterSettings.entrySet())
-            {
-                if (set.getValue().getKey() == field)
-                {
+    public NavigatorFilterComparator comperatorForField(Method field) {
+        synchronized (this.filterSettings) {
+            for (Map.Entry<String, Map.Entry<Method, NavigatorFilterComparator>> set : this.filterSettings.entrySet()) {
+                if (set.getValue().getKey() == field) {
                     return set.getValue().getValue();
                 }
             }

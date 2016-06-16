@@ -6,11 +6,10 @@ import com.eu.habbo.messages.outgoing.users.UserCurrencyComposer;
 import com.eu.habbo.messages.outgoing.users.UserDataComposer;
 import com.eu.habbo.messages.outgoing.users.UserHomeRoomComposer;
 
-public class HotelViewRequestBonusRareEvent extends MessageHandler
-{
+public class HotelViewRequestBonusRareEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         this.client.sendResponse(new BonusRareComposer(this.client.getHabbo()));
     }
 }

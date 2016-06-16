@@ -3,15 +3,14 @@ package com.eu.habbo.messages.outgoing.unknown;
 import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 
-public class SnowWarsAddUserComposer extends MessageComposer
-{
+public class SnowWarsAddUserComposer extends MessageComposer {
     /*
-        Adds the user to the "Waiting for more players" screen.
-        //Works
+     Adds the user to the "Waiting for more players" screen.
+     //Works
      */
+
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(1880);
         this.response.appendInt32(3);
         this.response.appendString("Derpface");

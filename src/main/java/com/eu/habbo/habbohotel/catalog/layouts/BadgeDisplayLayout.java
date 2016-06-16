@@ -8,8 +8,7 @@ import java.sql.SQLException;
 
 public class BadgeDisplayLayout extends CatalogPage {
 
-    public BadgeDisplayLayout(ResultSet set) throws SQLException
-    {
+    public BadgeDisplayLayout(ResultSet set) throws SQLException {
         super(set);
     }
 

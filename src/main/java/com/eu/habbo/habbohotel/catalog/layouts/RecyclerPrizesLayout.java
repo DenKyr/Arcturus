@@ -6,16 +6,14 @@ import com.eu.habbo.messages.ServerMessage;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class RecyclerPrizesLayout extends CatalogPage
-{
-    public RecyclerPrizesLayout(ResultSet set) throws SQLException
-    {
+public class RecyclerPrizesLayout extends CatalogPage {
+
+    public RecyclerPrizesLayout(ResultSet set) throws SQLException {
         super(set);
     }
 
     @Override
-    public void serialize(ServerMessage message)
-    {
+    public void serialize(ServerMessage message) {
         message.appendString("recycler_prizes");
         message.appendInt32(3);
         message.appendString("");

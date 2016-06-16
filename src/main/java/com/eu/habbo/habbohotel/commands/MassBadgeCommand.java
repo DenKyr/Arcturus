@@ -14,38 +14,30 @@ import com.eu.habbo.messages.outgoing.users.UserCreditsComposer;
 import java.util.Collection;
 import java.util.Map;
 
-public class MassBadgeCommand extends Command
-{
-    public MassBadgeCommand()
-    {
+public class MassBadgeCommand extends Command {
+
+    public MassBadgeCommand() {
         super("cmd_massbadge", Emulator.getTexts().getValue("commands.keys.cmd_massbadge").split(";"));
     }
 
     @Override
-    public boolean handle(GameClient gameClient, String[] params) throws Exception
-    {
-        if(params.length == 2)
-        {
+    public boolean handle(GameClient gameClient, String[] params) throws Exception {
+        if (params.length == 2) {
             String badge;
 
             badge = params[1];
 
-            if(!badge.isEmpty())
-            {
-                for(Map.Entry<Integer, Habbo> set : Emulator.getGameEnvironment().getHabboManager().getOnlineHabbos().entrySet())
-                {
+            if (!badge.isEmpty()) {
+                for (Map.Entry<Integer, Habbo> set : Emulator.getGameEnvironment().getHabboManager().getOnlineHabbos().entrySet()) {
                     Habbo habbo = set.getValue();
 
-                    if(!habbo.getHabboInventory().getBadgesComponent().hasBadge(badge))
-                    {
+                    if (!habbo.getHabboInventory().getBadgesComponent().hasBadge(badge)) {
                         HabboBadge b = BadgesComponent.createBadge(badge, habbo);
 
-                        if (b != null)
-                        {
+                        if (b != null) {
                             habbo.getClient().sendResponse(new AddUserBadgeComposer(b));
 
-                            if (habbo.getHabboInfo().getCurrentRoom() != null)
-                            {
+                            if (habbo.getHabboInfo().getCurrentRoom() != null) {
                                 habbo.getClient().sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.generic.cmd_badge.received"), habbo, habbo, RoomChatMessageBubbles.ALERT)));
                             }
                         }

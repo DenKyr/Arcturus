@@ -12,18 +12,18 @@ import com.eu.habbo.messages.outgoing.guilds.GuildMemberUpdateComposer;
 import com.eu.habbo.messages.outgoing.rooms.RoomRightsComposer;
 import com.eu.habbo.plugin.events.guilds.GuildGivenAdminEvent;
 
-public class GuildSetAdminEvent extends MessageHandler
-{
+public class GuildSetAdminEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         int guildId = this.packet.readInt();
         int userId = this.packet.readInt();
 
         Guild guild = Emulator.getGameEnvironment().getGuildManager().getGuild(guildId);
 
-        if(guild == null || guild.getOwnerId() != this.client.getHabbo().getHabboInfo().getId() && !this.client.getHabbo().hasPermission("acc_guild_admin"))
+        if (guild == null || guild.getOwnerId() != this.client.getHabbo().getHabboInfo().getId() && !this.client.getHabbo().hasPermission("acc_guild_admin")) {
             return;
+        }
 
         Emulator.getGameEnvironment().getGuildManager().setAdmin(guild, userId);
 
@@ -31,16 +31,14 @@ public class GuildSetAdminEvent extends MessageHandler
 
         GuildGivenAdminEvent adminEvent = new GuildGivenAdminEvent(guild, userId, habbo, this.client.getHabbo());
         Emulator.getPluginManager().fireEvent(adminEvent);
-        if(adminEvent.isCancelled())
+        if (adminEvent.isCancelled()) {
             return;
+        }
 
-        if(habbo != null)
-        {
+        if (habbo != null) {
             Room room = habbo.getHabboInfo().getCurrentRoom();
-            if(room != null)
-            {
-                if(room.getGuildId() == guildId)
-                {
+            if (room != null) {
+                if (room.getGuildId() == guildId) {
                     room.refreshRightsForHabbo(habbo);
                 }
             }

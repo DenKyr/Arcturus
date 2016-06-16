@@ -6,16 +6,14 @@ import com.eu.habbo.habbohotel.rooms.RoomChatMessage;
 import com.eu.habbo.habbohotel.rooms.RoomChatMessageBubbles;
 import com.eu.habbo.messages.outgoing.rooms.users.RoomUserWhisperComposer;
 
-public class UpdateConfigCommand extends Command
-{
-    public UpdateConfigCommand()
-    {
+public class UpdateConfigCommand extends Command {
+
+    public UpdateConfigCommand() {
         super("cmd_update_config", Emulator.getTexts().getValue("commands.keys.cmd_update_config").split(";"));
     }
 
     @Override
-    public boolean handle(GameClient gameClient, String[] params) throws Exception
-    {
+    public boolean handle(GameClient gameClient, String[] params) throws Exception {
         Emulator.getConfig().reload();
 
         gameClient.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.succes.cmd_update_config"), gameClient.getHabbo(), gameClient.getHabbo(), RoomChatMessageBubbles.ALERT)));

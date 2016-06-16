@@ -6,25 +6,23 @@ import com.eu.habbo.habbohotel.rooms.Room;
 import com.eu.habbo.messages.incoming.MessageHandler;
 import com.eu.habbo.messages.outgoing.guilds.GuildConfirmRemoveMemberComposer;
 
-public class GuildConfirmRemoveMemberEvent extends MessageHandler
-{
+public class GuildConfirmRemoveMemberEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         int guildId = this.packet.readInt();
         int userId = this.packet.readInt();
 
         Guild guild = Emulator.getGameEnvironment().getGuildManager().getGuild(guildId);
 
-        if (guild == null)
+        if (guild == null) {
             return;
+        }
 
-        if(guild.getOwnerId() == this.client.getHabbo().getHabboInfo().getId() && userId != this.client.getHabbo().getHabboInfo().getId())
-        {
+        if (guild.getOwnerId() == this.client.getHabbo().getHabboInfo().getId() && userId != this.client.getHabbo().getHabboInfo().getId()) {
             Room room = Emulator.getGameEnvironment().getRoomManager().loadRoom(guild.getRoomId());
 
-            if(room != null)
-            {
+            if (room != null) {
                 this.client.sendResponse(new GuildConfirmRemoveMemberComposer(userId, room.getUserFurniCount(userId)));
             }
         }

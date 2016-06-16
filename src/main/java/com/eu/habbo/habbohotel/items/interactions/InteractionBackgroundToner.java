@@ -13,21 +13,18 @@ import com.eu.habbo.threading.runnables.BackgroundAnimation;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class InteractionBackgroundToner extends HabboItem
-{
-    public InteractionBackgroundToner(ResultSet set, Item baseItem) throws SQLException
-    {
+public class InteractionBackgroundToner extends HabboItem {
+
+    public InteractionBackgroundToner(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
 
-    public InteractionBackgroundToner(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public InteractionBackgroundToner(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
 
     @Override
-    public void serializeExtradata(ServerMessage serverMessage)
-    {
+    public void serializeExtradata(ServerMessage serverMessage) {
         serverMessage.appendInt32(5 + (this.isLimited() ? 256 : 0));
         serverMessage.appendInt32(4);
         if (this.getExtradata().split(":").length == 4) {
@@ -50,36 +47,29 @@ public class InteractionBackgroundToner extends HabboItem
     }
 
     @Override
-    public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects)
-    {
+    public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects) {
         return true;
     }
 
     @Override
-    public boolean isWalkable()
-    {
+    public boolean isWalkable() {
         return false;
     }
 
     @Override
-    public void onClick(GameClient client, Room room, Object[] objects) throws Exception
-    {
+    public void onClick(GameClient client, Room room, Object[] objects) throws Exception {
         super.onClick(client, room, objects);
 
-        if(client.getHabbo().getRoomUnit().cmdSit && client.getHabbo().getRoomUnit().getEffectId() == 1337)
-        {
+        if (client.getHabbo().getRoomUnit().cmdSit && client.getHabbo().getRoomUnit().getEffectId() == 1337) {
             Emulator.getThreading().run(new BackgroundAnimation(this, room));
             return;
         }
 
-        if(this.getExtradata().split(":").length == 4)
-        {
+        if (this.getExtradata().split(":").length == 4) {
             String[] data = this.getExtradata().split(":");
             this.setExtradata((data[0].equals("0") ? "1" : "0") + ":" + data[1] + ":" + data[2] + ":" + data[3]);
             room.updateItem(this);
-        }
-        else
-        {
+        } else {
             this.setExtradata("0:126:126:126");
             room.updateItem(this);
         }
@@ -88,20 +78,17 @@ public class InteractionBackgroundToner extends HabboItem
     }
 
     @Override
-    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception
-    {
+    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception {
 
     }
 
     @Override
-    public void onWalkOn(RoomUnit roomUnit, Room room, Object[] objects) throws Exception
-    {
+    public void onWalkOn(RoomUnit roomUnit, Room room, Object[] objects) throws Exception {
         super.onWalkOn(roomUnit, room, objects);
     }
 
     @Override
-    public void onWalkOff(RoomUnit roomUnit, Room room, Object[] objects) throws Exception
-    {
+    public void onWalkOff(RoomUnit roomUnit, Room room, Object[] objects) throws Exception {
         super.onWalkOff(roomUnit, room, objects);
     }
 }

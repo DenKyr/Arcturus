@@ -4,6 +4,7 @@ package com.eu.habbo.habbohotel.rooms;
  * Created on 13-9-2014 17:14.
  */
 public enum RoomUserRotation {
+
     NORTH(0),
     NORTH_EAST(1),
     EAST(2),
@@ -14,13 +15,12 @@ public enum RoomUserRotation {
     NORTH_WEST(7);
 
     private final int direction;
-    RoomUserRotation(int direction)
-    {
+
+    RoomUserRotation(int direction) {
         this.direction = direction;
     }
 
-    public int getValue()
-    {
+    public int getValue() {
         return this.direction;
     }
 }

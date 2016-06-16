@@ -16,25 +16,22 @@ import com.eu.habbo.messages.outgoing.rooms.users.RoomUserWhisperComposer;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class WiredEffectWhisper extends InteractionWiredEffect
-{
+public class WiredEffectWhisper extends InteractionWiredEffect {
+
     public static final WiredEffectType type = WiredEffectType.SHOW_MESSAGE;
 
     private String message = "";
 
-    public WiredEffectWhisper(ResultSet set, Item baseItem) throws SQLException
-    {
+    public WiredEffectWhisper(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
 
-    public WiredEffectWhisper(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public WiredEffectWhisper(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
 
     @Override
-    public void serializeWiredData(ServerMessage message)
-    {
+    public void serializeWiredData(ServerMessage message) {
         message.appendBoolean(false);
         message.appendInt32(0);
         message.appendInt32(0);
@@ -49,8 +46,7 @@ public class WiredEffectWhisper extends InteractionWiredEffect
     }
 
     @Override
-    public boolean saveData(ClientMessage packet)
-    {
+    public boolean saveData(ClientMessage packet) {
         packet.readInt();
 
         this.message = Emulator.getGameEnvironment().getWordFilter().filter(packet.readString(), null);
@@ -59,24 +55,17 @@ public class WiredEffectWhisper extends InteractionWiredEffect
     }
 
     @Override
-    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff)
-    {
-        if(this.message.length() > 0)
-        {
-            if(roomUnit != null)
-            {
+    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff) {
+        if (this.message.length() > 0) {
+            if (roomUnit != null) {
                 Habbo habbo = room.getHabbo(roomUnit);
 
-                if (habbo != null)
-                {
+                if (habbo != null) {
                     habbo.getClient().sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(message.replace("%user%", habbo.getHabboInfo().getUsername()), habbo, habbo, RoomChatMessageBubbles.WIRED)));
                     return true;
                 }
-            }
-            else
-            {
-                for(Habbo h : room.getCurrentHabbos().valueCollection())
-                {
+            } else {
+                for (Habbo h : room.getCurrentHabbos().valueCollection()) {
                     h.getClient().sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(message.replace("%user%", h.getHabboInfo().getUsername()), h, h, RoomChatMessageBubbles.WIRED)));
                 }
             }
@@ -85,33 +74,28 @@ public class WiredEffectWhisper extends InteractionWiredEffect
     }
 
     @Override
-    public String getWiredData()
-    {
+    public String getWiredData() {
         return this.getDelay() + "\t" + this.message;
     }
 
     @Override
-    public void loadWiredData(ResultSet set, Room room) throws SQLException
-    {
+    public void loadWiredData(ResultSet set, Room room) throws SQLException {
         String wireData = set.getString("wired_data");
         this.message = "";
 
-        if(wireData.split("\t").length >= 2)
-        {
+        if (wireData.split("\t").length >= 2) {
             super.setDelay(Integer.valueOf(wireData.split("\t")[0]));
             this.message = wireData.split("\t")[1];
         }
     }
 
     @Override
-    public void onPickUp()
-    {
+    public void onPickUp() {
         this.message = "";
     }
 
     @Override
-    public WiredEffectType getType()
-    {
+    public WiredEffectType getType() {
         return type;
     }
 }

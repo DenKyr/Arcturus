@@ -5,16 +5,15 @@ import gnu.trove.map.hash.THashMap;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class PollQuestion
-{
+public class PollQuestion {
+
     private int id;
     private int type;
     private String question;
     private THashMap<Integer, String[]> options;
     private int minSelections;
 
-    public PollQuestion(ResultSet set) throws SQLException
-    {
+    public PollQuestion(ResultSet set) throws SQLException {
         this.id = set.getInt("id");
         this.type = set.getInt("type");
         this.question = set.getString("question");
@@ -24,37 +23,30 @@ public class PollQuestion
 
         String opts = set.getString("options");
 
-        if(this.type == 1 || this.type == 2)
-        {
-            for (int i = 0; i < opts.split(";").length; i++)
-            {
+        if (this.type == 1 || this.type == 2) {
+            for (int i = 0; i < opts.split(";").length; i++) {
                 this.options.put(i, new String[]{opts.split(";")[i].split(":")[0], opts.split(";")[i].split(":")[1]});
             }
         }
     }
 
-    public int getId()
-    {
+    public int getId() {
         return this.id;
     }
 
-    public int getType()
-    {
+    public int getType() {
         return this.type;
     }
 
-    public String getQuestion()
-    {
+    public String getQuestion() {
         return this.question;
     }
 
-    public THashMap<Integer, String[]> getOptions()
-    {
+    public THashMap<Integer, String[]> getOptions() {
         return this.options;
     }
 
-    public int getMinSelections()
-    {
+    public int getMinSelections() {
         return this.minSelections;
     }
 }

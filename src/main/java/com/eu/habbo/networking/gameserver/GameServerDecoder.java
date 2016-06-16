@@ -12,11 +12,10 @@ import io.netty.handler.codec.bytes.ByteArrayDecoder;
 import java.nio.charset.Charset;
 import java.util.List;
 
-public class GameServerDecoder extends ByteArrayDecoder
-{
+public class GameServerDecoder extends ByteArrayDecoder {
+
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception
-    {
+    protected void decode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
         int handledObjects = 0;
         while (msg.readableBytes() > 0) {
             try {
@@ -46,19 +45,15 @@ public class GameServerDecoder extends ByteArrayDecoder
             }
         }
 
-        for(Object o : out)
-        {
-            if(o instanceof byte[])
-            {
+        for (Object o : out) {
+            if (o instanceof byte[]) {
                 System.out.println(new String((byte[]) o));
-            }
-            else
-            {
+            } else {
                 System.out.println(o.toString());
             }
         }
         /*byte[] array = new byte[msg.readableBytes()];
-        msg.getBytes(0, array);
-        out.add(array);*/
+         msg.getBytes(0, array);
+         out.add(array);*/
     }
 }

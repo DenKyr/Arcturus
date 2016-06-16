@@ -4,33 +4,27 @@ import com.eu.habbo.Emulator;
 import com.eu.habbo.messages.incoming.MessageHandler;
 import com.eu.habbo.messages.outgoing.guides.GuideToolsComposer;
 
-public class RequestGuideToolEvent extends MessageHandler
-{
+public class RequestGuideToolEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         boolean onDuty = this.packet.readBoolean();
 
-        if(onDuty)
-        {
+        if (onDuty) {
             boolean tourRequests = this.packet.readBoolean();
             boolean helperRequests = this.packet.readBoolean();
             boolean bullyReports = this.packet.readBoolean();
 
-            if (helperRequests)
-            {
+            if (helperRequests) {
                 Emulator.getGameEnvironment().getGuideManager().setOnGuide(this.client.getHabbo(), onDuty);
             }
 
-            if(bullyReports)
-            {
+            if (bullyReports) {
                 Emulator.getGameEnvironment().getGuideManager().setOnGuardian(this.client.getHabbo(), onDuty);
             }
 
             this.client.sendResponse(new GuideToolsComposer(onDuty));
-        }
-        else
-        {
+        } else {
             Emulator.getGameEnvironment().getGuideManager().setOnGuide(this.client.getHabbo(), onDuty);
             Emulator.getGameEnvironment().getGuideManager().setOnGuardian(this.client.getHabbo(), onDuty);
             this.client.sendResponse(new GuideToolsComposer(onDuty));

@@ -6,35 +6,29 @@ import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 import gnu.trove.set.hash.THashSet;
 
-public class MarketplaceOffersComposer extends MessageComposer
-{
+public class MarketplaceOffersComposer extends MessageComposer {
+
     private final THashSet<MarketPlaceOffer> offers;
 
-    public MarketplaceOffersComposer(THashSet<MarketPlaceOffer> offers)
-    {
+    public MarketplaceOffersComposer(THashSet<MarketPlaceOffer> offers) {
         this.offers = offers;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.MarketplaceOffersComposer);
         int total = 0;
         this.response.appendInt32(this.offers.size());
 
-        for(MarketPlaceOffer offer : this.offers)
-        {
+        for (MarketPlaceOffer offer : this.offers) {
             this.response.appendInt32(offer.getOfferId());
             this.response.appendInt32(1);
             this.response.appendInt32(offer.getType());
             this.response.appendInt32(offer.getItemId());
-            if(offer.getType() == 3)
-            {
+            if (offer.getType() == 3) {
                 this.response.appendInt32(offer.getLimitedNumber());
                 this.response.appendInt32(offer.getLimitedStack());
-            }
-            else
-            {
+            } else {
                 this.response.appendInt32(0);
                 this.response.appendString("");
             }

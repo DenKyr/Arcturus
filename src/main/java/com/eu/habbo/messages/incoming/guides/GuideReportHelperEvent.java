@@ -10,21 +10,18 @@ import com.eu.habbo.messages.outgoing.guides.GuideSessionDetachedComposer;
 import com.eu.habbo.messages.outgoing.guides.GuideSessionEndedComposer;
 import com.eu.habbo.messages.outgoing.modtool.ModToolReportReceivedAlertComposer;
 
-public class GuideReportHelperEvent extends MessageHandler
-{
+public class GuideReportHelperEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         String message = this.packet.readString();
 
         GuideTour tour = Emulator.getGameEnvironment().getGuideManager().getGuideTourByHabbo(this.client.getHabbo());
 
-        if(tour != null)
-        {
+        if (tour != null) {
             Habbo reported = tour.getHelper();
 
-            if(reported == this.client.getHabbo())
-            {
+            if (reported == this.client.getHabbo()) {
                 reported = tour.getNoob();
             }
 
@@ -35,7 +32,6 @@ public class GuideReportHelperEvent extends MessageHandler
                     0,
                     message,
                     ModToolTicketType.GUIDE_SYSTEM);
-
 
             Emulator.getGameEnvironment().getModToolManager().addTicket(issue);
             Emulator.getGameEnvironment().getModToolManager().updateTicketToMods(issue);

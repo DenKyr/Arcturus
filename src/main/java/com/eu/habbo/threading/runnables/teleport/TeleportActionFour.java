@@ -6,22 +6,20 @@ import com.eu.habbo.habbohotel.rooms.Room;
 import com.eu.habbo.habbohotel.users.HabboItem;
 import com.eu.habbo.messages.outgoing.rooms.items.FloorItemUpdateComposer;
 
-class TeleportActionFour implements Runnable
-{
+class TeleportActionFour implements Runnable {
+
     private final HabboItem currentTeleport;
     private final Room room;
     private final GameClient client;
 
-    public TeleportActionFour(HabboItem currentTeleport, Room room, GameClient client)
-    {
+    public TeleportActionFour(HabboItem currentTeleport, Room room, GameClient client) {
         this.currentTeleport = currentTeleport;
         this.client = client;
         this.room = room;
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
         this.currentTeleport.setExtradata("1");
         this.room.updateItem(this.currentTeleport);
 

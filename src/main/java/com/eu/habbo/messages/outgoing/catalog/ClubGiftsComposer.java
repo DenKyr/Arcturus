@@ -10,11 +10,10 @@ import gnu.trove.iterator.TIntObjectIterator;
 
 import java.util.NoSuchElementException;
 
-public class ClubGiftsComposer extends MessageComposer
-{
+public class ClubGiftsComposer extends MessageComposer {
+
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.ClubGiftsComposer);
 
         this.response.appendInt32(365); //Days Until Next Gift
@@ -25,21 +24,16 @@ public class ClubGiftsComposer extends MessageComposer
 
         TIntObjectIterator<CatalogItem> iterator = page.getCatalogItems().iterator();
 
-        for(int i = page.getCatalogItems().size(); i-- > 0;)
-        {
-            try
-            {
+        for (int i = page.getCatalogItems().size(); i-- > 0;) {
+            try {
                 iterator.advance();
 
                 CatalogItem item = iterator.value();
 
-                if (item != null)
-                {
+                if (item != null) {
                     item.serialize(this.response);
                 }
-            }
-            catch (NoSuchElementException e)
-            {
+            } catch (NoSuchElementException e) {
                 break;
             }
         }

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public class ProfileFriendsComposer extends MessageComposer{
+public class ProfileFriendsComposer extends MessageComposer {
 
     private Habbo habbo;
     private final List<MessengerBuddy> lovers = new ArrayList<MessengerBuddy>();
@@ -21,29 +21,26 @@ public class ProfileFriendsComposer extends MessageComposer{
     private final List<MessengerBuddy> haters = new ArrayList<MessengerBuddy>();
     private final int userId;
 
-    public ProfileFriendsComposer(THashMap<Integer, THashSet<MessengerBuddy>> map, int userId)
-    {
+    public ProfileFriendsComposer(THashMap<Integer, THashSet<MessengerBuddy>> map, int userId) {
         try {
             lovers.addAll(map.get(1));
             friends.addAll(map.get(2));
             haters.addAll(map.get(3));
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         this.userId = userId;
     }
 
-    public ProfileFriendsComposer(Habbo habbo)
-    {
+    public ProfileFriendsComposer(Habbo habbo) {
         try {
             this.habbo = habbo;
 
             for (Map.Entry<Integer, MessengerBuddy> map : this.habbo.getMessenger().getFriends().entrySet()) {
-                if (map.getValue().getRelation() == 0)
+                if (map.getValue().getRelation() == 0) {
                     continue;
+                }
 
                 switch (map.getValue().getRelation()) {
                     case 1:
@@ -57,9 +54,7 @@ public class ProfileFriendsComposer extends MessageComposer{
                         break;
                 }
             }
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -67,7 +62,7 @@ public class ProfileFriendsComposer extends MessageComposer{
     }
 
     @Override
-    public ServerMessage compose()    {
+    public ServerMessage compose() {
 
         try {
 
@@ -76,14 +71,17 @@ public class ProfileFriendsComposer extends MessageComposer{
 
             int total = 0;
 
-            if(!this.lovers.isEmpty())
+            if (!this.lovers.isEmpty()) {
                 total++;
+            }
 
-            if(!this.friends.isEmpty())
+            if (!this.friends.isEmpty()) {
                 total++;
+            }
 
-            if(!this.haters.isEmpty())
+            if (!this.haters.isEmpty()) {
                 total++;
+            }
 
             this.response.appendInt32(total);
 
@@ -115,9 +113,7 @@ public class ProfileFriendsComposer extends MessageComposer{
                 this.response.appendString(this.haters.get(hatersIndex).getUsername());
                 this.response.appendString(this.haters.get(hatersIndex).getLook());
             }
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return this.response;

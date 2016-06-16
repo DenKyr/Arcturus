@@ -5,18 +5,16 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class GuideSessionStartedComposer extends MessageComposer
-{
+public class GuideSessionStartedComposer extends MessageComposer {
+
     private final GuideTour tour;
 
-    public GuideSessionStartedComposer(GuideTour tour)
-    {
+    public GuideSessionStartedComposer(GuideTour tour) {
         this.tour = tour;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         //:test 3048 i:1 s:Admin s:b i:2 s:Derp s:d
         this.response.init(Outgoing.GuideSessionStartedComposer);
 

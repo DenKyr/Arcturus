@@ -6,37 +6,31 @@ import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 import gnu.trove.set.hash.THashSet;
 
-public class AddHabboItemComposer extends MessageComposer
-{
+public class AddHabboItemComposer extends MessageComposer {
+
     private THashSet<HabboItem> itemsList;
     private HabboItem item;
 
-    public AddHabboItemComposer(THashSet<HabboItem> itemsList)
-    {
+    public AddHabboItemComposer(THashSet<HabboItem> itemsList) {
         this.itemsList = itemsList;
     }
 
-    public AddHabboItemComposer(HabboItem item)
-    {
+    public AddHabboItemComposer(HabboItem item) {
         this.item = item;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.AddHabboItemComposer);
 
-        if(item == null)
-        {
+        if (item == null) {
             this.response.appendInt32(1);
             this.response.appendInt32(1);
             this.response.appendInt32(this.itemsList.size());
             for (HabboItem habboItem : this.itemsList) {
                 this.response.appendInt32(habboItem.getId());
             }
-        }
-        else
-        {
+        } else {
             this.response.appendInt32(1);
             this.response.appendInt32(1);
             this.response.appendInt32(1);

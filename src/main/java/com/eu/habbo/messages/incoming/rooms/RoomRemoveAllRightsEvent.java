@@ -8,27 +8,23 @@ import com.eu.habbo.messages.outgoing.rooms.RoomRightsComposer;
 import com.eu.habbo.messages.outgoing.rooms.users.RoomUserRemoveRightsComposer;
 import gnu.trove.procedure.TIntProcedure;
 
-public class RoomRemoveAllRightsEvent extends MessageHandler
-{
+public class RoomRemoveAllRightsEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         final Room room = this.client.getHabbo().getHabboInfo().getCurrentRoom();
 
-        if(room == null || room.getId() != this.packet.readInt())
+        if (room == null || room.getId() != this.packet.readInt()) {
             return;
+        }
 
-        if(room.getOwnerId() == this.client.getHabbo().getHabboInfo().getId() || this.client.getHabbo().hasPermission("acc_anyroomowner"))
-        {
-            room.getRights().forEach(new TIntProcedure()
-            {
+        if (room.getOwnerId() == this.client.getHabbo().getHabboInfo().getId() || this.client.getHabbo().hasPermission("acc_anyroomowner")) {
+            room.getRights().forEach(new TIntProcedure() {
                 @Override
-                public boolean execute(int value)
-                {
+                public boolean execute(int value) {
                     Habbo habbo = room.getHabbo(value);
 
-                    if(habbo != null)
-                    {
+                    if (habbo != null) {
                         room.sendComposer(new RoomUserRemoveRightsComposer(room, value).compose());
                         habbo.getRoomUnit().getStatus().remove("flatctrl");
                         habbo.getClient().sendResponse(new RoomRightsComposer(RoomRightLevels.NONE));

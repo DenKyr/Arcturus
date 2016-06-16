@@ -14,10 +14,10 @@ import gnu.trove.map.hash.THashMap;
 
 import java.util.*;
 
-public class GuardianTicket
-{
+public class GuardianTicket {
+
     private ArrayList<ModToolChatLog> chatLogs;
-    private  final THashMap<Habbo, GuardianVote> votes = new THashMap<Habbo, GuardianVote>();
+    private final THashMap<Habbo, GuardianVote> votes = new THashMap<Habbo, GuardianVote>();
     private GuardianVoteType verdict;
     private int timeLeft = 120;
     private int resendCount = 0;
@@ -28,8 +28,7 @@ public class GuardianTicket
 
     private int guardianCount = 0;
 
-    public GuardianTicket(Habbo reporter, Habbo reported, ArrayList<ModToolChatLog> chatLogs)
-    {
+    public GuardianTicket(Habbo reporter, Habbo reported, ArrayList<ModToolChatLog> chatLogs) {
         this.chatLogs = chatLogs;
         Collections.sort(chatLogs);
         Emulator.getThreading().run(new GuardianVotingFinish(this), 120000);
@@ -41,10 +40,10 @@ public class GuardianTicket
 
     /**
      * Requests an Guardian to vote on this ticket.
+     *
      * @param guardian The Guardian to ask.
      */
-    public void requestToVote(Habbo guardian)
-    {
+    public void requestToVote(Habbo guardian) {
         guardian.getClient().sendResponse(new GuardianNewReportReceivedComposer(this));
 
         this.votes.put(guardian, new GuardianVote(guardianCount, guardian));
@@ -54,14 +53,13 @@ public class GuardianTicket
 
     /**
      * Adds an guardian to this ticket.
+     *
      * @param guardian The guardian to add.
      */
-    public void addGuardian(Habbo guardian)
-    {
+    public void addGuardian(Habbo guardian) {
         GuardianVote vote = this.votes.get(guardian);
 
-        if(vote != null && vote.type == GuardianVoteType.SEARCHING)
-        {
+        if (vote != null && vote.type == GuardianVoteType.SEARCHING) {
             guardian.getClient().sendResponse(new GuardianVotingRequestedComposer(this));
             vote.type = GuardianVoteType.WAITING;
             this.updateVotes();
@@ -70,17 +68,17 @@ public class GuardianTicket
 
     /**
      * Removes an Guardian from this ticket.
+     *
      * @param guardian The Guardian to remove.
      */
-    public void removeGuardian(Habbo guardian)
-    {
+    public void removeGuardian(Habbo guardian) {
         GuardianVote vote = this.getVoteForGuardian(guardian);
 
-        if(vote == null)
+        if (vote == null) {
             return;
+        }
 
-        if(vote.type == GuardianVoteType.SEARCHING || vote.type == GuardianVoteType.WAITING)
-        {
+        if (vote.type == GuardianVoteType.SEARCHING || vote.type == GuardianVoteType.WAITING) {
             this.getVoteForGuardian(guardian).type = GuardianVoteType.NOT_VOTED;
         }
 
@@ -93,11 +91,11 @@ public class GuardianTicket
 
     /**
      * Set the vote for an Guardian.
+     *
      * @param guardian The Guardian to set the vote for.
      * @param vote The GuardianVoteType to set the vote to.
      */
-    public void vote(Habbo guardian, GuardianVoteType vote)
-    {
+    public void vote(Habbo guardian, GuardianVoteType vote) {
         this.votes.get(guardian).type = vote;
 
         this.updateVotes();
@@ -110,14 +108,12 @@ public class GuardianTicket
     /**
      * Updates the votes to all other voting guardians.
      */
-    public void updateVotes()
-    {
-        synchronized (this.votes)
-        {
-            for(Map.Entry<Habbo, GuardianVote> set : this.votes.entrySet())
-            {
-                if(set.getValue().type == GuardianVoteType.WAITING || set.getValue().type == GuardianVoteType.NOT_VOTED || set.getValue().ignore || set.getValue().type == GuardianVoteType.SEARCHING)
+    public void updateVotes() {
+        synchronized (this.votes) {
+            for (Map.Entry<Habbo, GuardianVote> set : this.votes.entrySet()) {
+                if (set.getValue().type == GuardianVoteType.WAITING || set.getValue().type == GuardianVoteType.NOT_VOTED || set.getValue().ignore || set.getValue().type == GuardianVoteType.SEARCHING) {
                     continue;
+                }
 
                 set.getKey().getClient().sendResponse(new GuardianVotingVotesComposer(this, set.getKey()));
             }
@@ -125,15 +121,13 @@ public class GuardianTicket
     }
 
     /**
-     * Tries to finish the voting on a ticket and searches for more guardians if needed.
+     * Tries to finish the voting on a ticket and searches for more guardians if
+     * needed.
      */
-    public void finish()
-    {
+    public void finish() {
         int votedCount = this.getVotedCount();
-        if(votedCount < Emulator.getConfig().getInt("guardians.minimum.votes"))
-        {
-            if(this.votes.size() >= Emulator.getConfig().getInt("guardians.maximum.guardians.total") || this.resendCount == Emulator.getConfig().getInt("guardians.maximum.resends"))
-            {
+        if (votedCount < Emulator.getConfig().getInt("guardians.minimum.votes")) {
+            if (this.votes.size() >= Emulator.getConfig().getInt("guardians.maximum.guardians.total") || this.resendCount == Emulator.getConfig().getInt("guardians.maximum.resends")) {
                 this.verdict = GuardianVoteType.FORWARDED;
 
                 Emulator.getGameEnvironment().getGuideManager().closeTicket(this);
@@ -150,73 +144,59 @@ public class GuardianTicket
                 Emulator.getGameEnvironment().getModToolManager().updateTicketToMods(issue);
 
                 this.reporter.getClient().sendResponse(new BullyReportClosedComposer(BullyReportClosedComposer.CLOSED));
-            }
-            else
-            {
+            } else {
                 this.timeLeft = 30;
                 Emulator.getThreading().run(new GuardianVotingFinish(this), 10000);
                 this.resendCount++;
 
                 Emulator.getGameEnvironment().getGuideManager().findGuardians(this);
             }
-        }
-        else
-        {
+        } else {
             this.verdict = calculateVerdict();
 
-            for(Map.Entry<Habbo, GuardianVote> set : this.votes.entrySet())
-            {
-                if(set.getValue().type == GuardianVoteType.ACCEPTABLY ||
-                        set.getValue().type == GuardianVoteType.BADLY ||
-                        set.getValue().type == GuardianVoteType.AWFULLY)
-                {
+            for (Map.Entry<Habbo, GuardianVote> set : this.votes.entrySet()) {
+                if (set.getValue().type == GuardianVoteType.ACCEPTABLY
+                        || set.getValue().type == GuardianVoteType.BADLY
+                        || set.getValue().type == GuardianVoteType.AWFULLY) {
                     set.getKey().getClient().sendResponse(new GuardianVotingResultComposer(this, set.getValue()));
                 }
             }
 
             Emulator.getGameEnvironment().getGuideManager().closeTicket(this);
 
-            if(this.verdict == GuardianVoteType.ACCEPTABLY)
+            if (this.verdict == GuardianVoteType.ACCEPTABLY) {
                 this.reporter.getClient().sendResponse(new BullyReportClosedComposer(BullyReportClosedComposer.MISUSE));
-            else
+            } else {
                 this.reporter.getClient().sendResponse(new BullyReportClosedComposer(BullyReportClosedComposer.CLOSED));
+            }
         }
     }
 
     /**
      * @return True if an verdict has been set.
      */
-    public boolean isFinished()
-    {
+    public boolean isFinished() {
         return !(this.verdict == null);
     }
 
     /**
      * @return Calculates the verdict of this ticket.
      */
-    public GuardianVoteType calculateVerdict()
-    {
+    public GuardianVoteType calculateVerdict() {
         int countAcceptably = 0;
         int countBadly = 0;
         int countAwfully = 0;
         int total = 0;
 
-        synchronized (this.votes)
-        {
-            for(Map.Entry<Habbo, GuardianVote> set : this.votes.entrySet())
-            {
+        synchronized (this.votes) {
+            for (Map.Entry<Habbo, GuardianVote> set : this.votes.entrySet()) {
                 GuardianVote vote = set.getValue();
 
-                if(vote.type == GuardianVoteType.ACCEPTABLY)
-                {
+                if (vote.type == GuardianVoteType.ACCEPTABLY) {
                     countAcceptably++;
-                }
-                else if(vote.type == GuardianVoteType.BADLY)
-                {
+                } else if (vote.type == GuardianVoteType.BADLY) {
                     countBadly++;
-                }
-                else if(vote.type == GuardianVoteType.AWFULLY)
-                {
+                } else if (vote.type == GuardianVoteType.AWFULLY) {
                     countAwfully++;
                 }
             }
@@ -230,82 +210,67 @@ public class GuardianTicket
 //        {
 //            if(total / countBadly >= )
 //        }
-
         return GuardianVoteType.BADLY;
     }
 
-    public GuardianVote getVoteForGuardian(Habbo guardian)
-    {
+    public GuardianVote getVoteForGuardian(Habbo guardian) {
         return this.votes.get(guardian);
     }
 
-    public THashMap<Habbo, GuardianVote> getVotes()
-    {
+    public THashMap<Habbo, GuardianVote> getVotes() {
         return this.votes;
     }
 
-    public int getTimeLeft()
-    {
+    public int getTimeLeft() {
         return this.timeLeft;
     }
 
-    public GuardianVoteType getVerdict()
-    {
+    public GuardianVoteType getVerdict() {
         return this.verdict;
     }
 
-    public ArrayList<ModToolChatLog> getChatLogs()
-    {
+    public ArrayList<ModToolChatLog> getChatLogs() {
         return this.chatLogs;
     }
 
-    public int getResendCount()
-    {
+    public int getResendCount() {
         return this.resendCount;
     }
 
-    public int getCheckSum()
-    {
+    public int getCheckSum() {
         return this.checkSum;
     }
 
-    public Habbo getReporter()
-    {
+    public Habbo getReporter() {
         return this.reporter;
     }
 
-    public Habbo getReported()
-    {
+    public Habbo getReported() {
         return this.reported;
     }
 
-    public Date getDate()
-    {
+    public Date getDate() {
         return this.date;
     }
 
-    public int getGuardianCount()
-    {
+    public int getGuardianCount() {
         return this.guardianCount;
     }
 
     /**
      * Sorts all votes.
+     *
      * @param guardian The guardian to remove from this vote list.
      * @return The sorted votes list.
      */
-    public ArrayList<GuardianVote> getSortedVotes(Habbo guardian)
-    {
-        synchronized (this.votes)
-        {
+    public ArrayList<GuardianVote> getSortedVotes(Habbo guardian) {
+        synchronized (this.votes) {
             ArrayList<GuardianVote> votes = new ArrayList<GuardianVote>(this.votes.values());
             Collections.sort(votes);
 
             GuardianVote v = null;
-            for(GuardianVote vote : votes)
-            {
-                if(vote.guardian == guardian)
-                {
+            for (GuardianVote vote : votes) {
+                if (vote.guardian == guardian) {
                     v = vote;
                     break;
                 }
@@ -317,19 +282,18 @@ public class GuardianTicket
     }
 
     /**
-     * @return The amount of votes (Acceptably, Badly or Awfully) thath as been cast.
+     * @return The amount of votes (Acceptably, Badly or Awfully) thath as been
+     * cast.
      */
-    public int getVotedCount()
-    {
+    public int getVotedCount() {
         int count = 0;
-        synchronized (this.votes)
-        {
-            for(Map.Entry<Habbo, GuardianVote> set : this.votes.entrySet())
-            {
-                if(set.getValue().type == GuardianVoteType.ACCEPTABLY ||
-                        set.getValue().type == GuardianVoteType.BADLY ||
-                        set.getValue().type == GuardianVoteType.AWFULLY)
+        synchronized (this.votes) {
+            for (Map.Entry<Habbo, GuardianVote> set : this.votes.entrySet()) {
+                if (set.getValue().type == GuardianVoteType.ACCEPTABLY
+                        || set.getValue().type == GuardianVoteType.BADLY
+                        || set.getValue().type == GuardianVoteType.AWFULLY) {
                     count++;
+                }
             }
         }
 

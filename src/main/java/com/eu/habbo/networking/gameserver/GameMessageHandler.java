@@ -8,27 +8,23 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
-public class GameMessageHandler extends ChannelInboundHandlerAdapter
-{
+public class GameMessageHandler extends ChannelInboundHandlerAdapter {
+
     @Override
-    public void channelRegistered(ChannelHandlerContext ctx)
-    {
-        if (!Emulator.getGameServer().getGameClientManager().addClient(ctx))
-        {
+    public void channelRegistered(ChannelHandlerContext ctx) {
+        if (!Emulator.getGameServer().getGameClientManager().addClient(ctx)) {
             ctx.channel().disconnect();
             return;
         }
     }
 
     @Override
-    public void channelUnregistered(ChannelHandlerContext ctx)
-    {
+    public void channelUnregistered(ChannelHandlerContext ctx) {
         Emulator.getGameServer().getGameClientManager().disposeClient(ctx.channel());
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg)
-    {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ByteBuf m = (ByteBuf) msg;
         int length = m.readInt();
         short header = m.readShort();
@@ -39,14 +35,12 @@ public class GameMessageHandler extends ChannelInboundHandlerAdapter
     }
 
     @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception
-    {
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         Emulator.getGameServer().getGameClientManager().disposeClient(ctx.channel());
     }
 
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
-    {
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         ctx.close();
     }
 }

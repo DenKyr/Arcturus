@@ -9,18 +9,16 @@ import gnu.trove.iterator.TIntObjectIterator;
 
 import java.util.NoSuchElementException;
 
-public class InventoryPetsComposer extends MessageComposer
-{
+public class InventoryPetsComposer extends MessageComposer {
+
     private final Habbo habbo;
 
-    public InventoryPetsComposer(Habbo habbo)
-    {
+    public InventoryPetsComposer(Habbo habbo) {
         this.habbo = habbo;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.InventoryPetsComposer);
 
         this.response.appendInt32(1);
@@ -29,14 +27,10 @@ public class InventoryPetsComposer extends MessageComposer
 
         TIntObjectIterator<Pet> petIterator = this.habbo.getHabboInventory().getPetsComponent().getPets().iterator();
 
-        for(int i = this.habbo.getHabboInventory().getPetsComponent().getPets().size(); i-- > 0;)
-        {
-            try
-            {
+        for (int i = this.habbo.getHabboInventory().getPetsComponent().getPets().size(); i-- > 0;) {
+            try {
                 petIterator.advance();
-            }
-            catch (NoSuchElementException e)
-            {
+            } catch (NoSuchElementException e) {
                 break;
             }
             petIterator.value().serialize(this.response);

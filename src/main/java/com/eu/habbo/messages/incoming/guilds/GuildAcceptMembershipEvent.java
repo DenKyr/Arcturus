@@ -11,18 +11,18 @@ import com.eu.habbo.messages.outgoing.guilds.GuildRefreshMembersListComposer;
 import com.eu.habbo.messages.outgoing.rooms.RoomRightsComposer;
 import com.eu.habbo.plugin.events.guilds.GuildAcceptedMembershipEvent;
 
-public class GuildAcceptMembershipEvent extends MessageHandler
-{
+public class GuildAcceptMembershipEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         int guildId = this.packet.readInt();
         int userId = this.packet.readInt();
 
         Guild guild = Emulator.getGameEnvironment().getGuildManager().getGuild(guildId);
 
-        if(guild == null || guild.getOwnerId() != this.client.getHabbo().getHabboInfo().getId() && !this.client.getHabbo().hasPermission("acc_guild_admin"))
+        if (guild == null || guild.getOwnerId() != this.client.getHabbo().getHabboInfo().getId() && !this.client.getHabbo().hasPermission("acc_guild_admin")) {
             return;
+        }
 
         Emulator.getGameEnvironment().getGuildManager().joinGuild(guild, this.client, userId, true);
         guild.decreaseRequestCount();
@@ -31,14 +31,11 @@ public class GuildAcceptMembershipEvent extends MessageHandler
         Habbo habbo = Emulator.getGameEnvironment().getHabboManager().getHabbo(userId);
         Emulator.getPluginManager().fireEvent(new GuildAcceptedMembershipEvent(guild, userId, habbo));
 
-        if(habbo != null)
-        {
+        if (habbo != null) {
             habbo.getHabboStats().addGuild(guild.getId());
             Room room = habbo.getHabboInfo().getCurrentRoom();
-            if(room != null)
-            {
-                if(room.getGuildId() == guildId)
-                {
+            if (room != null) {
+                if (room.getGuildId() == guildId) {
                     habbo.getClient().sendResponse(new GuildInfoComposer(guild, habbo.getClient(), false, Emulator.getGameEnvironment().getGuildManager().getGuildMember(guildId, userId)));
 
                     room.refreshRightsForHabbo(habbo);

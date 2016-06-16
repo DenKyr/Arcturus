@@ -8,22 +8,20 @@ import com.eu.habbo.messages.outgoing.rooms.users.RoomUserStatusComposer;
 import com.eu.habbo.plugin.events.users.UserIdleEvent;
 import com.eu.habbo.util.pathfinding.Tile;
 
-public class RoomUserLookAtPoint extends MessageHandler
-{
+public class RoomUserLookAtPoint extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
-        if(this.client.getHabbo().getHabboInfo().getCurrentRoom() == null)
+    public void handle() throws Exception {
+        if (this.client.getHabbo().getHabboInfo().getCurrentRoom() == null) {
             return;
+        }
 
         Habbo habbo = this.client.getHabbo();
 
-        if(this.client.getHabbo().getRoomUnit().getCacheable().get("control") != null)
-        {
-            habbo = (Habbo)this.client.getHabbo().getRoomUnit().getCacheable().get("control");
+        if (this.client.getHabbo().getRoomUnit().getCacheable().get("control") != null) {
+            habbo = (Habbo) this.client.getHabbo().getRoomUnit().getCacheable().get("control");
 
-            if(habbo.getHabboInfo().getCurrentRoom() != this.client.getHabbo().getHabboInfo().getCurrentRoom())
-            {
+            if (habbo.getHabboInfo().getCurrentRoom() != this.client.getHabbo().getHabboInfo().getCurrentRoom()) {
                 habbo.getRoomUnit().getCacheable().remove("controller");
                 this.client.getHabbo().getRoomUnit().getCacheable().remove("control");
                 habbo = this.client.getHabbo();
@@ -32,30 +30,30 @@ public class RoomUserLookAtPoint extends MessageHandler
 
         RoomUnit roomUnit = habbo.getRoomUnit();
 
-        if(!roomUnit.canWalk())
+        if (!roomUnit.canWalk()) {
             return;
+        }
 
-        if(roomUnit.isWalking() || roomUnit.getStatus().containsKey("mv"))
+        if (roomUnit.isWalking() || roomUnit.getStatus().containsKey("mv")) {
             return;
+        }
 
         int x = this.packet.readInt();
         int y = this.packet.readInt();
 
-        if(x == roomUnit.getX() && y == roomUnit.getY())
+        if (x == roomUnit.getX() && y == roomUnit.getY()) {
             return;
+        }
 
-        if(!roomUnit.getStatus().containsKey("sit"))
-        {
+        if (!roomUnit.getStatus().containsKey("sit")) {
             roomUnit.lookAtPoint(new Tile(x, y, 0.0));
         }
 
         UserIdleEvent event = new UserIdleEvent(this.client.getHabbo(), UserIdleEvent.IdleReason.WALKED, false);
         Emulator.getPluginManager().fireEvent(event);
 
-        if (!event.isCancelled())
-        {
-            if (!event.idle)
-            {
+        if (!event.isCancelled()) {
+            if (!event.idle) {
                 this.client.getHabbo().getHabboInfo().getCurrentRoom().unIdle(habbo);
             }
         }

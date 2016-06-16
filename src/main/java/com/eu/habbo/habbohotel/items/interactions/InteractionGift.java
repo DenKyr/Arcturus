@@ -12,8 +12,8 @@ import gnu.trove.set.hash.THashSet;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class InteractionGift extends HabboItem
-{
+public class InteractionGift extends HabboItem {
+
     private int[] itemId;
     private int colorId;
     private int ribbonId;
@@ -26,23 +26,20 @@ public class InteractionGift extends HabboItem
 
     public boolean explode = false;
 
-    public InteractionGift(ResultSet set, Item baseItem) throws SQLException
-    {
+    public InteractionGift(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
 
         this.loadData();
     }
 
-    public InteractionGift(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public InteractionGift(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
 
         this.loadData();
     }
 
     @Override
-    public void serializeExtradata(ServerMessage serverMessage)
-    {
+    public void serializeExtradata(ServerMessage serverMessage) {
         //serverMessage.appendInt32(this.colorId * 1000 + this.ribbonId);
         serverMessage.appendInt32(1);
         serverMessage.appendInt32(6);
@@ -63,44 +60,38 @@ public class InteractionGift extends HabboItem
     }
 
     @Override
-    public void onClick(GameClient client, Room room, Object[] objects) throws Exception
-    {
+    public void onClick(GameClient client, Room room, Object[] objects) throws Exception {
 
     }
 
     @Override
-    public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects)
-    {
+    public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects) {
         return false;
     }
 
     @Override
-    public boolean isWalkable()
-    {
+    public boolean isWalkable() {
         return false;
     }
 
     @Override
-    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception
-    {
+    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception {
 
     }
 
-    private void loadData()
-    {
+    private void loadData() {
         String[] data = null;
 
-        if (this.getExtradata().contains("\t"))
+        if (this.getExtradata().contains("\t")) {
             data = this.getExtradata().split("\t");
+        }
 
-        if (data != null && data.length >= 5)
-        {
+        if (data != null && data.length >= 5) {
             int count = Integer.valueOf(data[0]);
 
             this.itemId = new int[count];
 
-            for (int i = 0; i < count; i++)
-            {
+            for (int i = 0; i < count; i++) {
                 this.itemId[i] = Integer.valueOf(data[i + 1]);
             }
 
@@ -109,13 +100,11 @@ public class InteractionGift extends HabboItem
             this.showSender = data[count + 3].equalsIgnoreCase("1");
             this.message = data[count + 4];
 
-            if (data.length - count >= 7 && this.showSender)
-            {
+            if (data.length - count >= 7 && this.showSender) {
                 this.sender = data[count + 5];
                 this.look = data[count + 6];
             }
-        } else
-        {
+        } else {
             this.itemId = new int[0];
             this.colorId = 0;
             this.ribbonId = 0;
@@ -124,22 +113,20 @@ public class InteractionGift extends HabboItem
         }
 
         this.items.clear();
-        for (int anItemId : itemId)
-        {
-            if (anItemId == 0)
+        for (int anItemId : itemId) {
+            if (anItemId == 0) {
                 continue;
+            }
 
             this.items.add(Emulator.getGameEnvironment().getItemManager().loadHabboItem(anItemId));
         }
     }
 
-    public int getColorId()
-    {
+    public int getColorId() {
         return colorId;
     }
 
-    public int getRibbonId()
-    {
+    public int getRibbonId() {
         return ribbonId;
     }
 }

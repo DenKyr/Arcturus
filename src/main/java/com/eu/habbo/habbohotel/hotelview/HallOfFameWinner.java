@@ -3,8 +3,8 @@ package com.eu.habbo.habbohotel.hotelview;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class HallOfFameWinner implements Comparable<HallOfFameWinner>
-{
+public class HallOfFameWinner implements Comparable<HallOfFameWinner> {
+
     /**
      * Habbo ID
      */
@@ -25,8 +25,7 @@ public class HallOfFameWinner implements Comparable<HallOfFameWinner>
      */
     private int points;
 
-    public HallOfFameWinner(ResultSet set) throws SQLException
-    {
+    public HallOfFameWinner(ResultSet set) throws SQLException {
         this.id = set.getInt("id");
         this.username = set.getString("username");
         this.look = set.getString("look");
@@ -36,38 +35,33 @@ public class HallOfFameWinner implements Comparable<HallOfFameWinner>
     /**
      * Habbo ID
      */
-    public int getId()
-    {
+    public int getId() {
         return this.id;
     }
 
     /**
      * Name
      */
-    public String getUsername()
-    {
+    public String getUsername() {
         return this.username;
     }
 
     /**
      * Look
      */
-    public String getLook()
-    {
+    public String getLook() {
         return this.look;
     }
 
     /**
      * Score
      */
-    public int getPoints()
-    {
+    public int getPoints() {
         return this.points;
     }
 
     @Override
-    public int compareTo(HallOfFameWinner o)
-    {
+    public int compareTo(HallOfFameWinner o) {
         return o.getPoints() - this.points;
     }
 }

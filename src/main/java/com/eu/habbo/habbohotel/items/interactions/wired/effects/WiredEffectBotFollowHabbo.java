@@ -14,26 +14,23 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class WiredEffectBotFollowHabbo extends InteractionWiredEffect
-{
+public class WiredEffectBotFollowHabbo extends InteractionWiredEffect {
+
     public static final WiredEffectType type = WiredEffectType.BOT_FOLLOW_AVATAR;
 
     private String botName = "";
     private int mode = 0;
 
-    public WiredEffectBotFollowHabbo(ResultSet set, Item baseItem) throws SQLException
-    {
+    public WiredEffectBotFollowHabbo(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
 
-    public WiredEffectBotFollowHabbo(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public WiredEffectBotFollowHabbo(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
 
     @Override
-    public void serializeWiredData(ServerMessage message)
-    {
+    public void serializeWiredData(ServerMessage message) {
         message.appendBoolean(false);
         message.appendInt32(5);
         message.appendInt32(0);
@@ -49,8 +46,7 @@ public class WiredEffectBotFollowHabbo extends InteractionWiredEffect
     }
 
     @Override
-    public boolean saveData(ClientMessage packet)
-    {
+    public boolean saveData(ClientMessage packet) {
         packet.readInt();
 
         this.mode = packet.readInt();
@@ -60,25 +56,22 @@ public class WiredEffectBotFollowHabbo extends InteractionWiredEffect
     }
 
     @Override
-    public WiredEffectType getType()
-    {
+    public WiredEffectType getType() {
         return type;
     }
 
     @Override
-    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff)
-    {
+    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff) {
         Habbo habbo = room.getHabbo(roomUnit);
 
-        if(habbo != null)
-        {
+        if (habbo != null) {
             List<Bot> bots = room.getBots(this.botName);
-            for(Bot bot : bots)
-            {
-                if(this.mode == 1)
+            for (Bot bot : bots) {
+                if (this.mode == 1) {
                     bot.startFollowingHabbo(habbo);
-                else
+                } else {
                     bot.stopFollowingHabbo();
+                }
             }
 
             return true;
@@ -88,26 +81,22 @@ public class WiredEffectBotFollowHabbo extends InteractionWiredEffect
     }
 
     @Override
-    protected String getWiredData()
-    {
+    protected String getWiredData() {
         return this.mode + ":" + this.botName;
     }
 
     @Override
-    public void loadWiredData(ResultSet set, Room room) throws SQLException
-    {
+    public void loadWiredData(ResultSet set, Room room) throws SQLException {
         String[] data = set.getString("wired_data").split(":");
 
-        if(data.length == 2)
-        {
+        if (data.length == 2) {
             this.mode = (data[0].equalsIgnoreCase("1") ? 1 : 0);
             this.botName = data[1];
         }
     }
 
     @Override
-    public void onPickUp()
-    {
+    public void onPickUp() {
         this.botName = "";
         this.mode = 0;
     }

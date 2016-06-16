@@ -6,20 +6,19 @@ import gnu.trove.map.hash.THashMap;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class InteractionInformationTerminal extends InteractionCustomValues
-{
-    public static THashMap<String, String> defaultValues = new THashMap<String, String>()
-    {
-        {put("internalLink", "http://arcturus.wf");}
+public class InteractionInformationTerminal extends InteractionCustomValues {
+
+    public static THashMap<String, String> defaultValues = new THashMap<String, String>() {
+        {
+            put("internalLink", "http://arcturus.wf");
+        }
     };
 
-    public InteractionInformationTerminal(ResultSet set, Item baseItem) throws SQLException
-    {
+    public InteractionInformationTerminal(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem, defaultValues);
     }
 
-    public InteractionInformationTerminal(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public InteractionInformationTerminal(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells, defaultValues);
     }
 }

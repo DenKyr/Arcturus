@@ -10,37 +10,33 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-class HopperActionTwo implements Runnable
-{
+class HopperActionTwo implements Runnable {
+
     private final HabboItem teleportOne;
     private final Room room;
     private final GameClient client;
 
-    public HopperActionTwo(HabboItem teleportOne, Room room, GameClient client)
-    {
+    public HopperActionTwo(HabboItem teleportOne, Room room, GameClient client) {
         this.teleportOne = teleportOne;
         this.room = room;
         this.client = client;
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
         this.teleportOne.setExtradata("2");
 
         int targetRoomId = 0;
         int targetItemId = 0;
 
-        try
-        {
+        try {
             PreparedStatement statement = Emulator.getDatabase().prepare("SELECT items.room_id, items_hoppers.* FROM items_hoppers INNER JOIN items ON items_hoppers.item_id = items.id WHERE base_item = ? AND items_hoppers.item_id != ? AND items.room_id > 0 ORDER BY RAND() LIMIT 1");
             statement.setInt(1, this.teleportOne.getBaseItem().getId());
             statement.setInt(2, this.teleportOne.getId());
 
             ResultSet set = statement.executeQuery();
 
-            if(set.next())
-            {
+            if (set.next()) {
                 targetItemId = set.getInt("item_id");
                 targetRoomId = set.getInt("room_id");
             }
@@ -48,18 +44,13 @@ class HopperActionTwo implements Runnable
             set.close();
             statement.close();
             statement.getConnection().close();
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             Emulator.getLogging().logSQLException(e);
         }
 
-        if(targetRoomId != 0 && targetItemId != 0)
-        {
+        if (targetRoomId != 0 && targetItemId != 0) {
             Emulator.getThreading().run(new HopperActionThree(this.teleportOne, this.room, this.client, targetRoomId, targetItemId), 500);
-        }
-        else
-        {
+        } else {
             this.teleportOne.setExtradata("0");
             this.client.getHabbo().getRoomUnit().setCanWalk(true);
             this.client.getHabbo().getRoomUnit().isTeleporting = false;

@@ -6,23 +6,20 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class CraftableProductsComposer extends MessageComposer
-{
+public class CraftableProductsComposer extends MessageComposer {
+
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.CraftableProductsComposer);
 
-        synchronized (Emulator.getGameEnvironment().getCraftingManager().getRecipes())
-        {
+        synchronized (Emulator.getGameEnvironment().getCraftingManager().getRecipes()) {
             this.response.appendInt32(1); //Count
             this.response.appendString("a");
             this.response.appendString("b");
 
             this.response.appendInt32(Emulator.getGameEnvironment().getCraftingManager().getRecipes().size()); //Count
 
-            for(CraftingRecipe recipe : Emulator.getGameEnvironment().getCraftingManager().getRecipes())
-            {
+            for (CraftingRecipe recipe : Emulator.getGameEnvironment().getCraftingManager().getRecipes()) {
                 this.response.appendString(recipe.result);
             }
         }

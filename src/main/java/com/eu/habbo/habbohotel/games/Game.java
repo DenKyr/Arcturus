@@ -16,8 +16,8 @@ import gnu.trove.map.hash.THashMap;
 
 import java.util.Map;
 
-public abstract class Game implements Runnable
-{
+public abstract class Game implements Runnable {
+
     /**
      * The class that should be used that defines teams.
      */
@@ -48,42 +48,40 @@ public abstract class Game implements Runnable
      */
     protected int endTime;
 
-    public Game(Class<? extends GameTeam> gameTeamClazz, Class<? extends GamePlayer> gamePlayerClazz, Room room)
-    {
+    public Game(Class<? extends GameTeam> gameTeamClazz, Class<? extends GamePlayer> gamePlayerClazz, Room room) {
         this.gameTeamClazz = gameTeamClazz;
         this.gamePlayerClazz = gamePlayerClazz;
         this.room = room;
     }
 
     /**
-     * Should reset the game to it's default state and call start() when done initialising.
-     * Only call start if you need to start a game.
+     * Should reset the game to it's default state and call start() when done
+     * initialising. Only call start if you need to start a game.
      */
     public abstract void initialise();
 
     /**
-     * When overridden call super first!
-     * Adds a particular Habbo to a specific team.
+     * When overridden call super first! Adds a particular Habbo to a specific
+     * team.
+     *
      * @param habbo The Habbo to add to an team.
      * @param teamColor The teamcolor to add the Habbo too.
      * @return True when user has joined the game.
      */
-    public boolean addHabbo(Habbo habbo, GameTeamColors teamColor)
-    {
-        try
-        {
-            if (habbo != null)
-            {
-                if(Emulator.getPluginManager().isRegistered(GameHabboJoinEvent.class, true))
-                {
+    public boolean addHabbo(Habbo habbo, GameTeamColors teamColor) {
+        try {
+            if (habbo != null) {
+                if (Emulator.getPluginManager().isRegistered(GameHabboJoinEvent.class, true)) {
                     Event gameHabboJoinEvent = new GameHabboJoinEvent(this, habbo);
                     Emulator.getPluginManager().fireEvent(gameHabboJoinEvent);
-                    if(gameHabboJoinEvent.isCancelled())
+                    if (gameHabboJoinEvent.isCancelled()) {
                         return false;
+                    }
                 }
 
-                if (!this.teams.containsKey(teamColor))
+                if (!this.teams.containsKey(teamColor)) {
                     this.teams.put(teamColor, this.gameTeamClazz.getDeclaredConstructor(GameTeamColors.class).newInstance(teamColor));
+                }
 
                 GamePlayer player = this.gamePlayerClazz.getDeclaredConstructor(Habbo.class, GameTeamColors.class).newInstance(habbo, teamColor);
                 this.teams.get(teamColor).addMember(player);
@@ -92,9 +90,7 @@ public abstract class Game implements Runnable
 
                 return true;
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Emulator.getLogging().logErrorLine(e);
         }
 
@@ -102,35 +98,32 @@ public abstract class Game implements Runnable
     }
 
     /**
-     * When overridden call super first!
-     * Removes an Habbo when the following events occur:
+     * When overridden call super first! Removes an Habbo when the following
+     * events occur:
      * <li>The Habbo gets disconnected.</li>
      * <li>The Habbo leaves the room.</li>
      * <li>The Habbo triggers leave team wired.</li>
+     *
      * @param habbo The Habbo to be removed.
      */
-    public synchronized void removeHabbo(Habbo habbo)
-    {
-        if (habbo != null)
-        {
-            if(Emulator.getPluginManager().isRegistered(GameHabboLeaveEvent.class, true))
-            {
+    public synchronized void removeHabbo(Habbo habbo) {
+        if (habbo != null) {
+            if (Emulator.getPluginManager().isRegistered(GameHabboLeaveEvent.class, true)) {
                 Event gameHabboLeaveEvent = new GameHabboLeaveEvent(this, habbo);
                 Emulator.getPluginManager().fireEvent(gameHabboLeaveEvent);
-                if(gameHabboLeaveEvent.isCancelled())
+                if (gameHabboLeaveEvent.isCancelled()) {
                     return;
+                }
             }
 
             GameTeam team = this.getTeamForHabbo(habbo);
-            if (team.isMember(habbo))
-            {
+            if (team.isMember(habbo)) {
                 team.removeMember(habbo.getHabboInfo().getGamePlayer());
                 habbo.getHabboInfo().getGamePlayer().reset();
                 habbo.getHabboInfo().setCurrentGame(null);
                 habbo.getHabboInfo().setGamePlayer(null);
 
-                if(this.endTime > this.startTime)
-                {
+                if (this.endTime > this.startTime) {
                     AchievementManager.progressAchievement(habbo, Emulator.getGameEnvironment().getAchievementManager().achievements.get("GamePlayed"));
                 }
             }
@@ -138,15 +131,13 @@ public abstract class Game implements Runnable
     }
 
     /**
-     * This method should start a game. Make sure to call super.start()
-     * to register the time the game was started.
+     * This method should start a game. Make sure to call super.start() to
+     * register the time the game was started.
      */
-    public void start()
-    {
+    public void start() {
         this.startTime = Emulator.getIntUnixTimestamp();
 
-        if(Emulator.getPluginManager().isRegistered(GameStartedEvent.class, true))
-        {
+        if (Emulator.getPluginManager().isRegistered(GameStartedEvent.class, true)) {
             Event gameStartedEvent = new GameStartedEvent(this);
             Emulator.getPluginManager().fireEvent(gameStartedEvent);
         }
@@ -164,16 +155,15 @@ public abstract class Game implements Runnable
      *
      * Called upon room unload or when the timer runs out.
      *
-     * Make sure to call super.stop() when overriden to save the scores to the database.
+     * Make sure to call super.stop() when overriden to save the scores to the
+     * database.
      */
-    public void stop()
-    {
+    public void stop() {
         this.endTime = Emulator.getIntUnixTimestamp();
 
         this.saveScores();
 
-        if(Emulator.getPluginManager().isRegistered(GameStoppedEvent.class, true))
-        {
+        if (Emulator.getPluginManager().isRegistered(GameStoppedEvent.class, true)) {
             Event gameStoppedEvent = new GameStoppedEvent(this);
             Emulator.getPluginManager().fireEvent(gameStoppedEvent);
         }
@@ -182,36 +172,30 @@ public abstract class Game implements Runnable
     }
 
     /**
-     * Saves all scores to the game.
-     * Used for the Wired Highscores.
-     * Must have set the room.
+     * Saves all scores to the game. Used for the Wired Highscores. Must have
+     * set the room.
      */
-    private void saveScores()
-    {
-        if(this.room == null)
+    private void saveScores() {
+        if (this.room == null) {
             return;
+        }
 
-        for(Map.Entry<GameTeamColors, GameTeam> teamEntry : this.teams.entrySet())
-        {
+        for (Map.Entry<GameTeamColors, GameTeam> teamEntry : this.teams.entrySet()) {
             Emulator.getThreading().run(new SaveScoreForTeam(teamEntry.getValue(), this));
         }
     }
 
     /**
      * Gets the team for the given Habbo.
+     *
      * @param habbo The Habbo to look for the team.
      * @return The team the Habbo is in.
      */
-    public GameTeam getTeamForHabbo(Habbo habbo)
-    {
-        if(habbo != null)
-        {
-            synchronized (this.teams)
-            {
-                for (GameTeam team : this.teams.values())
-                {
-                    if (team.isMember(habbo))
-                    {
+    public GameTeam getTeamForHabbo(Habbo habbo) {
+        if (habbo != null) {
+            synchronized (this.teams) {
+                for (GameTeam team : this.teams.values()) {
+                    if (team.isMember(habbo)) {
                         return team;
                     }
                 }
@@ -223,35 +207,32 @@ public abstract class Game implements Runnable
 
     /**
      * Get the team by the team color.
+     *
      * @param teamColor The teamcolor to look up.
      * @return The team for the given team color.
      */
-    public GameTeam getTeam(GameTeamColors teamColor)
-    {
+    public GameTeam getTeam(GameTeamColors teamColor) {
         return this.teams.get(teamColor);
     }
 
     /**
      * @return The room this game is affected by.
      */
-    public Room getRoom()
-    {
+    public Room getRoom() {
         return this.room;
     }
 
     /**
      * @return The time the game was started.
      */
-    public int getStartTime()
-    {
+    public int getStartTime() {
         return this.startTime;
     }
 
     /**
      * @return Last time this game ended.
      */
-    public int getEndTime()
-    {
+    public int getEndTime() {
         return this.endTime;
     }
 }

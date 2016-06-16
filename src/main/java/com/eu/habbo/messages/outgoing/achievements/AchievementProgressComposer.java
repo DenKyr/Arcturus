@@ -8,20 +8,18 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class AchievementProgressComposer extends MessageComposer
-{
+public class AchievementProgressComposer extends MessageComposer {
+
     private final Habbo habbo;
     private final Achievement achievement;
 
-    public AchievementProgressComposer(Habbo habbo, Achievement achievement)
-    {
+    public AchievementProgressComposer(Habbo habbo, Achievement achievement) {
         this.habbo = habbo;
         this.achievement = achievement;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.AchievementProgressComposer);
 
         int achievementProgress = this.habbo.getHabboStats().getAchievementProgress(achievement);

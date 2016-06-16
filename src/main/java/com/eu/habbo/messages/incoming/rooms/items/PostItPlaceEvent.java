@@ -8,23 +8,22 @@ import com.eu.habbo.messages.incoming.MessageHandler;
 import com.eu.habbo.messages.outgoing.inventory.RemoveHabboItemComposer;
 import com.eu.habbo.messages.outgoing.rooms.items.AddWallItemComposer;
 
-public class PostItPlaceEvent extends MessageHandler
-{
+public class PostItPlaceEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         int itemId = this.packet.readInt();
         String location = this.packet.readString();
 
         Room room = this.client.getHabbo().getHabboInfo().getCurrentRoom();
 
-        if(room == null || !room.hasRights(this.client.getHabbo()))
+        if (room == null || !room.hasRights(this.client.getHabbo())) {
             return;
+        }
 
         HabboItem item = this.client.getHabbo().getHabboInventory().getItemsComponent().getHabboItem(itemId);
 
-        if(item != null && item instanceof InteractionPostIt)
-        {
+        if (item != null && item instanceof InteractionPostIt) {
             room.addHabboItem(item);
             item.setExtradata("FFFF33");
             item.setRoomId(this.client.getHabbo().getHabboInfo().getCurrentRoom().getId());

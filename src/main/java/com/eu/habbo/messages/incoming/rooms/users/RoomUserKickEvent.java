@@ -7,31 +7,32 @@ import com.eu.habbo.messages.incoming.MessageHandler;
 import com.eu.habbo.messages.outgoing.generic.alerts.GenericErrorMessagesComposer;
 import com.eu.habbo.plugin.events.users.UserKickEvent;
 
-public class RoomUserKickEvent extends MessageHandler
-{
+public class RoomUserKickEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         Room room = this.client.getHabbo().getHabboInfo().getCurrentRoom();
 
-        if(room == null)
+        if (room == null) {
             return;
+        }
 
         int userId = this.packet.readInt();
 
         Habbo target = room.getHabbo(userId);
 
-        if(target == null)
+        if (target == null) {
             return;
+        }
 
         UserKickEvent event = new UserKickEvent(this.client.getHabbo(), target);
         Emulator.getPluginManager().fireEvent(event);
 
-        if(event.isCancelled())
+        if (event.isCancelled()) {
             return;
+        }
 
-        if(room.hasRights(this.client.getHabbo()) || this.client.getHabbo().hasPermission("acc_anyroomowner") || this.client.getHabbo().hasPermission("acc_ambassador"))
-        {
+        if (room.hasRights(this.client.getHabbo()) || this.client.getHabbo().hasPermission("acc_anyroomowner") || this.client.getHabbo().hasPermission("acc_ambassador")) {
             room.kickHabbo(target);
         }
     }

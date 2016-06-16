@@ -6,24 +6,21 @@ import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 import gnu.trove.set.hash.THashSet;
 
-public class GuildBuyRoomsComposer extends MessageComposer
-{
+public class GuildBuyRoomsComposer extends MessageComposer {
+
     private final THashSet<Room> rooms;
 
-    public GuildBuyRoomsComposer(THashSet<Room> rooms)
-    {
+    public GuildBuyRoomsComposer(THashSet<Room> rooms) {
         this.rooms = rooms;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.GuildBuyRoomsComposer);
         this.response.appendInt32(10);
         this.response.appendInt32(this.rooms.size());
 
-        for (Room room : this.rooms)
-        {
+        for (Room room : this.rooms) {
             this.response.appendInt32(room.getId());
             this.response.appendString(room.getName());
             this.response.appendBoolean(false);

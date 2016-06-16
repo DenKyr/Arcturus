@@ -1,7 +1,7 @@
 package com.eu.habbo.habbohotel.wired;
 
-public enum WiredTriggerType
-{
+public enum WiredTriggerType {
+
     SAY_SOMETHING(0),
     WALKS_ON_FURNI(1),
     WALKS_OFF_FURNI(2),
@@ -19,8 +19,7 @@ public enum WiredTriggerType
 
     public final int code;
 
-    WiredTriggerType(int code)
-    {
+    WiredTriggerType(int code) {
         this.code = code;
     }
 }

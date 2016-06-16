@@ -15,16 +15,14 @@ import gnu.trove.procedure.TIntIntProcedure;
 
 import java.util.ArrayList;
 
-public class RedeemCommand extends Command
-{
-    public RedeemCommand()
-    {
+public class RedeemCommand extends Command {
+
+    public RedeemCommand() {
         super("cmd_redeem", Emulator.getTexts().getValue("commands.keys.cmd_redeem").split(";"));
     }
 
     @Override
-    public boolean handle(final GameClient gameClient, String[] params) throws Exception
-    {
+    public boolean handle(final GameClient gameClient, String[] params) throws Exception {
         ArrayList<HabboItem> items = new ArrayList<HabboItem>();
 
         int credits = 0;
@@ -32,31 +30,21 @@ public class RedeemCommand extends Command
 
         TIntIntMap points = new TIntIntHashMap();
 
-
-        for(HabboItem item : gameClient.getHabbo().getHabboInventory().getItemsComponent().getItemsAsValueCollection())
-        {
-            if (item.getBaseItem().getName().startsWith("CF_") || item.getBaseItem().getName().startsWith("CFC_") || item.getBaseItem().getName().startsWith("DF_") || item.getBaseItem().getName().startsWith("PF_"))
-            {
+        for (HabboItem item : gameClient.getHabbo().getHabboInventory().getItemsComponent().getItemsAsValueCollection()) {
+            if (item.getBaseItem().getName().startsWith("CF_") || item.getBaseItem().getName().startsWith("CFC_") || item.getBaseItem().getName().startsWith("DF_") || item.getBaseItem().getName().startsWith("PF_")) {
                 items.add(item);
-                if (item.getBaseItem().getName().startsWith("CF_") || item.getBaseItem().getName().startsWith("CFC_"))
-                {
-                    try
-                    {
+                if (item.getBaseItem().getName().startsWith("CF_") || item.getBaseItem().getName().startsWith("CFC_")) {
+                    try {
                         credits += Integer.valueOf(item.getBaseItem().getName().split("_")[1]);
-                    } catch (Exception e)
-                    {
+                    } catch (Exception e) {
                     }
 
-                } else if (item.getBaseItem().getName().startsWith("PF_"))
-                {
-                    try
-                    {
+                } else if (item.getBaseItem().getName().startsWith("PF_")) {
+                    try {
                         pixels += Integer.valueOf(item.getBaseItem().getName().split("_")[1]);
-                    } catch (Exception e)
-                    {
+                    } catch (Exception e) {
                     }
-                } else if (item.getBaseItem().getName().startsWith("PF_"))
-                {
+                } else if (item.getBaseItem().getName().startsWith("PF_")) {
                     int pointsType = 0;
                     int pointsAmount = 0;
 
@@ -69,8 +57,7 @@ public class RedeemCommand extends Command
         }
 
         TIntObjectHashMap<HabboItem> deleted = new TIntObjectHashMap<HabboItem>();
-        for(HabboItem item : items)
-        {
+        for (HabboItem item : items) {
             gameClient.getHabbo().getHabboInventory().getItemsComponent().removeHabboItem(item);
             deleted.put(item.getId(), item);
         }
@@ -86,19 +73,15 @@ public class RedeemCommand extends Command
         message[0] += Emulator.getTexts().getValue("generic.credits");
         message[0] += ": " + credits;
 
-        if(pixels > 0)
-        {
+        if (pixels > 0) {
             message[0] += ", " + Emulator.getTexts().getValue("generic.pixels");
             message[0] += ": " + pixels + "";
         }
 
-        if(!points.isEmpty())
-        {
-            points.forEachEntry(new TIntIntProcedure()
-            {
+        if (!points.isEmpty()) {
+            points.forEachEntry(new TIntIntProcedure() {
                 @Override
-                public boolean execute(int a, int b)
-                {
+                public boolean execute(int a, int b) {
                     gameClient.getHabbo().givePoints(a, b);
                     message[0] += " ," + Emulator.getTexts().getValue("seasonal.name." + a) + ": " + b;
                     return true;

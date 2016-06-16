@@ -5,8 +5,8 @@ import com.eu.habbo.habbohotel.users.Habbo;
 
 import java.util.ArrayList;
 
-public class NavigatorPopularRoomsEvent extends NavigatorRoomsEvent
-{
+public class NavigatorPopularRoomsEvent extends NavigatorRoomsEvent {
+
     /**
      * The rooms displayed.
      */
@@ -16,8 +16,7 @@ public class NavigatorPopularRoomsEvent extends NavigatorRoomsEvent
      * @param habbo The Habbo this event applies to.
      * @param rooms The rooms displayed.
      */
-    public NavigatorPopularRoomsEvent(Habbo habbo, ArrayList<Room> rooms)
-    {
+    public NavigatorPopularRoomsEvent(Habbo habbo, ArrayList<Room> rooms) {
         super(habbo, rooms);
 
         this.rooms = rooms;

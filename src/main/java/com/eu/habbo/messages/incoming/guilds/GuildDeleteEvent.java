@@ -6,19 +6,16 @@ import com.eu.habbo.messages.incoming.MessageHandler;
 import com.eu.habbo.messages.outgoing.guilds.RemoveGuildFromRoomComposer;
 import com.eu.habbo.plugin.events.guilds.GuildDeletedEvent;
 
-public class GuildDeleteEvent extends MessageHandler
-{
+public class GuildDeleteEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         int guildId = this.packet.readInt();
 
-        if(this.client.getHabbo().getHabboStats().hasGuild(guildId))
-        {
+        if (this.client.getHabbo().getHabboStats().hasGuild(guildId)) {
             Guild guild = Emulator.getGameEnvironment().getGuildManager().getGuild(guildId);
 
-            if(guild != null)
-            {
+            if (guild != null) {
                 if (guild.getOwnerId() == this.client.getHabbo().getHabboInfo().getId()) //TODO Add staff permission override.
                 {
                     Emulator.getGameEnvironment().getGuildManager().deleteGuild(guild);

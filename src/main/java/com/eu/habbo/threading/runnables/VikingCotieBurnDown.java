@@ -6,15 +6,14 @@ import com.eu.habbo.habbohotel.items.interactions.InteractionVikingCotie;
 import com.eu.habbo.habbohotel.rooms.Room;
 import com.eu.habbo.habbohotel.users.Habbo;
 
-public class VikingCotieBurnDown implements Runnable
-{
+public class VikingCotieBurnDown implements Runnable {
+
     private int state;
     private final InteractionVikingCotie vikingCotie;
     private final Room room;
     private final Habbo habbo;
 
-    public VikingCotieBurnDown(InteractionVikingCotie vikingCotie, Room room, Habbo habbo)
-    {
+    public VikingCotieBurnDown(InteractionVikingCotie vikingCotie, Room room, Habbo habbo) {
         this.vikingCotie = vikingCotie;
         this.room = room;
         this.habbo = habbo;
@@ -22,16 +21,11 @@ public class VikingCotieBurnDown implements Runnable
     }
 
     @Override
-    public void run()
-    {
-        if(this.vikingCotie.getRoomId() > 0)
-        {
-            if (this.vikingCotie.getExtradata().equalsIgnoreCase("4"))
-            {
+    public void run() {
+        if (this.vikingCotie.getRoomId() > 0) {
+            if (this.vikingCotie.getExtradata().equalsIgnoreCase("4")) {
                 AchievementManager.progressAchievement(this.habbo, Emulator.getGameEnvironment().getAchievementManager().achievements.get("ViciousViking"));
-            }
-            else
-            {
+            } else {
                 this.state++;
                 this.vikingCotie.setExtradata(this.state + "");
                 this.room.updateItem(this.vikingCotie);

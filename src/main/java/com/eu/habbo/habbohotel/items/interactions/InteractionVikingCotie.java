@@ -9,25 +9,20 @@ import com.eu.habbo.threading.runnables.VikingCotieBurnDown;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class InteractionVikingCotie extends InteractionDefault
-{
-    public InteractionVikingCotie(ResultSet set, Item baseItem) throws SQLException
-    {
+public class InteractionVikingCotie extends InteractionDefault {
+
+    public InteractionVikingCotie(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
 
-    public InteractionVikingCotie(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public InteractionVikingCotie(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
 
     @Override
-    public void onClick(GameClient client, Room room, Object[] objects) throws Exception
-    {
-        if(this.getExtradata().isEmpty() || this.getExtradata().equalsIgnoreCase("0"))
-        {
-            if (client.getHabbo().getRoomUnit().getEffectId() == 5)
-            {
+    public void onClick(GameClient client, Room room, Object[] objects) throws Exception {
+        if (this.getExtradata().isEmpty() || this.getExtradata().equalsIgnoreCase("0")) {
+            if (client.getHabbo().getRoomUnit().getEffectId() == 5) {
                 this.setExtradata("1");
 
                 Emulator.getThreading().run(new VikingCotieBurnDown(this, room, client.getHabbo()), 500);

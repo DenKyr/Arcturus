@@ -10,8 +10,8 @@ import com.eu.habbo.util.pathfinding.Tile;
 
 import java.util.List;
 
-public class RoomUnitWalkToRoomUnit implements Runnable
-{
+public class RoomUnitWalkToRoomUnit implements Runnable {
+
     private RoomUnit walker;
     private RoomUnit target;
     private Room room;
@@ -20,8 +20,7 @@ public class RoomUnitWalkToRoomUnit implements Runnable
 
     private Tile goalTile = null;
 
-    public RoomUnitWalkToRoomUnit(RoomUnit walker, RoomUnit target, Room room, List<Runnable> targetReached, List<Runnable> failedReached)
-    {
+    public RoomUnitWalkToRoomUnit(RoomUnit walker, RoomUnit target, Room room, List<Runnable> targetReached, List<Runnable> failedReached) {
         this.walker = walker;
         this.target = target;
         this.room = room;
@@ -30,34 +29,25 @@ public class RoomUnitWalkToRoomUnit implements Runnable
     }
 
     @Override
-    public void run()
-    {
-        if(this.goalTile == null)
-        {
+    public void run() {
+        if (this.goalTile == null) {
             this.findNewLocation();
 
             Emulator.getThreading().run(this, 500);
-        }
-        else if(this.walker.getGoal().equals(this.goalTile)) //Check if the goal is still the same. Chances are something is running the same task. If so we dump this task.
+        } else if (this.walker.getGoal().equals(this.goalTile)) //Check if the goal is still the same. Chances are something is running the same task. If so we dump this task.
         {
             //Check if arrived.
-            if(this.walker.getLocation().equals(this.goalTile))
-            {
-                for(Runnable r : this.targetReached)
-                {
+            if (this.walker.getLocation().equals(this.goalTile)) {
+                for (Runnable r : this.targetReached) {
                     Emulator.getThreading().run(r);
 
                     WiredHandler.handle(WiredTriggerType.BOT_REACHED_AVTR, this.target, this.room, new Object[]{this.walker});
                 }
-            }
-            else
-            {
+            } else {
                 List<Tile> tiles = PathFinder.getTilesAround(this.target.getX(), this.target.getY());
 
-                for(Tile t : tiles)
-                {
-                    if(t.equals(this.goalTile))
-                    {
+                for (Tile t : tiles) {
+                    if (t.equals(this.goalTile)) {
                         Emulator.getThreading().run(this, 500);
                         return;
                     }
@@ -70,22 +60,17 @@ public class RoomUnitWalkToRoomUnit implements Runnable
         }
     }
 
-    private void findNewLocation()
-    {
+    private void findNewLocation() {
         List<Tile> tiles = PathFinder.getTilesAround(this.target.getX(), this.target.getY());
 
-        for(Tile t : tiles)
-        {
-            if(this.room.tileWalkable(t))
-            {
+        for (Tile t : tiles) {
+            if (this.room.tileWalkable(t)) {
                 this.goalTile = t;
 
                 walker.setGoalLocation(this.goalTile);
 
-                if(walker.getPathFinder().getPath() == null)
-                {
-                    for(Runnable r : this.failedReached)
-                    {
+                if (walker.getPathFinder().getPath() == null) {
+                    for (Runnable r : this.failedReached) {
                         Emulator.getThreading().run(r);
                     }
                 }

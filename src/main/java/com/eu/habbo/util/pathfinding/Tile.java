@@ -4,14 +4,13 @@ import gnu.trove.set.hash.THashSet;
 
 import java.awt.*;
 
-public class Tile extends Point
-{
+public class Tile extends Point {
+
     public int X;
     public int Y;
     public double Z;
 
-    public Tile()
-    {
+    public Tile() {
         super(0, 0);
 
         this.X = 0;
@@ -19,8 +18,7 @@ public class Tile extends Point
         this.Z = 0;
     }
 
-    public Tile(int x, int y)
-    {
+    public Tile(int x, int y) {
         super(x, y);
 
         this.X = x;
@@ -28,8 +26,7 @@ public class Tile extends Point
         this.Z = 0;
     }
 
-    public Tile(int x, int y, double z)
-    {
+    public Tile(int x, int y, double z) {
         super(x, y);
 
         this.X = x;
@@ -38,8 +35,7 @@ public class Tile extends Point
     }
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         return o instanceof Tile && ((Tile) o).X == this.X && ((Tile) o).Y == this.Y;
     }
 
@@ -86,27 +82,18 @@ public class Tile extends Point
 //        }
 //        return PointList;
 //    }
-
-    public static THashSet<Tile> getTilesAt(int x, int y, int width, int length, int rotation)
-    {
+    public static THashSet<Tile> getTilesAt(int x, int y, int width, int length, int rotation) {
         THashSet<Tile> pointList = new THashSet<Tile>();
 
-        if(rotation == 0 || rotation == 4)
-        {
-            for (int i = x; i <= (x + (width - 1)); i++)
-            {
-                for (int j = y; j <= (y + (length - 1)); j++)
-                {
+        if (rotation == 0 || rotation == 4) {
+            for (int i = x; i <= (x + (width - 1)); i++) {
+                for (int j = y; j <= (y + (length - 1)); j++) {
                     pointList.add(new Tile(i, j, 0.0));
                 }
             }
-        }
-        else if(rotation == 2 || rotation == 6)
-        {
-            for (int i = x; i <= (x + (length - 1)); i++)
-            {
-                for (int j = y; j <= (y + (width - 1)); j++)
-                {
+        } else if (rotation == 2 || rotation == 6) {
+            for (int i = x; i <= (x + (length - 1)); i++) {
+                for (int j = y; j <= (y + (width - 1)); j++) {
                     pointList.add(new Tile(i, j, 0.0));
                 }
             }
@@ -115,14 +102,12 @@ public class Tile extends Point
         return pointList;
     }
 
-    public Tile copy()
-    {
+    public Tile copy() {
         return new Tile(this.X, this.Y, this.Z);
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "X: " + this.x + ", Y:" + this.y + ", Z: " + this.Z;
     }
 }

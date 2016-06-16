@@ -2,8 +2,8 @@ package com.eu.habbo.habbohotel.games;
 
 import com.eu.habbo.habbohotel.users.Habbo;
 
-public class GamePlayer
-{
+public class GamePlayer {
+
     /**
      * The Habbo that is linked to the game player.
      */
@@ -17,64 +17,61 @@ public class GamePlayer
     /**
      * The score of this player.
      *
-     * This score gets saved at the end of a game for the Wired HighScore furniture.
+     * This score gets saved at the end of a game for the Wired HighScore
+     * furniture.
      */
     private int score;
 
     /**
      * Creates a new GamePlayer for the given Habbo and it's team.
+     *
      * @param habbo The Habbo who is linked to this GamePlayer.
      * @param teamColor The team the GamePlayer is in.
      */
-    public GamePlayer(Habbo habbo, GameTeamColors teamColor)
-    {
+    public GamePlayer(Habbo habbo, GameTeamColors teamColor) {
         this.habbo = habbo;
         this.teamColor = teamColor;
     }
 
     /**
-     * Resets the GamePlayer object to it's 'default' state.
-     * This method will be called by the emulator:
+     * Resets the GamePlayer object to it's 'default' state. This method will be
+     * called by the emulator:
      * <ul>
-     *     <li>The game starts.</li>
-     *     <li>The game ends.</li>
+     * <li>The game starts.</li>
+     * <li>The game ends.</li>
      * </ul>
      */
-    public void reset()
-    {
+    public void reset() {
         this.score = 0;
     }
 
     /**
      * Adds an given amount of score to this object.
+     *
      * @param amount The amount of score to add.
      */
-    public synchronized void addScore(int amount)
-    {
+    public synchronized void addScore(int amount) {
         this.score += amount;
     }
 
     /**
      * @return The Habbo linked to this object.
      */
-    public Habbo getHabbo()
-    {
+    public Habbo getHabbo() {
         return this.habbo;
     }
 
     /**
      * @return The GameTeamColor for this object.
      */
-    public GameTeamColors getTeamColor()
-    {
+    public GameTeamColors getTeamColor() {
         return this.teamColor;
     }
 
     /**
      * @return The score amount for this object.
      */
-    public int getScore()
-    {
+    public int getScore() {
         return this.score;
     }
 }

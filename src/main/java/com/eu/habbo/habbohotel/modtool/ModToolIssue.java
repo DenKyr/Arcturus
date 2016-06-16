@@ -8,8 +8,8 @@ import com.eu.habbo.threading.runnables.UpdateModToolIssue;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ModToolIssue implements ISerialize
-{
+public class ModToolIssue implements ISerialize {
+
     public int id;
     public volatile ModToolTicketState state;
     public volatile ModToolTicketType type = ModToolTicketType.NORMAL;
@@ -25,8 +25,7 @@ public class ModToolIssue implements ISerialize
     public volatile String modName = "";
     public String message = "Unknown Message";
 
-    public ModToolIssue(ResultSet set) throws SQLException
-    {
+    public ModToolIssue(ResultSet set) throws SQLException {
         this.id = set.getInt("id");
         this.state = ModToolTicketState.getState(set.getInt("state"));
         this.timestamp = set.getInt("timestamp");
@@ -40,15 +39,13 @@ public class ModToolIssue implements ISerialize
         this.modName = set.getString("mod_username");
         this.type = ModToolTicketType.values()[set.getInt("type") - 1];
 
-        if(this.modId <= 0)
-        {
+        if (this.modId <= 0) {
             this.modName = "";
             this.state = ModToolTicketState.OPEN;
         }
     }
 
-    public ModToolIssue(int senderId, String senderUserName, int reportedId, String reportedUsername, int reportedRoomId, String message, ModToolTicketType type)
-    {
+    public ModToolIssue(int senderId, String senderUserName, int reportedId, String reportedUsername, int reportedRoomId, String message, ModToolTicketType type) {
         this.state = ModToolTicketState.OPEN;
         this.timestamp = Emulator.getIntUnixTimestamp();
         this.priority = 0;
@@ -63,8 +60,7 @@ public class ModToolIssue implements ISerialize
     }
 
     @Override
-    public void serialize(ServerMessage message)
-    {
+    public void serialize(ServerMessage message) {
         message.appendInt32(this.id); //ID
         message.appendInt32(this.state.getState()); //STATE
         message.appendInt32(this.type.getType()); //TYPE
@@ -83,8 +79,7 @@ public class ModToolIssue implements ISerialize
         message.appendInt32(0);
     }
 
-    public void updateInDatabase()
-    {
+    public void updateInDatabase() {
         Emulator.getThreading().run(new UpdateModToolIssue(this));
     }
 }

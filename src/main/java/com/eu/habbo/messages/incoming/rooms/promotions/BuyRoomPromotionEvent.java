@@ -9,41 +9,32 @@ import com.eu.habbo.messages.outgoing.catalog.AlertPurchaseFailedComposer;
 import com.eu.habbo.messages.outgoing.catalog.PurchaseOKComposer;
 import com.eu.habbo.messages.outgoing.users.UserCreditsComposer;
 
-public class BuyRoomPromotionEvent extends MessageHandler
-{
+public class BuyRoomPromotionEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         //TODO Copy from Azure.
         int pageId = this.packet.readInt();
 
         CatalogPage page = Emulator.getGameEnvironment().getCatalogManager().getCatalogPage(pageId);
 
-        if(page != null)
-        {
+        if (page != null) {
             CatalogItem item = page.getCatalogItem(this.packet.readInt());
-            if(item != null)
-            {
-                if(this.client.getHabbo().getHabboInfo().canBuy(item))
-                {
+            if (item != null) {
+                if (this.client.getHabbo().getHabboInfo().canBuy(item)) {
                     Room room = Emulator.getGameEnvironment().getRoomManager().getRoom(this.packet.readInt());
 
-                    if (room.isPromoted())
-                    {
+                    if (room.isPromoted()) {
                         room.getPromotion().addEndTimestamp(120 * 60);
-                    } else
-                    {
+                    } else {
                         room.createPromotion(this.packet.readString(), this.packet.readString());
                     }
 
-                    if(room.isPromoted())
-                    {
+                    if (room.isPromoted()) {
                         this.client.getHabbo().giveCredits(-item.getCredits());
                         this.client.getHabbo().givePoints(item.getPointsType(), -item.getPoints());
                         this.client.sendResponse(new PurchaseOKComposer());
-                    }
-                    else
-                    {
+                    } else {
                         this.client.sendResponse(new AlertPurchaseFailedComposer(AlertPurchaseFailedComposer.SERVER_ERROR));
                     }
                 }

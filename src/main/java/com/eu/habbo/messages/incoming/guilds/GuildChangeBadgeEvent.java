@@ -6,21 +6,20 @@ import com.eu.habbo.habbohotel.rooms.Room;
 import com.eu.habbo.messages.incoming.MessageHandler;
 import com.eu.habbo.plugin.events.guilds.GuildChangedBadgeEvent;
 
-public class GuildChangeBadgeEvent extends MessageHandler
-{
+public class GuildChangeBadgeEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         int guildId = this.packet.readInt();
 
         Guild guild = Emulator.getGameEnvironment().getGuildManager().getGuild(guildId);
 
-        if(guild.getOwnerId() == this.client.getHabbo().getHabboInfo().getId() || this.client.getHabbo().hasPermission("acc_guild_admin"))
-        {
+        if (guild.getOwnerId() == this.client.getHabbo().getHabboInfo().getId() || this.client.getHabbo().hasPermission("acc_guild_admin")) {
             Room room = Emulator.getGameEnvironment().getRoomManager().getRoom(guild.getRoomId());
 
-            if(room == null || room.getId() != guild.getRoomId())
+            if (room == null || room.getId() != guild.getRoomId()) {
                 return;
+            }
 
             int count = this.packet.readInt();
 
@@ -28,18 +27,14 @@ public class GuildChangeBadgeEvent extends MessageHandler
 
             byte base = 1;
 
-            while(base < count)
-            {
-                int id      = this.packet.readInt();
-                int color   = this.packet.readInt();
-                int pos     = this.packet.readInt();
+            while (base < count) {
+                int id = this.packet.readInt();
+                int color = this.packet.readInt();
+                int pos = this.packet.readInt();
 
-                if(base == 1)
-                {
+                if (base == 1) {
                     badge += "b";
-                }
-                else
-                {
+                } else {
                     badge += "s";
                 }
 
@@ -48,14 +43,16 @@ public class GuildChangeBadgeEvent extends MessageHandler
                 base += 3;
             }
 
-            if(guild.getBadge().toLowerCase().equals(badge.toLowerCase()))
+            if (guild.getBadge().toLowerCase().equals(badge.toLowerCase())) {
                 return;
+            }
 
             GuildChangedBadgeEvent badgeEvent = new GuildChangedBadgeEvent(guild, badge);
             Emulator.getPluginManager().fireEvent(badgeEvent);
 
-            if(badgeEvent.isCancelled())
+            if (badgeEvent.isCancelled()) {
                 return;
+            }
 
             guild.setBadge(badgeEvent.badge);
             guild.needsUpdate = true;

@@ -6,8 +6,8 @@ import com.eu.habbo.habbohotel.catalog.marketplace.MarketPlaceState;
 import com.eu.habbo.habbohotel.users.inventory.*;
 import gnu.trove.set.hash.THashSet;
 
-public class HabboInventory
-{
+public class HabboInventory {
+
     private WardrobeComponent wardrobeComponent;
     private BadgesComponent badgesComponent;
     private BotsComponent botsComponent;
@@ -16,8 +16,7 @@ public class HabboInventory
     private PetsComponent petsComponent;
     private final THashSet<MarketPlaceOffer> items;
 
-    public HabboInventory(Habbo habbo)
-    {
+    public HabboInventory(Habbo habbo) {
         this.badgesComponent = new BadgesComponent(habbo);
         this.botsComponent = new BotsComponent(habbo);
         this.effectsComponent = new EffectsComponent(habbo);
@@ -28,38 +27,31 @@ public class HabboInventory
         this.items = MarketPlace.getOwnOffers(habbo);
     }
 
-    public BadgesComponent getBadgesComponent()
-    {
+    public BadgesComponent getBadgesComponent() {
         return this.badgesComponent;
     }
 
-    public BotsComponent getBotsComponent()
-    {
+    public BotsComponent getBotsComponent() {
         return this.botsComponent;
     }
 
-    public EffectsComponent getEffectsComponent()
-    {
+    public EffectsComponent getEffectsComponent() {
         return this.effectsComponent;
     }
 
-    public ItemsComponent getItemsComponent()
-    {
+    public ItemsComponent getItemsComponent() {
         return this.itemsComponent;
     }
 
-    public PetsComponent getPetsComponent()
-    {
+    public PetsComponent getPetsComponent() {
         return this.petsComponent;
     }
 
-    public WardrobeComponent getWardrobeComponent()
-    {
+    public WardrobeComponent getWardrobeComponent() {
         return this.wardrobeComponent;
     }
 
-    public void dispose()
-    {
+    public void dispose() {
         this.badgesComponent.dispose();
         this.botsComponent.dispose();
         this.effectsComponent.dispose();
@@ -75,40 +67,33 @@ public class HabboInventory
         this.wardrobeComponent = null;
     }
 
-    public void addMarketplaceOffer(MarketPlaceOffer marketPlaceOffer)
-    {
+    public void addMarketplaceOffer(MarketPlaceOffer marketPlaceOffer) {
         this.items.add(marketPlaceOffer);
     }
 
-    public void removeMarketplaceOffer(MarketPlaceOffer marketPlaceOffer)
-    {
+    public void removeMarketplaceOffer(MarketPlaceOffer marketPlaceOffer) {
         this.items.remove(marketPlaceOffer);
     }
 
-    public THashSet<MarketPlaceOffer> getMarketplaceItems()
-    {
+    public THashSet<MarketPlaceOffer> getMarketplaceItems() {
         return this.items;
     }
 
-    public int getSoldPriceTotal()
-    {
+    public int getSoldPriceTotal() {
         int i = 0;
-        for(MarketPlaceOffer offer : this.items)
-        {
-            if(offer.getState().equals(MarketPlaceState.SOLD))
-            {
-                i+= (offer.getPrice() - (int)Math.ceil(offer.getPrice() / 100.0));
+        for (MarketPlaceOffer offer : this.items) {
+            if (offer.getState().equals(MarketPlaceState.SOLD)) {
+                i += (offer.getPrice() - (int) Math.ceil(offer.getPrice() / 100.0));
             }
         }
         return i;
     }
 
-    public MarketPlaceOffer getOffer(int id)
-    {
-        for(MarketPlaceOffer offer : this.items)
-        {
-            if(offer.getOfferId() == id)
+    public MarketPlaceOffer getOffer(int id) {
+        for (MarketPlaceOffer offer : this.items) {
+            if (offer.getOfferId() == id) {
                 return offer;
+            }
         }
 
         return null;

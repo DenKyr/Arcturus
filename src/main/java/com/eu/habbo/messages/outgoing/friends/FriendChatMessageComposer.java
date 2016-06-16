@@ -6,18 +6,16 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class FriendChatMessageComposer extends MessageComposer
-{
+public class FriendChatMessageComposer extends MessageComposer {
+
     private final Message message;
 
-    public FriendChatMessageComposer(Message message)
-    {
+    public FriendChatMessageComposer(Message message) {
         this.message = message;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.FriendChatMessageComposer);
 
         this.response.appendInt32(message.getFromId());

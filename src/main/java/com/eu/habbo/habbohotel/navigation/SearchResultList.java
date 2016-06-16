@@ -8,8 +8,8 @@ import com.eu.habbo.messages.ServerMessage;
 import java.util.Collections;
 import java.util.List;
 
-public class SearchResultList implements ISerialize
-{
+public class SearchResultList implements ISerialize {
+
     public final int order;
     public final String code;
     public final String query;
@@ -19,8 +19,7 @@ public class SearchResultList implements ISerialize
     public final List<Room> rooms;
     public final boolean filter;
 
-    public SearchResultList(int order, String code, String query, SearchAction action, SearchMode mode, boolean hidden, List<Room> rooms, boolean filter)
-    {
+    public SearchResultList(int order, String code, String query, SearchAction action, SearchMode mode, boolean hidden, List<Room> rooms, boolean filter) {
         this.order = order;
         this.code = code;
         this.query = query;
@@ -32,8 +31,7 @@ public class SearchResultList implements ISerialize
     }
 
     @Override
-    public void serialize(ServerMessage message)
-    {
+    public void serialize(ServerMessage message) {
         message.appendString(this.code); //Search Code
         message.appendString(this.query); //Text
         message.appendInt32(this.action.type); //Action Allowed (0 (Nothing), 1 (More Results), 2 (Go Back))
@@ -42,8 +40,7 @@ public class SearchResultList implements ISerialize
         message.appendInt32(this.rooms.size());
 
         Collections.sort(this.rooms);
-        for (Room room : this.rooms)
-        {
+        for (Room room : this.rooms) {
             room.serialize(message);
         }
     }

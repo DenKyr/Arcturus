@@ -5,8 +5,8 @@ import gnu.trove.map.hash.THashMap;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Poll
-{
+public class Poll {
+
     private int id;
     private String title;
     private String thanksMessage;
@@ -14,8 +14,7 @@ public class Poll
 
     private THashMap<Integer, PollQuestion> questions;
 
-    public Poll(ResultSet set) throws SQLException
-    {
+    public Poll(ResultSet set) throws SQLException {
         set.first();
         this.id = set.getInt("poll_id");
         this.title = set.getString("title");
@@ -25,34 +24,28 @@ public class Poll
         this.questions = new THashMap<Integer, PollQuestion>();
 
         set.beforeFirst();
-        while(set.next())
-        {
+        while (set.next()) {
             this.questions.put(set.getInt("question_number"), new PollQuestion(set));
         }
     }
 
-    public int getId()
-    {
+    public int getId() {
         return this.id;
     }
 
-    public String getTitle()
-    {
+    public String getTitle() {
         return this.title;
     }
 
-    public String getThanksMessage()
-    {
+    public String getThanksMessage() {
         return this.thanksMessage;
     }
 
-    public String getBadgeReward()
-    {
+    public String getBadgeReward() {
         return this.badgeReward;
     }
 
-    public THashMap<Integer, PollQuestion> getQuestions()
-    {
+    public THashMap<Integer, PollQuestion> getQuestions() {
         return this.questions;
     }
 }

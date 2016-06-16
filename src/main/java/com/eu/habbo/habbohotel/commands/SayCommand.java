@@ -8,43 +8,34 @@ import com.eu.habbo.habbohotel.users.Habbo;
 import com.eu.habbo.messages.outgoing.rooms.users.RoomUserTalkComposer;
 import com.eu.habbo.messages.outgoing.rooms.users.RoomUserWhisperComposer;
 
-public class SayCommand extends Command
-{
-    public SayCommand()
-    {
+public class SayCommand extends Command {
+
+    public SayCommand() {
         super("cmd_say", Emulator.getTexts().getValue("commands.keys.cmd_say").split(";"));
     }
 
     @Override
-    public boolean handle(GameClient gameClient, String[] params) throws Exception
-    {
-        if(params.length < 2)
-        {
+    public boolean handle(GameClient gameClient, String[] params) throws Exception {
+        if (params.length < 2) {
             gameClient.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.error.cmd_say.forgot_username"), gameClient.getHabbo(), gameClient.getHabbo(), RoomChatMessageBubbles.ALERT)));
             return true;
         }
 
         Habbo target = Emulator.getGameEnvironment().getHabboManager().getHabbo(params[1]);
 
-        if(target == null)
-        {
+        if (target == null) {
             gameClient.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.error.cmd_say.user_not_found"), gameClient.getHabbo(), gameClient.getHabbo(), RoomChatMessageBubbles.ALERT)));
             return true;
-        }
-        else
-        {
-            if(target.getHabboInfo().getCurrentRoom() == null)
-            {
+        } else {
+            if (target.getHabboInfo().getCurrentRoom() == null) {
                 gameClient.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.error.cmd_say.hotel_view").replace("%user%", params[1]), gameClient.getHabbo(), gameClient.getHabbo(), RoomChatMessageBubbles.ALERT)));
                 return true;
             }
         }
 
         String message = "";
-        if(params.length > 2)
-        {
-            for(int i = 2; i < params.length; i++)
-            {
+        if (params.length > 2) {
+            for (int i = 2; i < params.length; i++) {
                 message += params[i] + " ";
             }
         }

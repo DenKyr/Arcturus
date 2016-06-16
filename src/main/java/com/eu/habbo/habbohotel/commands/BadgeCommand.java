@@ -13,35 +13,28 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class BadgeCommand extends Command
-{
-    public BadgeCommand()
-    {
+public class BadgeCommand extends Command {
+
+    public BadgeCommand() {
         super("cmd_badge", Emulator.getTexts().getValue("commands.keys.cmd_badge").split(";"));
     }
 
     @Override
-    public boolean handle(GameClient gameClient, String[] params) throws Exception
-    {
-        if(params.length == 1)
-        {
+    public boolean handle(GameClient gameClient, String[] params) throws Exception {
+        if (params.length == 1) {
             gameClient.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.error.cmd_badge.forgot_username"), gameClient.getHabbo(), gameClient.getHabbo(), RoomChatMessageBubbles.ALERT)));
             return true;
         }
-        if(params.length == 2)
-        {
+        if (params.length == 2) {
             gameClient.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.error.cmd_badge.forgot_badge").replace("%user%", params[1]), gameClient.getHabbo(), gameClient.getHabbo(), RoomChatMessageBubbles.ALERT)));
             return true;
         }
 
-        if(params.length == 3)
-        {
+        if (params.length == 3) {
             Habbo habbo = Emulator.getGameEnvironment().getHabboManager().getHabbo(params[1]);
 
-            if(habbo != null)
-            {
-                if(habbo.getHabboInventory().getBadgesComponent().hasBadge(params[2]))
-                {
+            if (habbo != null) {
+                if (habbo.getHabboInventory().getBadgesComponent().hasBadge(params[2])) {
                     gameClient.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.error.cmd_badge.already_owned").replace("%user%", params[1]).replace("%badge%", params[2]), gameClient.getHabbo(), gameClient.getHabbo(), RoomChatMessageBubbles.ALERT)));
                     return true;
                 }
@@ -55,16 +48,12 @@ public class BadgeCommand extends Command
 
                 gameClient.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.succes.cmd_badge.given").replace("%user%", params[1]).replace("%badge%", params[2]), gameClient.getHabbo(), gameClient.getHabbo(), RoomChatMessageBubbles.ALERT)));
 
-                if (habbo.getHabboInfo().getCurrentRoom() != null)
-                {
+                if (habbo.getHabboInfo().getCurrentRoom() != null) {
                     habbo.getClient().sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.generic.cmd_badge.received"), habbo, habbo, RoomChatMessageBubbles.ALERT)));
                 }
                 return true;
-            }
-            else
-            {
-                try
-                {
+            } else {
+                try {
                     PreparedStatement statement = Emulator.getDatabase().prepare("SELECT COUNT(slot_id) FROM users_badges INNER JOIN users ON users.id = user_id WHERE users.username = ? AND badge_code = ? LIMIT 1");
                     statement.setString(1, params[1]);
                     statement.setString(2, params[2]);
@@ -76,13 +65,10 @@ public class BadgeCommand extends Command
                     statement.close();
                     statement.getConnection().close();
 
-                    if(found)
-                    {
+                    if (found) {
                         gameClient.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.error.cmd_badge.already_owns").replace("%user%", params[1]).replace("%badge%", params[2]), gameClient.getHabbo(), gameClient.getHabbo(), RoomChatMessageBubbles.ALERT)));
                         return true;
-                    }
-                    else
-                    {
+                    } else {
                         PreparedStatement s = Emulator.getDatabase().prepare("INSERT INTO users_badges VALUES (null, (SELECT id FROM users WHERE username = ? LIMIT 1), 0, ?)");
                         s.setString(1, params[1]);
                         s.setString(2, params[2]);
@@ -93,9 +79,7 @@ public class BadgeCommand extends Command
                         gameClient.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.succes.cmd_badge.given").replace("%user%", params[1]).replace("%badge%", params[2]), gameClient.getHabbo(), gameClient.getHabbo(), RoomChatMessageBubbles.ALERT)));
                         return true;
                     }
-                }
-                catch (SQLException e)
-                {
+                } catch (SQLException e) {
                     Emulator.getLogging().logSQLException(e);
                 }
             }

@@ -3,8 +3,8 @@ package com.eu.habbo.habbohotel.hotelview;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class NewsWidget
-{
+public class NewsWidget {
+
     /**
      * News ID
      */
@@ -40,8 +40,7 @@ public class NewsWidget
      */
     private String image;
 
-    public NewsWidget(ResultSet set) throws SQLException
-    {
+    public NewsWidget(ResultSet set) throws SQLException {
         this.id = set.getInt("id");
         this.title = set.getString("title");
         this.message = set.getString("text");
@@ -54,56 +53,49 @@ public class NewsWidget
     /**
      * News ID
      */
-    public int getId()
-    {
+    public int getId() {
         return this.id;
     }
 
     /**
      * Title
      */
-    public String getTitle()
-    {
+    public String getTitle() {
         return this.title;
     }
 
     /**
      * Message
      */
-    public String getMessage()
-    {
+    public String getMessage() {
         return this.message;
     }
 
     /**
      * Text on the button
      */
-    public String getButtonMessage()
-    {
+    public String getButtonMessage() {
         return this.buttonMessage;
     }
 
     /**
      * Type
      */
-    public int getType()
-    {
+    public int getType() {
         return this.type;
     }
 
     /**
      * Link
      */
-    public String getLink()
-    {
+    public String getLink() {
         return this.link;
     }
 
     /**
      * Image
      */
-    public String getImage()
-    {
+    public String getImage() {
         return this.image;
     }
 }

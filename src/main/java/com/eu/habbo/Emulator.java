@@ -22,46 +22,41 @@ import java.util.Date;
 import java.util.Random;
 import java.util.regex.Pattern;
 
-public final class Emulator
-{
+public final class Emulator {
+
     public static MessengerBuddy publicChatBuddy;
     public static final String version = "Version: 1.0.2";
     public static boolean isReady = false;
     public static boolean stopped = false;
     public static boolean debugging = true;
 
-    private static int                      timeStarted = 0;
-    private static Runtime                  runtime;
-    private static ConfigurationManager     config;
-    private static TextsManager             texts;
-    private static GameServer               gameServer;
-    private static RCONServer               rconServer;
-    private static Database                 database;
-    private static Logging                  logging;
-    private static ThreadPooling            threading;
-    private static GameEnvironment          gameEnvironment;
-    private static PluginManager            pluginManager;
-    private static Random                   random;
-    private static BadgeImager              badgeImager;
-    
-    static
-    {
-        Thread hook = new Thread(new Runnable()
-        {
-            public void run()
-            {
+    private static int timeStarted = 0;
+    private static Runtime runtime;
+    private static ConfigurationManager config;
+    private static TextsManager texts;
+    private static GameServer gameServer;
+    private static RCONServer rconServer;
+    private static Database database;
+    private static Logging logging;
+    private static ThreadPooling threading;
+    private static GameEnvironment gameEnvironment;
+    private static PluginManager pluginManager;
+    private static Random random;
+    private static BadgeImager badgeImager;
+
+    static {
+        Thread hook = new Thread(new Runnable() {
+            public void run() {
                 Emulator.dispose();
             }
         });
         hook.setPriority(10);
-        
+
         Runtime.getRuntime().addShutdownHook(hook);
     }
-    
-    public static void main(String[] args) throws Exception
-    {
-        try
-        {
+
+    public static void main(String[] args) throws Exception {
+        try {
             Emulator.stopped = false;
             Emulator.logging = new Logging();
             Emulator.getLogging().logStart("\r" + Emulator.logo);
@@ -96,118 +91,112 @@ public final class Emulator
 
             Emulator.debugging = Emulator.getConfig().getBoolean("debug.mode");
 
-            if (debugging)
-            {
+            if (debugging) {
                 Emulator.getLogging().logDebugLine("Debugging Enabled!");
             }
 
             Emulator.getPluginManager().fireEvent(new EmulatorLoadedEvent());
             Emulator.isReady = true;
             Emulator.timeStarted = getIntUnixTimestamp();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
+        } catch (Exception e) {
+            Emulator.getLogging().logErrorLine(e);
         }
     }
 
-    public static void dispose()
-    {
+    public static void dispose() {
         Emulator.isReady = false;
         Emulator.getLogging().logShutdownLine("Preparing for shutting down..");
         Emulator.getLogging().logShutdownLine("Disposing..");
 
-        if(Emulator.getPluginManager() != null)
+        if (Emulator.getPluginManager() != null) {
             Emulator.getPluginManager().fireEvent(new EmulatorStartShutdownEvent());
+        }
 
-        if(Emulator.gameEnvironment != null)
+        if (Emulator.gameEnvironment != null) {
             Emulator.gameEnvironment.dispose();
+        }
 
-        if(Emulator.rconServer != null)
+        if (Emulator.rconServer != null) {
             Emulator.rconServer.stop();
+        }
 
-        if(Emulator.gameServer != null)
+        if (Emulator.gameServer != null) {
             Emulator.gameServer.stop();
+        }
 
-        if(Emulator.threading != null)
+        if (Emulator.threading != null) {
             Emulator.threading.shutDown();
+        }
 
-        if(Emulator.getPluginManager() != null)
+        if (Emulator.getPluginManager() != null) {
             Emulator.getPluginManager().fireEvent(new EmulatorStoppedEvent());
+        }
 
-        if(Emulator.pluginManager != null)
+        if (Emulator.pluginManager != null) {
             Emulator.pluginManager.dispose();
+        }
 
         Emulator.getLogging().logShutdownLine("Disposed!");
         Emulator.stopped = true;
     }
-    
-    public static ConfigurationManager getConfig()
-    {
+
+    public static ConfigurationManager getConfig() {
         return config;
     }
 
-    public static TextsManager getTexts()
-    {
+    public static TextsManager getTexts() {
         return texts;
     }
-    
-    public static Database getDatabase()
-    {
+
+    public static Database getDatabase() {
         return database;
     }
-    
-    public static Runtime getRuntime()
-    {
+
+    public static Runtime getRuntime() {
         return runtime;
     }
-    
-    public static GameServer getGameServer()
-    {
+
+    public static GameServer getGameServer() {
         return gameServer;
     }
 
-    public static RCONServer getRconServer()
-    {
+    public static RCONServer getRconServer() {
         return rconServer;
     }
-    
-    public static Logging getLogging()
-    {
+
+    public static Logging getLogging() {
         return logging;
     }
 
-    public static ThreadPooling getThreading() { return threading; }
+    public static ThreadPooling getThreading() {
+        return threading;
+    }
 
-    public static GameEnvironment getGameEnvironment() { return gameEnvironment; }
+    public static GameEnvironment getGameEnvironment() {
+        return gameEnvironment;
+    }
 
-    public static PluginManager getPluginManager()
-    {
+    public static PluginManager getPluginManager() {
         return pluginManager;
     }
 
-    public static Random getRandom()
-    {
+    public static Random getRandom() {
         return random;
     }
 
-    public static BadgeImager getBadgeImager()
-    {
+    public static BadgeImager getBadgeImager() {
         return badgeImager;
     }
-    
-    public static int getTimeStarted()
-    {
+
+    public static int getTimeStarted() {
         return timeStarted;
     }
-    
-    public static void prepareShutdown()
-    {
+
+    public static void prepareShutdown() {
         System.exit(0);
     }
-    
-    private static String dateToUnixTimestamp(Date fecha)
-    {
+
+    private static String dateToUnixTimestamp(Date fecha) {
         String res = "";
         Date aux = stringToDate("1970-01-01 00:00:00");
         Timestamp aux1 = dateToTimeStamp(aux);
@@ -216,55 +205,43 @@ public final class Emulator
         long seconds = difference / 1000L;
         return res + seconds;
     }
-    
-    private static Date stringToDate(String fecha)
-    {
+
+    private static Date stringToDate(String fecha) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date res = null;
-        try
-        {
+        try {
             res = format.parse(fecha);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Emulator.getLogging().logErrorLine(e);
         }
         return res;
     }
-    
-    private static Timestamp dateToTimeStamp(Date date)
-    {
+
+    private static Timestamp dateToTimeStamp(Date date) {
         return new Timestamp(date.getTime());
     }
-    
-    private static Date getDate()
-    {
+
+    private static Date getDate() {
         return new Date(System.currentTimeMillis());
     }
-    
-    private static String getUnixTimestamp()
-    {
+
+    private static String getUnixTimestamp() {
         return dateToUnixTimestamp(getDate());
     }
-    
-    public static int getIntUnixTimestamp()
-    {
+
+    public static int getIntUnixTimestamp() {
         return Integer.parseInt(getUnixTimestamp());
     }
-    
+
     public static boolean isNumeric(String string)
-        throws IllegalArgumentException
-    {
+            throws IllegalArgumentException {
         boolean isnumeric = false;
-        if ((string != null) && (!string.equals("")))
-        {
+        if ((string != null) && (!string.equals(""))) {
             isnumeric = true;
             char[] chars = string.toCharArray();
-            for (char aChar : chars)
-            {
+            for (char aChar : chars) {
                 isnumeric = Character.isDigit(aChar);
-                if (!isnumeric)
-                {
+                if (!isnumeric) {
                     break;
                 }
             }
@@ -272,28 +249,25 @@ public final class Emulator
         return isnumeric;
     }
 
-    public static boolean validString(String string)
-    {
+    public static boolean validString(String string) {
         return Pattern.compile("[^a-zA-Z0-9]").matcher(string).find();
     }
 
-    public int getUserCount()
-    {
+    public int getUserCount() {
         return gameEnvironment.getHabboManager().getOnlineCount();
     }
 
-    public int getRoomCount()
-    {
+    public int getRoomCount() {
         return gameEnvironment.getRoomManager().getActiveRooms().size();
     }
 
-    private static final String logo =
-            "                    _                          ______                 _       _             _ \n" +
-            "     /\\            | |                        |  ____|               | |     | |           | |\n" +
-            "    /  \\   _ __ ___| |_ _   _ _ __ _   _ ___  | |__   _ __ ___  _   _| | __ _| |_ ___  _ __| |\n" +
-            "   / /\\ \\ | '__/ __| __| | | | '__| | | / __| |  __| | '_ ` _ \\| | | | |/ _` | __/ _ \\| '__| |\n" +
-            "  / ____ \\| | | (__| |_| |_| | |  | |_| \\__ \\ | |____| | | | | | |_| | | (_| | || (_) | |  |_|\n" +
-            " /_/    \\_\\_|  \\___|\\__|\\__,_|_|   \\__,_|___/ |______|_| |_| |_|\\__,_|_|\\__,_|\\__\\___/|_|  (_)\n" +
-            "                                                                                              \n" +
-            "                                                                                              ";
+    private static final String logo
+            = "                    _                          ______                 _       _             _ \n"
+            + "     /\\            | |                        |  ____|               | |     | |           | |\n"
+            + "    /  \\   _ __ ___| |_ _   _ _ __ _   _ ___  | |__   _ __ ___  _   _| | __ _| |_ ___  _ __| |\n"
+            + "   / /\\ \\ | '__/ __| __| | | | '__| | | / __| |  __| | '_ ` _ \\| | | | |/ _` | __/ _ \\| '__| |\n"
+            + "  / ____ \\| | | (__| |_| |_| | |  | |_| \\__ \\ | |____| | | | | | |_| | | (_| | || (_) | |  |_|\n"
+            + " /_/    \\_\\_|  \\___|\\__|\\__,_|_|   \\__,_|___/ |______|_| |_| |_|\\__,_|_|\\__,_|\\__\\___/|_|  (_)\n"
+            + "                                                                                              \n"
+            + "                                                                                              ";
 }

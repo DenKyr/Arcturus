@@ -1,7 +1,7 @@
 package com.eu.habbo.messages.incoming;
 
-public class Incoming
-{
+public class Incoming {
+
     public static final int MannequinSaveLookEvent = 3936;//1804
     public static final int RequestCatalogPageEvent = 39;//1754
     public static final int RequestWearingBadgesEvent = 2226;//3968

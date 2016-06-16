@@ -10,21 +10,17 @@ import com.eu.habbo.messages.outgoing.rooms.users.RoomUserWhisperComposer;
 
 public class AlertCommand extends Command {
 
-    public AlertCommand()
-    {
+    public AlertCommand() {
         super("cmd_alert", Emulator.getTexts().getValue("commands.keys.cmd_alert").split(";"));
     }
 
     @Override
-    public boolean handle(GameClient gameClient, String[] params)
-    {
-        if(params.length < 2)
-        {
+    public boolean handle(GameClient gameClient, String[] params) {
+        if (params.length < 2) {
             gameClient.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.error.cmd_alert.forgot_username"), gameClient.getHabbo(), gameClient.getHabbo(), RoomChatMessageBubbles.ALERT)));
             return true;
         }
-        if(params.length < 3)
-        {
+        if (params.length < 3) {
             gameClient.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.error.cmd_alert.forgot_username"), gameClient.getHabbo(), gameClient.getHabbo(), RoomChatMessageBubbles.ALERT)));
             return true;
         }
@@ -32,8 +28,7 @@ public class AlertCommand extends Command {
         String targetUsername = params[1];
         String message = "";
 
-        for(int i = 2; i < params.length; i++)
-        {
+        for (int i = 2; i < params.length; i++) {
             message += (params[i] + " ");
         }
 

@@ -11,21 +11,18 @@ import com.eu.habbo.messages.ServerMessage;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class InteractionBattleBanzaiTile extends HabboItem
-{
-    public InteractionBattleBanzaiTile(ResultSet set, Item baseItem) throws SQLException
-    {
+public class InteractionBattleBanzaiTile extends HabboItem {
+
+    public InteractionBattleBanzaiTile(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
 
-    public InteractionBattleBanzaiTile(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public InteractionBattleBanzaiTile(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
 
     @Override
-    public void serializeExtradata(ServerMessage serverMessage)
-    {
+    public void serializeExtradata(ServerMessage serverMessage) {
         serverMessage.appendInt32((this.isLimited() ? 256 : 0));
         serverMessage.appendString(this.getExtradata());
 
@@ -33,73 +30,67 @@ public class InteractionBattleBanzaiTile extends HabboItem
     }
 
     @Override
-    public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects)
-    {
+    public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects) {
         return true;
     }
 
     @Override
-    public boolean isWalkable()
-    {
+    public boolean isWalkable() {
         return false;
     }
 
     @Override
-    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception
-    {
+    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception {
 
     }
 
     @Override
-    public void onWalkOn(RoomUnit roomUnit, Room room, Object[] objects)  throws Exception
-    {
+    public void onWalkOn(RoomUnit roomUnit, Room room, Object[] objects) throws Exception {
         super.onWalkOn(roomUnit, room, objects);
 
-        if(this.getExtradata().isEmpty())
+        if (this.getExtradata().isEmpty()) {
             this.setExtradata("0");
+        }
 
         int state = Integer.valueOf(this.getExtradata());
 
-        if(state % 3 == 2)
+        if (state % 3 == 2) {
             return;
+        }
 
         Habbo habbo = room.getHabbo(roomUnit);
 
-        if(habbo == null)
+        if (habbo == null) {
             return;
+        }
 
-        if(this.isLocked())
+        if (this.isLocked()) {
             return;
+        }
 
-        if(habbo.getHabboInfo().getCurrentGame() != null && habbo.getHabboInfo().getCurrentGame().equals(BattleBanzaiGame.class))
-        {
+        if (habbo.getHabboInfo().getCurrentGame() != null && habbo.getHabboInfo().getCurrentGame().equals(BattleBanzaiGame.class)) {
 
-            BattleBanzaiGame game = ((BattleBanzaiGame)room.getGame(BattleBanzaiGame.class));
+            BattleBanzaiGame game = ((BattleBanzaiGame) room.getGame(BattleBanzaiGame.class));
 
-            if(game == null)
+            if (game == null) {
                 return;
+            }
 
-            if(!game.isRunning())
+            if (!game.isRunning()) {
                 return;
-
+            }
 
             int check = state - (habbo.getHabboInfo().getGamePlayer().getTeamColor().type * 3);
-            if(check == 3 || check == 4)
-            {
+            if (check == 3 || check == 4) {
                 state++;
 
-                if(state % 3 == 2)
-                {
+                if (state % 3 == 2) {
                     habbo.getHabboInfo().getGamePlayer().addScore(BattleBanzaiGame.POINTS_LOCK_TILE);
                     game.tileLocked(habbo.getHabboInfo().getGamePlayer().getTeamColor(), this, habbo);
-                }
-                else
-                {
+                } else {
                     habbo.getHabboInfo().getGamePlayer().addScore(BattleBanzaiGame.POINTS_FILL_TILE);
                 }
-            }
-            else
-            {
+            } else {
                 state = (habbo.getHabboInfo().getGamePlayer().getTeamColor().type * 3) + 3;
 
                 habbo.getHabboInfo().getGamePlayer().addScore(BattleBanzaiGame.POINTS_HIJACK_TILE);
@@ -112,10 +103,10 @@ public class InteractionBattleBanzaiTile extends HabboItem
 
     }
 
-    public boolean isLocked()
-    {
-        if(this.getExtradata().isEmpty())
+    public boolean isLocked() {
+        if (this.getExtradata().isEmpty()) {
             return false;
+        }
 
         return Integer.valueOf(this.getExtradata()) % 3 == 2;
     }

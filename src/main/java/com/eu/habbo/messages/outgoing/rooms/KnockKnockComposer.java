@@ -5,17 +5,16 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class KnockKnockComposer extends MessageComposer
-{
+public class KnockKnockComposer extends MessageComposer {
+
     private final Habbo habbo;
 
-    public KnockKnockComposer(Habbo habbo)
-    {
+    public KnockKnockComposer(Habbo habbo) {
         this.habbo = habbo;
     }
+
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.KnockKnockComposer);
         this.response.appendString(this.habbo.getHabboInfo().getUsername());
         return this.response;

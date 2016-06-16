@@ -5,18 +5,16 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class RoomPetHorseFigureComposer extends MessageComposer
-{
+public class RoomPetHorseFigureComposer extends MessageComposer {
+
     private final HorsePet pet;
 
-    public RoomPetHorseFigureComposer(HorsePet pet)
-    {
+    public RoomPetHorseFigureComposer(HorsePet pet) {
         this.pet = pet;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.RoomPetHorseFigureComposer);
         this.response.appendInt32(this.pet.getRoomUnit().getId());
         this.response.appendInt32(this.pet.getId());
@@ -24,8 +22,7 @@ public class RoomPetHorseFigureComposer extends MessageComposer
         this.response.appendInt32(this.pet.getRace());
         this.response.appendString(this.pet.getColor().toLowerCase());
 
-        if(this.pet.hasSaddle())
-        {
+        if (this.pet.hasSaddle()) {
             this.response.appendInt32(2);
             this.response.appendInt32(3);
             this.response.appendInt32(4);
@@ -38,9 +35,7 @@ public class RoomPetHorseFigureComposer extends MessageComposer
             this.response.appendInt32(3); //Saddle type?
             this.response.appendInt32(this.pet.getHairStyle());
             this.response.appendInt32(this.pet.getHairColor());
-        }
-        else
-        {
+        } else {
             this.response.appendInt32(1);
             this.response.appendInt32(2);
             this.response.appendInt32(2);

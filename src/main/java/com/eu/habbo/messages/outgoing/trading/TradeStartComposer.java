@@ -6,20 +6,18 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class TradeStartComposer extends MessageComposer
-{
+public class TradeStartComposer extends MessageComposer {
+
     private RoomTrade roomTrade;
 
-    public TradeStartComposer(RoomTrade roomTrade)
-    {
+    public TradeStartComposer(RoomTrade roomTrade) {
         this.roomTrade = roomTrade;
     }
+
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.TradeStartComposer);
-        for(RoomTradeUser tradeUser : this.roomTrade.getRoomTradeUsers())
-        {
+        for (RoomTradeUser tradeUser : this.roomTrade.getRoomTradeUsers()) {
             this.response.appendInt32(tradeUser.getHabbo().getHabboInfo().getId());
             this.response.appendInt32(1);
         }

@@ -5,15 +5,13 @@ import com.eu.habbo.habbohotel.rooms.Room;
 import com.eu.habbo.messages.incoming.MessageHandler;
 import com.eu.habbo.messages.outgoing.rooms.RoomFilterWordsComposer;
 
-public class RequestRoomWordFilterEvent extends MessageHandler
-{
+public class RequestRoomWordFilterEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         Room room = Emulator.getGameEnvironment().getRoomManager().getRoom(this.packet.readInt());
 
-        if(room != null)
-        {
+        if (room != null) {
             this.client.sendResponse(new RoomFilterWordsComposer(room));
         }
     }

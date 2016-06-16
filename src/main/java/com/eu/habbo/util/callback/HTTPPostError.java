@@ -6,18 +6,18 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class HTTPPostError implements Runnable
-{
+public class HTTPPostError implements Runnable {
+
     public Throwable stackTrace;
 
-    public HTTPPostError(Throwable stackTrace)
-    {
+    public HTTPPostError(Throwable stackTrace) {
         this.stackTrace = stackTrace;
     }
-    private void sendPost() throws Exception
-    {
-        if (!Emulator.isReady)
+
+    private void sendPost() throws Exception {
+        if (!Emulator.isReady) {
             return;
+        }
 
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
@@ -46,14 +46,10 @@ public class HTTPPostError implements Runnable
     }
 
     @Override
-    public void run()
-    {
-        try
-        {
+    public void run() {
+        try {
             this.sendPost();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

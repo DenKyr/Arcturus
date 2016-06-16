@@ -11,53 +11,45 @@ import com.eu.habbo.messages.ServerMessage;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class WiredTriggerGameEnds extends InteractionWiredTrigger
-{
+public class WiredTriggerGameEnds extends InteractionWiredTrigger {
+
     private static final WiredTriggerType type = WiredTriggerType.GAME_ENDS;
 
-    public WiredTriggerGameEnds(ResultSet set, Item baseItem) throws SQLException
-    {
+    public WiredTriggerGameEnds(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
 
-    public WiredTriggerGameEnds(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public WiredTriggerGameEnds(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
 
     @Override
-    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff)
-    {
+    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff) {
         return true;
     }
 
     @Override
-    public String getWiredData()
-    {
+    public String getWiredData() {
         return "";
     }
 
     @Override
-    public void loadWiredData(ResultSet set, Room room) throws SQLException
-    {
+    public void loadWiredData(ResultSet set, Room room) throws SQLException {
         return;
     }
 
     @Override
-    public void onPickUp()
-    {
+    public void onPickUp() {
 
     }
 
     @Override
-    public WiredTriggerType getType()
-    {
+    public WiredTriggerType getType() {
         return type;
     }
 
     @Override
-    public void serializeWiredData(ServerMessage message)
-    {
+    public void serializeWiredData(ServerMessage message) {
         message.appendBoolean(false);
         message.appendInt32(5);
         message.appendInt32(0);
@@ -72,8 +64,7 @@ public class WiredTriggerGameEnds extends InteractionWiredTrigger
     }
 
     @Override
-    public boolean saveData(ClientMessage packet)
-    {
+    public boolean saveData(ClientMessage packet) {
         return true;
     }
 }

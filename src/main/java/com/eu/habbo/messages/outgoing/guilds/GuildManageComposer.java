@@ -5,18 +5,16 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class GuildManageComposer extends MessageComposer
-{
+public class GuildManageComposer extends MessageComposer {
+
     private final Guild guild;
 
-    public GuildManageComposer(Guild guild)
-    {
+    public GuildManageComposer(Guild guild) {
         this.guild = guild;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.GuildManageComposer);
         this.response.appendInt32(1);
         this.response.appendInt32(1);
@@ -39,20 +37,19 @@ public class GuildManageComposer extends MessageComposer
         String[] data = badge.split("s");
         int req = 5 - data.length;
         int i = 0;
-        for(String s : data)
-        {
+        for (String s : data) {
             this.response.appendInt32((s.length() > 5 ? Integer.parseInt(s.substring(0, 3)) : Integer.parseInt(s.substring(0, 2))));
             this.response.appendInt32((s.length() > 5 ? Integer.parseInt(s.substring(3, 5)) : Integer.parseInt(s.substring(2, 4))));
 
-            if(s.length() < 5)
+            if (s.length() < 5) {
                 this.response.appendInt32(0);
-            else if(s.length() > 6)
+            } else if (s.length() > 6) {
                 this.response.appendInt32(Integer.parseInt(s.substring(5, 6)));
-            else
+            } else {
                 this.response.appendInt32(Integer.parseInt(s.substring(4, 5)));
+            }
         }
-        while(i != req)
-        {
+        while (i != req) {
             this.response.appendInt32(0);
             this.response.appendInt32(0);
             this.response.appendInt32(0);

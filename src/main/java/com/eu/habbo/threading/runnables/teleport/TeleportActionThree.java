@@ -11,37 +11,36 @@ import com.eu.habbo.messages.outgoing.rooms.users.RoomUserRemoveComposer;
 import com.eu.habbo.messages.outgoing.rooms.users.RoomUserStatusComposer;
 import com.eu.habbo.threading.runnables.HabboItemNewState;
 
-class TeleportActionThree implements Runnable
-{
+class TeleportActionThree implements Runnable {
+
     private final HabboItem currentTeleport;
     private final Room room;
     private final GameClient client;
 
-    public TeleportActionThree(HabboItem currentTeleport, Room room, GameClient client)
-    {
+    public TeleportActionThree(HabboItem currentTeleport, Room room, GameClient client) {
         this.currentTeleport = currentTeleport;
         this.client = client;
         this.room = room;
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
         HabboItem targetTeleport;
         Room targetRoom = room;
 
-        if(this.currentTeleport.getRoomId() != ((InteractionTeleport)this.currentTeleport).getTargetRoomId())
-        {
+        if (this.currentTeleport.getRoomId() != ((InteractionTeleport) this.currentTeleport).getTargetRoomId()) {
             targetRoom = Emulator.getGameEnvironment().getRoomManager().loadRoom(((InteractionTeleport) this.currentTeleport).getTargetRoomId());
         }
 
-        if(targetRoom == null)
+        if (targetRoom == null) {
             return;
+        }
 
         targetTeleport = targetRoom.getHabboItem(((InteractionTeleport) this.currentTeleport).getTargetId());
 
-        if(targetTeleport == null)
+        if (targetTeleport == null) {
             return;
+        }
 
         this.client.getHabbo().getRoomUnit().setX(targetTeleport.getX());
         this.client.getHabbo().getRoomUnit().setY(targetTeleport.getY());
@@ -49,8 +48,7 @@ class TeleportActionThree implements Runnable
         this.client.getHabbo().getRoomUnit().setRotation(RoomUserRotation.values()[targetTeleport.getRotation() % 8]);
         this.client.getHabbo().getRoomUnit().getStatus().remove("mv");
 
-        if(targetRoom != this.room)
-        {
+        if (targetRoom != this.room) {
             this.room.sendComposer(new RoomUserRemoveComposer(client.getHabbo().getRoomUnit()).compose());
             Emulator.getGameEnvironment().getRoomManager().enterRoom(this.client.getHabbo(), targetRoom.getId(), "", false);
         }

@@ -7,44 +7,36 @@ import com.google.gson.Gson;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class GiveCredits extends RCONMessage<GiveCredits.JSONGiveCredits>
-{
-    public GiveCredits()
-    {
+public class GiveCredits extends RCONMessage<GiveCredits.JSONGiveCredits> {
+
+    public GiveCredits() {
         super(JSONGiveCredits.class);
     }
 
     @Override
-    public String handle(JSONGiveCredits object)
-    {
+    public String handle(JSONGiveCredits object) {
         Habbo habbo = Emulator.getGameEnvironment().getHabboManager().getHabbo(object.username);
 
-        if (habbo != null)
-        {
+        if (habbo != null) {
             habbo.giveCredits(object.credits);
             return new Gson().toJson("OK", String.class);
-        }
-        else
-        {
+        } else {
             PreparedStatement statement = Emulator.getDatabase().prepare("UPDATE users SET credits = credits + ? WHERE username = ? LIMIT 1");
-            try
-            {
+            try {
                 statement.setInt(1, object.credits);
                 statement.setString(2, object.username);
                 statement.execute();
                 statement.close();
                 statement.getConnection().close();
-            }
-            catch (SQLException e)
-            {
+            } catch (SQLException e) {
                 return new Gson().toJson("FAILED", String.class);
             }
             return new Gson().toJson("OK", String.class);
         }
     }
 
-    public class JSONGiveCredits
-    {
+    public class JSONGiveCredits {
+
         private String username;
         private int credits;
     }

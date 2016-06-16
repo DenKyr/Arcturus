@@ -9,24 +9,21 @@ import com.eu.habbo.messages.outgoing.Outgoing;
 
 import java.util.Map;
 
-public class FriendsComposer extends MessageComposer
-{
+public class FriendsComposer extends MessageComposer {
+
     private final Habbo habbo;
 
-    public FriendsComposer(Habbo habbo)
-    {
+    public FriendsComposer(Habbo habbo) {
         this.habbo = habbo;
     }
 
     @Override
-    public ServerMessage compose()
-    {
-        try
-        {
+    public ServerMessage compose() {
+        try {
             this.response.init(Outgoing.FriendsComposer);
 
             //this.response.appendInt32(300);
-           //this.response.appendInt32(300);
+            //this.response.appendInt32(300);
             //this.response.appendInt32(3); //Club level
             this.response.appendInt32(300);
             this.response.appendInt32(300);
@@ -49,8 +46,7 @@ public class FriendsComposer extends MessageComposer
                 this.response.appendShort(row.getValue().getRelation());
             }
 
-            if(habbo.hasPermission("acc_staff_chat"))
-            {
+            if (habbo.hasPermission("acc_staff_chat")) {
                 this.response.appendInt32(0);
                 this.response.appendString("Staff Chat");
                 this.response.appendInt32(this.habbo.getHabboInfo().getGender().equals(HabboGender.M) ? 0 : 1);
@@ -67,9 +63,7 @@ public class FriendsComposer extends MessageComposer
                 this.response.appendShort(0);
             }
             return this.response;
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;

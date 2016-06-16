@@ -3,8 +3,8 @@ package com.eu.habbo.plugin.events.bots;
 import com.eu.habbo.habbohotel.bots.Bot;
 import com.eu.habbo.habbohotel.users.HabboGender;
 
-public class BotSavedLookEvent extends BotEvent
-{
+public class BotSavedLookEvent extends BotEvent {
+
     /**
      * The new gender of this bot. Can be altered.
      */
@@ -20,8 +20,7 @@ public class BotSavedLookEvent extends BotEvent
      * @param gender The new gender of this bot. Can be altered.
      * @param newLook The new look of this bot. Can be altered.
      */
-    public BotSavedLookEvent(Bot bot, HabboGender gender, String newLook)
-    {
+    public BotSavedLookEvent(Bot bot, HabboGender gender, String newLook) {
         super(bot);
 
         this.gender = gender;

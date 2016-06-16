@@ -1,17 +1,15 @@
 package com.eu.habbo.habbohotel.guilds;
 
-public enum GuildPartType
-{
+public enum GuildPartType {
+
     /**
      * Badge base.
      */
     BASE,
-
     /**
      * Symbol
      */
     SYMBOL,
-
     /**
      * Colors
      */

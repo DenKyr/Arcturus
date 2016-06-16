@@ -8,22 +8,20 @@ import com.eu.habbo.habbohotel.users.HabboItem;
 import com.eu.habbo.messages.outgoing.rooms.users.RoomUserStatusComposer;
 import com.eu.habbo.threading.runnables.HabboItemNewState;
 
-public class TeleportActionOne implements Runnable
-{
+public class TeleportActionOne implements Runnable {
+
     private final HabboItem currentTeleport;
     private final Room room;
     private final GameClient client;
 
-    public TeleportActionOne(HabboItem currentTeleport, Room room, GameClient client)
-    {
+    public TeleportActionOne(HabboItem currentTeleport, Room room, GameClient client) {
         this.currentTeleport = currentTeleport;
         this.client = client;
         this.room = room;
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
         this.client.getHabbo().getRoomUnit().setGoalLocation(currentTeleport.getX(), currentTeleport.getY());
         this.client.getHabbo().getRoomUnit().setRotation(RoomUserRotation.values()[(this.currentTeleport.getRotation() + 4) % 8]);
         this.client.getHabbo().getRoomUnit().getStatus().put("mv", this.currentTeleport.getX() + "," + this.currentTeleport.getY() + "," + this.currentTeleport.getZ());

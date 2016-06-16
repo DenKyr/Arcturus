@@ -3,8 +3,8 @@ package com.eu.habbo.plugin.events.users;
 import com.eu.habbo.habbohotel.items.interactions.wired.effects.WiredEffectGiveReward;
 import com.eu.habbo.habbohotel.users.Habbo;
 
-public class UserWiredRewardReceived extends UserEvent
-{
+public class UserWiredRewardReceived extends UserEvent {
+
     /**
      * The wired effect that gave the reward.
      */
@@ -21,16 +21,16 @@ public class UserWiredRewardReceived extends UserEvent
     public String value;
 
     /**
-     * Triggered whenever a Habbo succesfully receives a reward.
-     * Change value to set the new reward.
-     * Cancel the event to prevent the reward from being given.
+     * Triggered whenever a Habbo succesfully receives a reward. Change value to
+     * set the new reward. Cancel the event to prevent the reward from being
+     * given.
+     *
      * @param habbo The Habbo this event applies to.
      * @param wiredEffectGiveReward The wired effect that gave the reward.
-     * @param type  Type of reward being given.
+     * @param type Type of reward being given.
      * @param value Reward being given.
      */
-    public UserWiredRewardReceived(Habbo habbo, WiredEffectGiveReward wiredEffectGiveReward, String type, String value)
-    {
+    public UserWiredRewardReceived(Habbo habbo, WiredEffectGiveReward wiredEffectGiveReward, String type, String value) {
         super(habbo);
 
         this.wiredEffectGiveReward = wiredEffectGiveReward;

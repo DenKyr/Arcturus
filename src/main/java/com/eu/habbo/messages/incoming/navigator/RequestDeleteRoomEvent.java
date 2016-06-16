@@ -10,33 +10,27 @@ import com.eu.habbo.plugin.events.navigator.NavigatorRoomDeletedEvent;
 
 import java.sql.PreparedStatement;
 
-public class RequestDeleteRoomEvent extends MessageHandler
-{
+public class RequestDeleteRoomEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         int roomId = this.packet.readInt();
 
         Room room = Emulator.getGameEnvironment().getRoomManager().getRoom(roomId);
 
-        if(room != null)
-        {
-            if (room.isOwner(this.client.getHabbo()))
-            {
-                if(Emulator.getPluginManager().fireEvent(new NavigatorRoomDeletedEvent(this.client.getHabbo(), room)).isCancelled())
-                {
+        if (room != null) {
+            if (room.isOwner(this.client.getHabbo())) {
+                if (Emulator.getPluginManager().fireEvent(new NavigatorRoomDeletedEvent(this.client.getHabbo(), room)).isCancelled()) {
                     return;
                 }
 
                 room.ejectAll();
                 room.ejectUserFurni(room.getOwnerId());
 
-                if(room.getGuildId() > 0)
-                {
+                if (room.getGuildId() > 0) {
                     Guild guild = Emulator.getGameEnvironment().getGuildManager().getGuild(room.getGuildId());
 
-                    if(guild != null)
-                    {
+                    if (guild != null) {
                         Emulator.getGameEnvironment().getGuildManager().deleteGuild(guild);
                     }
                 }
@@ -49,8 +43,7 @@ public class RequestDeleteRoomEvent extends MessageHandler
 
                 room.preventUnloading = false;
 
-                if(room.hasCustomLayout())
-                {
+                if (room.hasCustomLayout()) {
                     PreparedStatement stmt = Emulator.getDatabase().prepare("DELETE FROM room_models_custom WHERE id = ? LIMIT 1");
                     stmt.setInt(1, roomId);
                     stmt.execute();
@@ -77,9 +70,7 @@ public class RequestDeleteRoomEvent extends MessageHandler
                 filter.execute();
                 filter.getConnection().close();
                 filter.close();
-            }
-            else
-            {
+            } else {
                 String message = Emulator.getTexts().getValue("scripter.warning.room.delete").replace("%username%", this.client.getHabbo().getHabboInfo().getUsername()).replace("%roomname%", room.getName()).replace("%roomowner%", room.getOwnerName());
                 Emulator.getGameEnvironment().getModToolManager().quickTicket(this.client.getHabbo(), "Scripter", message);
                 Emulator.getLogging().logUserLine(message);

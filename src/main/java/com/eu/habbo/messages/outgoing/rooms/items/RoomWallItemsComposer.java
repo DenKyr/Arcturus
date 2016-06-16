@@ -13,39 +13,33 @@ import gnu.trove.set.hash.THashSet;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-public class RoomWallItemsComposer extends MessageComposer{
+public class RoomWallItemsComposer extends MessageComposer {
 
     private final Room room;
 
-    public RoomWallItemsComposer(Room room)
-    {
+    public RoomWallItemsComposer(Room room) {
         this.room = room;
     }
 
     @Override
-    public ServerMessage compose()    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.RoomWallItemsComposer);
         THashMap<Integer, String> userNames = new THashMap<Integer, String>();
         TIntObjectMap<String> furniOwnerNames = this.room.getFurniOwnerNames();
         TIntObjectIterator<String> iterator = furniOwnerNames.iterator();
 
-        for(int i = furniOwnerNames.size(); i-- > 0;)
-        {
-            try
-            {
+        for (int i = furniOwnerNames.size(); i-- > 0;) {
+            try {
                 iterator.advance();
 
                 userNames.put(iterator.key(), iterator.value());
-            }
-            catch (NoSuchElementException e)
-            {
+            } catch (NoSuchElementException e) {
                 break;
             }
         }
 
         this.response.appendInt32(userNames.size());
-        for(Map.Entry<Integer, String> set : userNames.entrySet())
-        {
+        for (Map.Entry<Integer, String> set : userNames.entrySet()) {
             this.response.appendInt32(set.getKey());
             this.response.appendString(set.getValue());
         }
@@ -53,8 +47,7 @@ public class RoomWallItemsComposer extends MessageComposer{
         THashSet<HabboItem> items = this.room.getWallItems();
 
         this.response.appendInt32(items.size());
-        for(HabboItem item : items)
-        {
+        for (HabboItem item : items) {
             item.serializeWallData(this.response);
         }
         return this.response;

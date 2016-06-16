@@ -16,44 +16,41 @@ import gnu.trove.set.hash.THashSet;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class WiredEffectLowerFurni extends InteractionWiredEffect
-{
+public class WiredEffectLowerFurni extends InteractionWiredEffect {
+
     public static final WiredEffectType type = WiredEffectType.TELEPORT;
 
     private THashSet<HabboItem> items = new THashSet<HabboItem>();
 
     private int offset = 0;
 
-    public WiredEffectLowerFurni(ResultSet set, Item baseItem) throws SQLException
-    {
+    public WiredEffectLowerFurni(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
 
-    public WiredEffectLowerFurni(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public WiredEffectLowerFurni(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
 
     @Override
-    public void serializeWiredData(ServerMessage message)
-    {
+    public void serializeWiredData(ServerMessage message) {
         THashSet<HabboItem> items = new THashSet<HabboItem>();
 
-        for(HabboItem item : this.items)
-        {
-            if(item.getRoomId() != this.getRoomId() || Emulator.getGameEnvironment().getRoomManager().getRoom(this.getRoomId()).getHabboItem(item.getId()) == null)
+        for (HabboItem item : this.items) {
+            if (item.getRoomId() != this.getRoomId() || Emulator.getGameEnvironment().getRoomManager().getRoom(this.getRoomId()).getHabboItem(item.getId()) == null) {
                 items.add(item);
+            }
         }
 
-        for(HabboItem item : items)
-        {
+        for (HabboItem item : items) {
             this.items.remove(item);
         }
         message.appendBoolean(false);
         message.appendInt32(5);
         message.appendInt32(this.items.size());
-        for(HabboItem item : this.items)
+        for (HabboItem item : this.items) {
             message.appendInt32(item.getId());
+        }
         message.appendInt32(this.getBaseItem().getSpriteId());
         message.appendInt32(this.getId());
         message.appendString("");
@@ -66,8 +63,7 @@ public class WiredEffectLowerFurni extends InteractionWiredEffect
     }
 
     @Override
-    public boolean saveData(ClientMessage packet)
-    {
+    public boolean saveData(ClientMessage packet) {
         packet.readInt();
         packet.readString();
 
@@ -75,8 +71,7 @@ public class WiredEffectLowerFurni extends InteractionWiredEffect
 
         int count = packet.readInt();
 
-        for(int i = 0; i < count; i++)
-        {
+        for (int i = 0; i < count; i++) {
             this.items.add(Emulator.getGameEnvironment().getRoomManager().getRoom(this.getRoomId()).getHabboItem(packet.readInt()));
         }
 
@@ -86,25 +81,21 @@ public class WiredEffectLowerFurni extends InteractionWiredEffect
     }
 
     @Override
-    public WiredEffectType getType()
-    {
+    public WiredEffectType getType() {
         return type;
     }
 
     @Override
-    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff)
-    {
-        for(HabboItem item : this.items)
-        {
-            if(item.getRoomId() == 0)
+    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff) {
+        for (HabboItem item : this.items) {
+            if (item.getRoomId() == 0) {
                 continue;
+            }
 
-            if(item.getZ() > 0)
-            {
-                double z = (item.getZ() - (0.1) * (double)offset);
+            if (item.getZ() > 0) {
+                double z = (item.getZ() - (0.1) * (double) offset);
                 double minZ = room.getLayout().getHeightAtSquare(item.getX(), item.getY());
-                if(z < minZ)
-                {
+                if (z < minZ) {
                     z = minZ;
                 }
 
@@ -116,14 +107,11 @@ public class WiredEffectLowerFurni extends InteractionWiredEffect
     }
 
     @Override
-    protected String getWiredData()
-    {
+    protected String getWiredData() {
         String wiredData = offset + "\t";
 
-        if(items != null && !items.isEmpty())
-        {
-            for (HabboItem item : this.items)
-            {
+        if (items != null && !items.isEmpty()) {
+            for (HabboItem item : this.items) {
                 wiredData += item.getId() + ";";
             }
         }
@@ -132,38 +120,32 @@ public class WiredEffectLowerFurni extends InteractionWiredEffect
     }
 
     @Override
-    public void loadWiredData(ResultSet set, Room room) throws SQLException
-    {
+    public void loadWiredData(ResultSet set, Room room) throws SQLException {
         this.items = new THashSet<HabboItem>();
         String wiredData = set.getString("wired_data");
 
-        if(wiredData.contains("\t"))
-        {
+        if (wiredData.contains("\t")) {
             String[] data = wiredData.split("\t");
 
-            try
-            {
+            try {
                 this.offset = Integer.valueOf(data[0]);
+            } catch (Exception e) {
             }
-            catch (Exception e)
-            {}
 
-            if (data[1].contains(";"))
-            {
-                for (String s : data[1].split(";"))
-                {
+            if (data[1].contains(";")) {
+                for (String s : data[1].split(";")) {
                     HabboItem item = room.getHabboItem(Integer.valueOf(s));
 
-                    if (item != null)
+                    if (item != null) {
                         this.items.add(item);
+                    }
                 }
             }
         }
     }
 
     @Override
-    public void onPickUp()
-    {
+    public void onPickUp() {
         this.offset = 0;
         this.items.clear();
     }

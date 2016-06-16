@@ -19,21 +19,18 @@ import com.eu.habbo.threading.runnables.HabboItemNewState;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class InteractionObstacle extends HabboItem
-{
-    public InteractionObstacle(ResultSet set, Item baseItem) throws SQLException
-    {
+public class InteractionObstacle extends HabboItem {
+
+    public InteractionObstacle(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
 
-    public InteractionObstacle(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public InteractionObstacle(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
 
     @Override
-    public void serializeExtradata(ServerMessage serverMessage)
-    {
+    public void serializeExtradata(ServerMessage serverMessage) {
         serverMessage.appendInt32((this.isLimited() ? 256 : 0));
         serverMessage.appendString(this.getExtradata());
 
@@ -41,62 +38,51 @@ public class InteractionObstacle extends HabboItem
     }
 
     @Override
-    public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects)
-    {
+    public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects) {
         HorsePet pet = (HorsePet) room.getPet(roomUnit);
 
-        if(pet == null)
-        {
+        if (pet == null) {
             Habbo habbo = room.getHabbo(roomUnit);
 
-            if(habbo != null && habbo.getHabboInfo().getRiding() != null)
-            {
+            if (habbo != null && habbo.getHabboInfo().getRiding() != null) {
                 return true;
             }
 
             return false;
-        }
-        else
+        } else {
             return pet.getRider() != null;
+        }
     }
 
     @Override
-    public boolean isWalkable()
-    {
+    public boolean isWalkable() {
         return false;
     }
 
     @Override
-    public void onClick(GameClient client, Room room, Object[] objects) throws Exception
-    {
+    public void onClick(GameClient client, Room room, Object[] objects) throws Exception {
         super.onClick(client, room, objects);
     }
 
     @Override
-    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception
-    {
+    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception {
         Habbo habbo = room.getHabbo(roomUnit);
 
-        if(habbo == null)
-        {
+        if (habbo == null) {
             AbstractPet pet = room.getPet(roomUnit);
 
-            if(pet != null && pet instanceof HorsePet && ((HorsePet) pet).getRider() != null && ((HorsePet) pet).getTask().equals(PetTask.RIDE))
-            {
-                if(pet.getRoomUnit().getStatus().containsKey("jmp"))
-                {
+            if (pet != null && pet instanceof HorsePet && ((HorsePet) pet).getRider() != null && ((HorsePet) pet).getTask().equals(PetTask.RIDE)) {
+                if (pet.getRoomUnit().getStatus().containsKey("jmp")) {
                     pet.getRoomUnit().getStatus().remove("jmp");
                     Emulator.getThreading().run(new HabboItemNewState(this, room, "0"), 2000);
-                }
-                else
-                {
+                } else {
                     int state = 0;
-                    for(int i = 0; i < 2; i++)
-                    {
+                    for (int i = 0; i < 2; i++) {
                         state = Emulator.getRandom().nextInt(4) + 1;
 
-                        if(state == 4)
+                        if (state == 4) {
                             break;
+                        }
                     }
 
                     this.setExtradata(state + "");
@@ -112,39 +98,26 @@ public class InteractionObstacle extends HabboItem
     }
 
     @Override
-    public void onWalkOn(RoomUnit roomUnit, Room room, Object[] objects) throws Exception
-    {
+    public void onWalkOn(RoomUnit roomUnit, Room room, Object[] objects) throws Exception {
         super.onWalkOn(roomUnit, room, objects);
 
         Habbo habbo = room.getHabbo(roomUnit);
 
-        if(habbo == null)
-        {
+        if (habbo == null) {
             AbstractPet pet = room.getPet(roomUnit);
 
-            if(pet != null && pet instanceof HorsePet && ((HorsePet) pet).getRider() != null)
-            {
-                if (roomUnit.getBodyRotation().getValue() % 2 == 0)
-                {
-                    if (this.getRotation() == 2)
-                    {
-                        if(roomUnit.getBodyRotation().equals(RoomUserRotation.WEST))
-                        {
+            if (pet != null && pet instanceof HorsePet && ((HorsePet) pet).getRider() != null) {
+                if (roomUnit.getBodyRotation().getValue() % 2 == 0) {
+                    if (this.getRotation() == 2) {
+                        if (roomUnit.getBodyRotation().equals(RoomUserRotation.WEST)) {
                             ((HorsePet) pet).getRider().getRoomUnit().setGoalLocation(roomUnit.getX() - 3, roomUnit.getY());
-                        }
-                        else if(roomUnit.getBodyRotation().equals(RoomUserRotation.EAST))
-                        {
+                        } else if (roomUnit.getBodyRotation().equals(RoomUserRotation.EAST)) {
                             ((HorsePet) pet).getRider().getRoomUnit().setGoalLocation(roomUnit.getX() + 3, roomUnit.getY());
                         }
-                    }
-                    else if(this.getRotation() == 4)
-                    {
-                        if(roomUnit.getBodyRotation().equals(RoomUserRotation.NORTH))
-                        {
+                    } else if (this.getRotation() == 4) {
+                        if (roomUnit.getBodyRotation().equals(RoomUserRotation.NORTH)) {
                             ((HorsePet) pet).getRider().getRoomUnit().setGoalLocation(roomUnit.getX(), roomUnit.getY() - 3);
-                        }
-                        else if(roomUnit.getBodyRotation().equals(RoomUserRotation.SOUTH))
-                        {
+                        } else if (roomUnit.getBodyRotation().equals(RoomUserRotation.SOUTH)) {
                             ((HorsePet) pet).getRider().getRoomUnit().setGoalLocation(roomUnit.getX(), roomUnit.getY() + 3);
                         }
                     }
@@ -154,18 +127,15 @@ public class InteractionObstacle extends HabboItem
     }
 
     @Override
-    public void onWalkOff(RoomUnit roomUnit, Room room, Object[] objects) throws Exception
-    {
+    public void onWalkOff(RoomUnit roomUnit, Room room, Object[] objects) throws Exception {
         super.onWalkOff(roomUnit, room, objects);
 
         Habbo habbo = room.getHabbo(roomUnit);
 
-        if(habbo == null)
-        {
+        if (habbo == null) {
             AbstractPet pet = room.getPet(roomUnit);
 
-            if(pet != null && pet instanceof HorsePet && ((HorsePet) pet).getRider() != null)
-            {
+            if (pet != null && pet instanceof HorsePet && ((HorsePet) pet).getRider() != null) {
                 pet.getRoomUnit().getStatus().remove("jmp");
             }
         }

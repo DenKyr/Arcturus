@@ -7,24 +7,20 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class InventoryAchievementsComposer extends MessageComposer
-{
+public class InventoryAchievementsComposer extends MessageComposer {
+
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.InventoryAchievementsComposer);
 
-        synchronized (Emulator.getGameEnvironment().getAchievementManager().achievements)
-        {
+        synchronized (Emulator.getGameEnvironment().getAchievementManager().achievements) {
             this.response.appendInt32(Emulator.getGameEnvironment().getAchievementManager().achievements.size());
 
-            for (Achievement achievement : Emulator.getGameEnvironment().getAchievementManager().achievements.values())
-            {
+            for (Achievement achievement : Emulator.getGameEnvironment().getAchievementManager().achievements.values()) {
                 this.response.appendString((achievement.name.startsWith("ACH_") ? achievement.name.replace("ACH_", "") : achievement.name));
                 this.response.appendInt32(achievement.levels.size());
 
-                for (AchievementLevel level : achievement.levels.values())
-                {
+                for (AchievementLevel level : achievement.levels.values()) {
                     this.response.appendInt32(level.level);
                     this.response.appendInt32(level.progress);
                 }

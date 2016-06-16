@@ -15,16 +15,14 @@ import java.sql.SQLException;
 /**
  * Created on 25-8-2014 18:11.
  */
-public class FriendRequestEvent extends MessageHandler
-{
+public class FriendRequestEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         String username = packet.readString();
         Habbo habbo = Emulator.getGameServer().getGameClientManager().getHabbo(username);
 
-        if(Emulator.getPluginManager().fireEvent(new UserRequestFriendshipEvent(this.client.getHabbo(), username, habbo)).isCancelled())
-        {
+        if (Emulator.getPluginManager().fireEvent(new UserRequestFriendshipEvent(this.client.getHabbo(), username, habbo)).isCancelled()) {
             this.client.sendResponse(new FriendRequestErrorComposer(2));
             return;
         }
@@ -32,58 +30,47 @@ public class FriendRequestEvent extends MessageHandler
         int id = 0;
         boolean allowFriendRequests = true;
 
-        if(!Messenger.canFriendRequest(this.client.getHabbo(), username))
-        {
+        if (!Messenger.canFriendRequest(this.client.getHabbo(), username)) {
             this.client.sendResponse(new FriendRequestErrorComposer(FriendRequestErrorComposer.TARGET_NOT_FOUND));
             return;
         }
 
-        if(habbo == null)
-        {
-            try
-            {
+        if (habbo == null) {
+            try {
                 PreparedStatement statement = Emulator.getDatabase().prepare("SELECT users_settings.block_friendrequests, users.id FROM users INNER JOIN users_settings ON users.id = users_settings.user_id WHERE username = ? LIMIT 1");
                 statement.setString(1, username);
                 ResultSet set = statement.executeQuery();
-                while(set.next())
-                {
+                while (set.next()) {
                     id = set.getInt("id");
                     allowFriendRequests = set.getString("block_friendrequests").equalsIgnoreCase("0");
                 }
                 set.close();
                 statement.close();
                 statement.getConnection().close();
-            } catch (SQLException e)
-            {
+            } catch (SQLException e) {
                 Emulator.getLogging().logSQLException(e);
                 return;
             }
-        }
-        else
-        {
+        } else {
             id = habbo.getHabboInfo().getId();
             allowFriendRequests = !habbo.getHabboStats().blockFriendRequests;
-            if(allowFriendRequests)
+            if (allowFriendRequests) {
                 Emulator.getGameServer().getGameClientManager().getClient(habbo).sendResponse(new FriendRequestComposer(this.client.getHabbo()));
+            }
         }
 
-        if(id != 0)
-        {
-            if(!allowFriendRequests)
-            {
+        if (id != 0) {
+            if (!allowFriendRequests) {
                 this.client.sendResponse(new FriendRequestErrorComposer(FriendRequestErrorComposer.TARGET_NOT_ACCEPTING_REQUESTS));
                 return;
             }
 
-            if(this.client.getHabbo().getMessenger().getFriends().values().size() >= Emulator.getConfig().getInt("hotel.max.friends"))
-            {
+            if (this.client.getHabbo().getMessenger().getFriends().values().size() >= Emulator.getConfig().getInt("hotel.max.friends")) {
                 this.client.sendResponse(new FriendRequestErrorComposer(FriendRequestErrorComposer.FRIEND_LIST_OWN_FULL));
                 return;
             }
-                Messenger.makeFriendRequest(this.client.getHabbo().getHabboInfo().getId(), id);
-        }
-        else
-        {
+            Messenger.makeFriendRequest(this.client.getHabbo().getHabboInfo().getId(), id);
+        } else {
             this.client.sendResponse(new FriendRequestErrorComposer(FriendRequestErrorComposer.TARGET_NOT_FOUND));
         }
     }

@@ -7,8 +7,8 @@ import com.eu.habbo.habbohotel.rooms.RoomChatMessageBubbles;
 import com.eu.habbo.habbohotel.rooms.RoomChatType;
 import com.eu.habbo.habbohotel.users.Habbo;
 
-public class YouAreAPirate implements Runnable
-{
+public class YouAreAPirate implements Runnable {
+
     public static String[] iamapirate = new String[]{
         "Do what you want, 'cause a pirate is free,",
         "You are a pirate!",
@@ -77,8 +77,8 @@ public class YouAreAPirate implements Runnable
 
     private int index = 0;
     private int oldEffect;
-    public YouAreAPirate(Habbo habbo, Room room)
-    {
+
+    public YouAreAPirate(Habbo habbo, Room room) {
         this.habbo = habbo;
         this.room = room;
         this.oldEffect = this.habbo.getRoomUnit().getEffectId();
@@ -86,23 +86,19 @@ public class YouAreAPirate implements Runnable
     }
 
     @Override
-    public void run()
-    {
-        if(this.room == this.habbo.getHabboInfo().getCurrentRoom())
-        {
-            if(!iamapirate[index].isEmpty())
-            {
+    public void run() {
+        if (this.room == this.habbo.getHabboInfo().getCurrentRoom()) {
+            if (!iamapirate[index].isEmpty()) {
                 this.room.talk(this.habbo, new RoomChatMessage(iamapirate[index], this.habbo, RoomChatMessageBubbles.PIRATE), RoomChatType.SHOUT);
             }
             this.index++;
 
-            if(this.index == iamapirate.length)
-            {
+            if (this.index == iamapirate.length) {
                 this.room.giveEffect(this.habbo, this.oldEffect);
                 return;
             }
 
-            Emulator.getThreading().run(this, iamapirate[index-1].length() * 100);
+            Emulator.getThreading().run(this, iamapirate[index - 1].length() * 100);
         }
     }
 }

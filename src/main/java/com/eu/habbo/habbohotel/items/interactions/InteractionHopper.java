@@ -14,21 +14,18 @@ import com.eu.habbo.util.pathfinding.Tile;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class InteractionHopper extends HabboItem
-{
-    public InteractionHopper(ResultSet set, Item baseItem) throws SQLException
-    {
+public class InteractionHopper extends HabboItem {
+
+    public InteractionHopper(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
 
-    public InteractionHopper(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public InteractionHopper(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
 
     @Override
-    public void serializeExtradata(ServerMessage serverMessage)
-    {
+    public void serializeExtradata(ServerMessage serverMessage) {
         serverMessage.appendInt32((this.isLimited() ? 256 : 0));
         serverMessage.appendString(this.getExtradata());
 
@@ -36,84 +33,76 @@ public class InteractionHopper extends HabboItem
     }
 
     @Override
-    public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects)
-    {
+    public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects) {
         return false;
     }
 
     @Override
-    public boolean isWalkable()
-    {
+    public boolean isWalkable() {
         return false;
     }
 
     @Override
-    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception
-    {
+    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception {
 
     }
 
     @Override
-    public void onClick(GameClient client, Room room, Object[] objects) throws Exception
-    {
+    public void onClick(GameClient client, Room room, Object[] objects) throws Exception {
         super.onClick(client, room, objects);
 
-        if(room != null)
-        {
+        if (room != null) {
             Tile loc = HabboItem.getSquareInFront(this);
-            if (canUseTeleport(client, loc, room))
-            {
+            if (canUseTeleport(client, loc, room)) {
                 client.getHabbo().getRoomUnit().isTeleporting = true;
                 this.setExtradata("1");
                 room.updateItem(this);
 
                 Emulator.getThreading().run(new HopperActionOne(this, room, client), 500);
-            }
-            else
-            {
+            } else {
                 client.getHabbo().getRoomUnit().setGoalLocation(loc);
             }
         }
     }
 
     @Override
-    public void onPickUp()
-    {
+    public void onPickUp() {
         this.setExtradata("0");
     }
 
     @Override
-    public void run()
-    {
-        if(!this.getExtradata().equals("0"))
-        {
+    public void run() {
+        if (!this.getExtradata().equals("0")) {
             this.setExtradata("0");
 
             Room room = Emulator.getGameEnvironment().getRoomManager().getRoom(this.getRoomId());
-            if(room != null)
-            {
+            if (room != null) {
                 room.updateItem(this);
             }
         }
         super.run();
     }
 
-    private boolean canUseTeleport(GameClient client, Tile front, Room room)
-    {
-        if(client.getHabbo().getRoomUnit().getX() != front.X)
+    private boolean canUseTeleport(GameClient client, Tile front, Room room) {
+        if (client.getHabbo().getRoomUnit().getX() != front.X) {
             return false;
+        }
 
-        if(client.getHabbo().getRoomUnit().getY() != front.Y)
+        if (client.getHabbo().getRoomUnit().getY() != front.Y) {
             return false;
+        }
 
-        if(client.getHabbo().getRoomUnit().isTeleporting)
+        if (client.getHabbo().getRoomUnit().isTeleporting) {
             return false;
+        }
 
-        if(!room.getHabbosAt(this.getX(), this.getY()).isEmpty())
+        if (!room.getHabbosAt(this.getX(), this.getY()).isEmpty()) {
             return false;
+        }
 
-        if(!this.getExtradata().equals("0"))
+        if (!this.getExtradata().equals("0")) {
             return false;
+        }
 
         return true;
     }

@@ -8,34 +8,29 @@ import com.eu.habbo.messages.outgoing.users.UpdateUserLookComposer;
 /**
  * Kudos to Wouto on RaGEZONE
  */
-public class FacelessCommand extends Command
-{
-    public FacelessCommand()
-    {
+public class FacelessCommand extends Command {
+
+    public FacelessCommand() {
         super("cmd_faceless", Emulator.getTexts().getValue("commands.keys.cmd_faceless").split(";"));
     }
 
     @Override
-    public boolean handle(GameClient gameClient, String[] params) throws Exception
-    {
-        if(gameClient.getHabbo().getHabboInfo().getCurrentRoom() != null)
-        {
-            try
-            {
+    public boolean handle(GameClient gameClient, String[] params) throws Exception {
+        if (gameClient.getHabbo().getHabboInfo().getCurrentRoom() != null) {
+            try {
 
                 String[] figureParts = gameClient.getHabbo().getHabboInfo().getLook().split("\\.");
 
-                for (String part : figureParts)
-                {
+                for (String part : figureParts) {
                     System.out.println(part);
-                    if (part.startsWith("hd"))
-                    {
+                    if (part.startsWith("hd")) {
                         String[] headParts = part.split("-");
 
-                        if (!headParts[1].equals("99999"))
+                        if (!headParts[1].equals("99999")) {
                             headParts[1] = "99999";
-                        else
+                        } else {
                             break;
+                        }
 
                         String newHead = "hd-" + headParts[1] + "-" + headParts[2];
 
@@ -46,9 +41,7 @@ public class FacelessCommand extends Command
                     }
                 }
 
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
 
             }
         }

@@ -11,79 +11,66 @@ import com.eu.habbo.threading.runnables.QueryDeleteHabboItem;
 import com.eu.habbo.util.pathfinding.Tile;
 import gnu.trove.set.hash.THashSet;
 
-public class ToggleFloorItemEvent extends MessageHandler
-{
+public class ToggleFloorItemEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
-        try
-        {
+    public void handle() throws Exception {
+        try {
             Room room = this.client.getHabbo().getHabboInfo().getCurrentRoom();
 
-            if (room == null)
+            if (room == null) {
                 return;
+            }
 
             int itemId = this.packet.readInt();
             int state = this.packet.readInt();
 
             HabboItem item = room.getHabboItem(itemId);
 
-            if (item == null)
+            if (item == null) {
                 return;
+            }
 
-            if(item.getBaseItem().getName().equalsIgnoreCase("totem_planet"))
-            {
+            if (item.getBaseItem().getName().equalsIgnoreCase("totem_planet")) {
                 THashSet<HabboItem> items = room.getItemsAt(item.getX(), item.getY());
                 HabboItem totemLeg = null;
                 HabboItem totemHead = null;
 
-                for(HabboItem totemItem : items)
-                {
-                    if(totemLeg != null && totemHead != null)
-                    {
+                for (HabboItem totemItem : items) {
+                    if (totemLeg != null && totemHead != null) {
                         break;
                     }
-                    if(totemItem.getBaseItem().getName().equalsIgnoreCase("totem_leg"))
-                    {
+                    if (totemItem.getBaseItem().getName().equalsIgnoreCase("totem_leg")) {
                         totemLeg = totemItem;
                     }
-                    if(totemItem.getBaseItem().getName().equalsIgnoreCase("totem_head"))
-                    {
+                    if (totemItem.getBaseItem().getName().equalsIgnoreCase("totem_head")) {
                         totemHead = totemItem;
                     }
                 }
 
-                if(totemHead != null && totemLeg != null)
-                {
-                    if (item.getExtradata().equals("2"))
-                    {
-                        if (totemLeg.getExtradata() == null || totemHead.getExtradata() == null)
+                if (totemHead != null && totemLeg != null) {
+                    if (item.getExtradata().equals("2")) {
+                        if (totemLeg.getExtradata() == null || totemHead.getExtradata() == null) {
                             return;
+                        }
 
-                        if (totemLeg.getExtradata().equals("2") && totemHead.getExtradata().equals("5"))
-                        {
+                        if (totemLeg.getExtradata().equals("2") && totemHead.getExtradata().equals("5")) {
                             room.giveEffect(this.client.getHabbo(), 23);
                             return;
                         }
 
-                        if (totemLeg.getExtradata().equals("10") && totemHead.getExtradata().equals("9"))
-                        {
+                        if (totemLeg.getExtradata().equals("10") && totemHead.getExtradata().equals("9")) {
                             room.giveEffect(this.client.getHabbo(), 26);
                             return;
                         }
-                    } else if(item.getExtradata().equals("0"))
-                    {
-                        if(totemLeg.getExtradata().equals("7") && totemHead.getExtradata().equals("10"))
-                        {
+                    } else if (item.getExtradata().equals("0")) {
+                        if (totemLeg.getExtradata().equals("7") && totemHead.getExtradata().equals("10")) {
                             room.giveEffect(this.client.getHabbo(), 24);
                             return;
                         }
 
-                    }
-                    else if(item.getExtradata().equals("1"))
-                    {
-                        if(totemLeg.getExtradata().equals("9") && totemHead.getExtradata().equals("12"))
-                        {
+                    } else if (item.getExtradata().equals("1")) {
+                        if (totemLeg.getExtradata().equals("9") && totemHead.getExtradata().equals("12")) {
                             room.giveEffect(this.client.getHabbo(), 25);
                             return;
                         }
@@ -91,8 +78,7 @@ public class ToggleFloorItemEvent extends MessageHandler
                 }
             }
 
-            if(item instanceof InteractionMonsterPlantSeed)
-            {
+            if (item instanceof InteractionMonsterPlantSeed) {
                 Emulator.getThreading().run(new QueryDeleteHabboItem(item));
                 Emulator.getGameEnvironment().getPetManager().createMonsterplant(room, this.client.getHabbo(), false, new Tile(item.getX(), item.getY(), item.getZ()));
                 room.sendComposer(new RemoveFloorItemComposer(item, true).compose());
@@ -101,13 +87,10 @@ public class ToggleFloorItemEvent extends MessageHandler
 
             item.onClick(this.client, room, new Object[]{state});
 
-            if(item instanceof InteractionWired)
-            {
+            if (item instanceof InteractionWired) {
                 this.client.getHabbo().getRoomUnit().setGoalLocation(this.client.getHabbo().getRoomUnit().getX(), this.client.getHabbo().getRoomUnit().getY());
             }
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

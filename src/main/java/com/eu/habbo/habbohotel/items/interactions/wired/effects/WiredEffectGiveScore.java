@@ -18,8 +18,8 @@ import java.sql.SQLException;
 import java.util.AbstractMap;
 import java.util.Map;
 
-public class WiredEffectGiveScore extends InteractionWiredEffect
-{
+public class WiredEffectGiveScore extends InteractionWiredEffect {
+
     public static final WiredEffectType type = WiredEffectType.GIVE_SCORE;
 
     private int score;
@@ -27,51 +27,42 @@ public class WiredEffectGiveScore extends InteractionWiredEffect
 
     private TObjectIntMap<Map.Entry<Integer, Integer>> data = new TObjectIntHashMap<Map.Entry<Integer, Integer>>();
 
-    public WiredEffectGiveScore(ResultSet set, Item baseItem) throws SQLException
-    {
+    public WiredEffectGiveScore(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
 
-    public WiredEffectGiveScore(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public WiredEffectGiveScore(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
 
     @Override
-    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff)
-    {
+    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff) {
         Habbo habbo = room.getHabbo(roomUnit);
 
-        if(habbo != null)
-        {
+        if (habbo != null) {
             Game game = room.getGame(habbo.getHabboInfo().getCurrentGame());
 
-            if(game == null)
+            if (game == null) {
                 return false;
+            }
 
             TObjectIntIterator<Map.Entry<Integer, Integer>> iterator = this.data.iterator();
 
-            for(int i = this.data.size(); i-- > 0; )
-            {
+            for (int i = this.data.size(); i-- > 0;) {
                 iterator.advance();
 
                 Map.Entry<Integer, Integer> map = iterator.key();
 
-                if(map.getValue() == habbo.getHabboInfo().getId())
-                {
-                    if(map.getKey() == game.getStartTime())
-                    {
-                        if(iterator.value() < this.count)
-                        {
+                if (map.getValue() == habbo.getHabboInfo().getId()) {
+                    if (map.getKey() == game.getStartTime()) {
+                        if (iterator.value() < this.count) {
                             iterator.setValue(iterator.value() + 1);
 
                             habbo.getHabboInfo().getGamePlayer().addScore(this.score);
 
                             return true;
                         }
-                    }
-                    else
-                    {
+                    } else {
                         iterator.remove();
                     }
                 }
@@ -88,39 +79,33 @@ public class WiredEffectGiveScore extends InteractionWiredEffect
     }
 
     @Override
-    public String getWiredData()
-    {
+    public String getWiredData() {
         return this.score + ";" + this.count;
     }
 
     @Override
-    public void loadWiredData(ResultSet set, Room room) throws SQLException
-    {
+    public void loadWiredData(ResultSet set, Room room) throws SQLException {
         String[] data = set.getString("wired_data").split(";");
 
-        if(data.length == 2)
-        {
+        if (data.length == 2) {
             this.score = Integer.valueOf(data[0]);
             this.count = Integer.valueOf(data[1]);
         }
     }
 
     @Override
-    public void onPickUp()
-    {
+    public void onPickUp() {
         this.score = 0;
         this.count = 0;
     }
 
     @Override
-    public WiredEffectType getType()
-    {
+    public WiredEffectType getType() {
         return WiredEffectGiveScore.type;
     }
 
     @Override
-    public void serializeWiredData(ServerMessage message)
-    {
+    public void serializeWiredData(ServerMessage message) {
         message.appendBoolean(false);
         message.appendInt32(5);
         message.appendInt32(0);
@@ -137,8 +122,7 @@ public class WiredEffectGiveScore extends InteractionWiredEffect
     }
 
     @Override
-    public boolean saveData(ClientMessage packet)
-    {
+    public boolean saveData(ClientMessage packet) {
         packet.readInt();
 
         this.score = packet.readInt();

@@ -13,37 +13,36 @@ import com.eu.habbo.util.pathfinding.Tile;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class InteractionPuzzleBox extends HabboItem
-{
-    public InteractionPuzzleBox(ResultSet set, Item baseItem) throws SQLException
-    {
+public class InteractionPuzzleBox extends HabboItem {
+
+    public InteractionPuzzleBox(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
 
-    public InteractionPuzzleBox(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public InteractionPuzzleBox(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
 
     @Override
-    public void onClick(GameClient client, Room room, Object[] objects) throws Exception
-    {
-        if(client.getHabbo().getRoomUnit().getStatus().containsKey("mv"))
+    public void onClick(GameClient client, Room room, Object[] objects) throws Exception {
+        if (client.getHabbo().getRoomUnit().getStatus().containsKey("mv")) {
             return;
+        }
 
-        if(!PathFinder.tilesAdjecent(super.getX(), super.getY(), client.getHabbo().getRoomUnit().getX(), client.getHabbo().getRoomUnit().getY()))
+        if (!PathFinder.tilesAdjecent(super.getX(), super.getY(), client.getHabbo().getRoomUnit().getX(), client.getHabbo().getRoomUnit().getY())) {
             return;
+        }
 
         Tile tile = PathFinder.getSquareInFront(super.getX(), super.getY(), client.getHabbo().getRoomUnit().getBodyRotation().getValue());
         Tile boxLocation = new Tile(this.getX(), this.getY(), this.getZ());
 
-        if(!boxLocation.equals(PathFinder.getSquareInFront(client.getHabbo().getRoomUnit().getX(), client.getHabbo().getRoomUnit().getY(), client.getHabbo().getRoomUnit().getBodyRotation().getValue())))
+        if (!boxLocation.equals(PathFinder.getSquareInFront(client.getHabbo().getRoomUnit().getX(), client.getHabbo().getRoomUnit().getY(), client.getHabbo().getRoomUnit().getBodyRotation().getValue()))) {
             return;
+        }
 
         HabboItem item = room.getTopItemAt(tile.X, tile.Y);
 
-        if(item == null || (item.getZ() <= this.getZ() && item.getBaseItem().allowWalk()))
-        {
+        if (item == null || (item.getZ() <= this.getZ() && item.getBaseItem().allowWalk())) {
             room.sendComposer(new FloorItemOnRollerComposer(this, null, tile, room).compose());
             client.getHabbo().getRoomUnit().setGoalLocation(boxLocation);
             this.needsUpdate(true);
@@ -51,8 +50,7 @@ public class InteractionPuzzleBox extends HabboItem
     }
 
     @Override
-    public void serializeExtradata(ServerMessage serverMessage)
-    {
+    public void serializeExtradata(ServerMessage serverMessage) {
         serverMessage.appendInt32((this.isLimited() ? 256 : 0));
         serverMessage.appendString(this.getExtradata());
 
@@ -60,20 +58,17 @@ public class InteractionPuzzleBox extends HabboItem
     }
 
     @Override
-    public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects)
-    {
+    public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects) {
         return false;
     }
 
     @Override
-    public boolean isWalkable()
-    {
+    public boolean isWalkable() {
         return false;
     }
 
     @Override
-    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception
-    {
+    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception {
 
     }
 }

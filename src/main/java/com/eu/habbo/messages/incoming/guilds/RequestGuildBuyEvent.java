@@ -13,11 +13,10 @@ import com.eu.habbo.plugin.events.guilds.GuildPurchasedEvent;
 
 import java.util.List;
 
-public class RequestGuildBuyEvent extends MessageHandler
-{
+public class RequestGuildBuyEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         this.client.getHabbo().getHabboInfo().addCredits(-10);
         this.client.sendResponse(new UserCreditsComposer(this.client.getHabbo()));
 
@@ -28,12 +27,9 @@ public class RequestGuildBuyEvent extends MessageHandler
 
         Room r = Emulator.getGameEnvironment().getRoomManager().getRoom(roomId);
 
-        if(r != null)
-        {
-            if(r.getOwnerId() == this.client.getHabbo().getHabboInfo().getId())
-            {
-                if (r.getGuildId() == 0)
-                {
+        if (r != null) {
+            if (r.getOwnerId() == this.client.getHabbo().getHabboInfo().getId()) {
+                if (r.getGuildId() == 0) {
                     int colorOne = this.packet.readInt();
                     int colorTwo = this.packet.readInt();
 
@@ -43,18 +39,14 @@ public class RequestGuildBuyEvent extends MessageHandler
 
                     byte base = 1;
 
-                    while(base < count)
-                    {
-                        int id      = this.packet.readInt();
-                        int color   = this.packet.readInt();
-                        int pos     = this.packet.readInt();
+                    while (base < count) {
+                        int id = this.packet.readInt();
+                        int color = this.packet.readInt();
+                        int pos = this.packet.readInt();
 
-                        if(base == 1)
-                        {
+                        if (base == 1) {
                             badge += "b";
-                        }
-                        else
-                        {
+                        } else {
                             badge += "s";
                         }
 
@@ -74,9 +66,7 @@ public class RequestGuildBuyEvent extends MessageHandler
 
                     Emulator.getGameEnvironment().getGuildManager().addGuild(guild);
                 }
-            }
-            else
-            {
+            } else {
                 String message = Emulator.getTexts().getValue("scripter.warning.guild.buy.owner").replace("%username%", this.client.getHabbo().getHabboInfo().getUsername()).replace("%roomname%", r.getName().replace("%owner%", r.getOwnerName()));
                 Emulator.getGameEnvironment().getModToolManager().quickTicket(this.client.getHabbo(), "Scripter", message);
                 Emulator.getLogging().logUserLine(message);

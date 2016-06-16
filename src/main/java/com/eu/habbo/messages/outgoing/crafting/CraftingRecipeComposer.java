@@ -6,19 +6,16 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class CraftingRecipeComposer extends MessageComposer
-{
+public class CraftingRecipeComposer extends MessageComposer {
+
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.CraftingRecipeComposer);
 
-        synchronized (Emulator.getGameEnvironment().getCraftingManager())
-        {
+        synchronized (Emulator.getGameEnvironment().getCraftingManager()) {
             this.response.appendInt32(Emulator.getGameEnvironment().getCraftingManager().getRecipes().size()); //Count
 
-            for(CraftingRecipe recipe : Emulator.getGameEnvironment().getCraftingManager().getRecipes())
-            {
+            for (CraftingRecipe recipe : Emulator.getGameEnvironment().getCraftingManager().getRecipes()) {
                 this.response.appendInt32(recipe.ingredients.size()); //Count
                 this.response.appendString(recipe.result);
             }

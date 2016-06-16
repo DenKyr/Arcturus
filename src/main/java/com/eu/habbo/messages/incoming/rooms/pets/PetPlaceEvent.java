@@ -12,18 +12,17 @@ import com.eu.habbo.messages.outgoing.generic.alerts.PetErrorComposer;
 import com.eu.habbo.messages.outgoing.inventory.RemovePetComposer;
 import com.eu.habbo.messages.outgoing.rooms.pets.RoomPetComposer;
 
-public class PetPlaceEvent extends MessageHandler
-{
+public class PetPlaceEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         Room room = this.client.getHabbo().getHabboInfo().getCurrentRoom();
 
-        if(room == null)
+        if (room == null) {
             return;
+        }
 
-        if(this.client.getHabbo().getHabboInfo().getId() != room.getOwnerId() && !room.isAllowPets() && !(this.client.getHabbo().hasPermission("acc_anyroomowner") || this.client.getHabbo().hasPermission("acc_placefurni")))
-        {
+        if (this.client.getHabbo().getHabboInfo().getId() != room.getOwnerId() && !room.isAllowPets() && !(this.client.getHabbo().hasPermission("acc_anyroomowner") || this.client.getHabbo().hasPermission("acc_placefurni"))) {
             this.client.sendResponse(new PetErrorComposer(PetErrorComposer.ROOM_ERROR_PETS_FORBIDDEN_IN_FLAT));
             return;
         }
@@ -32,23 +31,20 @@ public class PetPlaceEvent extends MessageHandler
 
         Pet pet = this.client.getHabbo().getHabboInventory().getPetsComponent().getPet(petId);
 
-        if(pet == null)
-        {
+        if (pet == null) {
             return;
         }
 
         int x = this.packet.readInt();
         int y = this.packet.readInt();
 
-        if(room.getCurrentPets().size() >= Emulator.getConfig().getInt("hotel.pets.max.room") && !this.client.getHabbo().hasPermission("acc_unlimited_pets"))
-        {
+        if (room.getCurrentPets().size() >= Emulator.getConfig().getInt("hotel.pets.max.room") && !this.client.getHabbo().hasPermission("acc_unlimited_pets")) {
             this.client.sendResponse(new PetErrorComposer(PetErrorComposer.ROOM_ERROR_MAX_PETS));
             return;
         }
 
         HabboItem item = room.getTopItemAt(x, y);
-        if(item != null && !item.getBaseItem().allowStack())
-        {
+        if (item != null && !item.getBaseItem().allowStack()) {
             this.client.sendResponse(new PetErrorComposer(PetErrorComposer.ROOM_ERROR_PETS_SELECTED_TILE_NOT_FREE));
             return;
         }
@@ -56,8 +52,7 @@ public class PetPlaceEvent extends MessageHandler
         pet.setRoom(room);
         RoomUnit roomUnit = pet.getRoomUnit();
 
-        if(roomUnit == null)
-        {
+        if (roomUnit == null) {
             roomUnit = new RoomUnit();
         }
 

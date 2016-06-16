@@ -10,26 +10,23 @@ import com.eu.habbo.messages.outgoing.Outgoing;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-public class ClubDataComposer extends MessageComposer
-{
+public class ClubDataComposer extends MessageComposer {
+
     private final int windowId;
     private final Habbo habbo;
 
-    public ClubDataComposer(Habbo habbo, int windowId)
-    {
+    public ClubDataComposer(Habbo habbo, int windowId) {
         this.habbo = habbo;
         this.windowId = windowId;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.ClubDataComposer);
 
         this.response.appendInt32(Emulator.getGameEnvironment().getCatalogManager().clubItems.size());
 
-        for(CatalogItem item : Emulator.getGameEnvironment().getCatalogManager().clubItems)
-        {
+        for (CatalogItem item : Emulator.getGameEnvironment().getCatalogManager().clubItems) {
             this.response.appendInt32(item.getId());
             this.response.appendString(item.getName());
             this.response.appendBoolean(true); //unused
@@ -42,16 +39,11 @@ public class ClubDataComposer extends MessageComposer
 
             int days = 31;
 
-            if(data[2].toLowerCase().equalsIgnoreCase("day"))
-            {
+            if (data[2].toLowerCase().equalsIgnoreCase("day")) {
                 days = Integer.valueOf(data[3]);
-            }
-            else if(data[2].toLowerCase().equalsIgnoreCase("month"))
-            {
+            } else if (data[2].toLowerCase().equalsIgnoreCase("month")) {
                 days = Integer.valueOf(data[3]) * 31;
-            }
-            else if(data[2].toLowerCase().equalsIgnoreCase("year"))
-            {
+            } else if (data[2].toLowerCase().equalsIgnoreCase("year")) {
                 days = Integer.valueOf(data[3]) * 12 * 31;
             }
 
@@ -63,37 +55,35 @@ public class ClubDataComposer extends MessageComposer
             int endTimestamp = this.habbo.getHabboStats().getClubExpireTimestamp();
             int now = Emulator.getIntUnixTimestamp();
 
-            if(endTimestamp < Emulator.getIntUnixTimestamp())
+            if (endTimestamp < Emulator.getIntUnixTimestamp()) {
                 endTimestamp = now;
+            }
 
             Date endDate = new Date(endTimestamp * 1000);
             Date startDate = new Date(Emulator.getIntUnixTimestamp() * 1000);
 
-            long duration  = endDate.getTime() - startDate.getTime();
+            long duration = endDate.getTime() - startDate.getTime();
 
             long theDays = TimeUnit.MILLISECONDS.toDays(duration);
-            int years = (int)Math.floor(theDays / 365);
+            int years = (int) Math.floor(theDays / 365);
             theDays = theDays - (years * 365);
 
-            int months = (int)Math.floor(theDays / 31);
+            int months = (int) Math.floor(theDays / 31);
             theDays = theDays - (months * 31);
 
-
-            if(days >= 365)
-            {
-                years += (int)Math.floor(days / 365);
-                days = days - (int)(Math.floor(days / 365) * 365);
+            if (days >= 365) {
+                years += (int) Math.floor(days / 365);
+                days = days - (int) (Math.floor(days / 365) * 365);
             }
 
-            if(days >= 31)
-            {
-                months += (int)Math.floor(days / 31);
-                days = days - (int)(Math.floor(days / 31) * 31);
+            if (days >= 31) {
+                months += (int) Math.floor(days / 31);
+                days = days - (int) (Math.floor(days / 31) * 31);
             }
 
             theDays += days;
 
-            this.response.appendInt32((int)theDays);
+            this.response.appendInt32((int) theDays);
             this.response.appendInt32(months);
             this.response.appendInt32(years);
         }

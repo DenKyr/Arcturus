@@ -10,37 +10,33 @@ import com.eu.habbo.messages.outgoing.Outgoing;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.set.hash.THashSet;
 
-public class RoomUsersComposer extends MessageComposer
-{
+public class RoomUsersComposer extends MessageComposer {
+
     private Habbo habbo;
     private TIntObjectMap<Habbo> habbos;
     private Bot bot;
     private THashSet<Bot> bots;
 
-    public RoomUsersComposer(Habbo habbo)
-    {
+    public RoomUsersComposer(Habbo habbo) {
         this.habbo = habbo;
     }
 
-    public RoomUsersComposer(TIntObjectMap<Habbo> habbos)
-    {
+    public RoomUsersComposer(TIntObjectMap<Habbo> habbos) {
         this.habbos = habbos;
     }
 
-    public RoomUsersComposer(Bot bot)
-    {
+    public RoomUsersComposer(Bot bot) {
         this.bot = bot;
     }
 
-    public RoomUsersComposer(THashSet<Bot> bots, boolean isBot)
-    {
+    public RoomUsersComposer(THashSet<Bot> bots, boolean isBot) {
         this.bots = bots;
     }
 
     @Override
-    public ServerMessage compose()    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.RoomUsersComposer);
-        if(this.habbo != null) {
+        if (this.habbo != null) {
             this.response.appendInt32(1);
             this.response.appendInt32(this.habbo.getHabboInfo().getId());
             this.response.appendString(this.habbo.getHabboInfo().getUsername());
@@ -57,24 +53,21 @@ public class RoomUsersComposer extends MessageComposer
             this.response.appendInt32(this.habbo.getHabboStats().guild != 0 ? 1 : -1);
 
             String name = "";
-            if(this.habbo.getHabboStats().guild != 0)
-            {
+            if (this.habbo.getHabboStats().guild != 0) {
                 Guild g = Emulator.getGameEnvironment().getGuildManager().getGuild(this.habbo.getHabboStats().guild);
 
-                if(g != null)
+                if (g != null) {
                     name = g.getName();
+                }
             }
             this.response.appendString(name);
 
             this.response.appendString("");
             this.response.appendInt32(this.habbo.getHabboInfo().getAchievementScore());
             this.response.appendBoolean(true);
-        }
-        else if(this.habbos != null)
-        {
+        } else if (this.habbos != null) {
             this.response.appendInt32(this.habbos.size());
-            for(Habbo habbo : this.habbos.valueCollection())
-            {
+            for (Habbo habbo : this.habbos.valueCollection()) {
                 this.response.appendInt32(habbo.getHabboInfo().getId());
                 this.response.appendString(habbo.getHabboInfo().getUsername());
                 this.response.appendString(habbo.getHabboInfo().getMotto());
@@ -93,9 +86,7 @@ public class RoomUsersComposer extends MessageComposer
                 this.response.appendInt32(habbo.getHabboInfo().getAchievementScore());
                 this.response.appendBoolean(true);
             }
-        }
-        else if(this.bot != null)
-        {
+        } else if (this.bot != null) {
             this.response.appendInt32(1);
             this.response.appendInt32(0 - this.bot.getId());
             this.response.appendString(this.bot.getName());
@@ -126,12 +117,9 @@ public class RoomUsersComposer extends MessageComposer
             this.response.appendInt32(12);
             this.response.appendInt32(13);
             this.response.appendInt32(14);
-        }
-        else if(this.bots != null)
-        {
+        } else if (this.bots != null) {
             this.response.appendInt32(this.bots.size());
-            for(Bot bot : this.bots)
-            {
+            for (Bot bot : this.bots) {
                 this.response.appendInt32(0 - bot.getId());
                 this.response.appendString(bot.getName());
                 this.response.appendString(bot.getMotto());

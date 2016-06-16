@@ -11,11 +11,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class HallOfFameComposer extends MessageComposer
-{
+public class HallOfFameComposer extends MessageComposer {
 
     @Override
-    public ServerMessage compose()    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.HallOfFameComposer);
         HallOfFame hallOfFame = Emulator.getGameEnvironment().getHotelViewManager().getHallOfFame();
 
@@ -26,8 +25,7 @@ public class HallOfFameComposer extends MessageComposer
 
         List<HallOfFameWinner> winners = new ArrayList(hallOfFame.getWinners().values());
         Collections.sort(winners);
-        for(HallOfFameWinner winner : winners)
-        {
+        for (HallOfFameWinner winner : winners) {
             this.response.appendInt32(winner.getId());
             this.response.appendString(winner.getUsername());
             this.response.appendString(winner.getLook());

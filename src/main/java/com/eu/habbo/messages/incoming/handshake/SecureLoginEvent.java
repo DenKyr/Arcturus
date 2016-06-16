@@ -27,33 +27,29 @@ import com.eu.habbo.plugin.events.users.UserLoginEvent;
 
 import java.util.ArrayList;
 
-public class SecureLoginEvent extends MessageHandler
-{
-    /*************************************************************************************************
+public class SecureLoginEvent extends MessageHandler {
+
+    /**
+     * ***********************************************************************************************
      *
-             #####   #######        #     # ####### #######        ####### ######  ### #######
-             #     # #     #        ##    # #     #    #           #       #     #  #     #
-             #     # #     #        # #   # #     #    #           #       #     #  #     #
-             #     # #     #        #  #  # #     #    #           #####   #     #  #     #
-             #     # #     #        #   # # #     #    #           #       #     #  #     #
-             #     # #     #        #    ## #     #    #           #       #     #  #     #
-             #####   #######        #     # #######    #           ####### ######  ###    #
-     *                                                                                  -The General
-     *************************************************************************************************/
+     * ##### ####### # # ####### ####### ####### ###### ### ####### # # # # ## #
+     * # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # ##### #
+     * # # # # # # # # # # # # # # # # # # # # # # # ## # # # # # # # # #####
+     * ####### # # ####### # ####### ###### ### # -The General
+     ************************************************************************************************
+     */
 
     @Override
-    public void handle() throws Exception
-    {
-        if(!Emulator.isReady)
+    public void handle() throws Exception {
+        if (!Emulator.isReady) {
             return;
+        }
 
         String sso = this.packet.readString();
 
-        if(this.client.getHabbo() == null)
-        {
+        if (this.client.getHabbo() == null) {
             Habbo habbo = Emulator.getGameEnvironment().getHabboManager().loadHabbo(sso, this.client);
-            if(habbo != null)
-            {
+            if (habbo != null) {
                 habbo.setClient(this.client);
                 this.client.setHabbo(habbo);
                 this.client.getHabbo().connect();
@@ -74,8 +70,7 @@ public class SecureLoginEvent extends MessageHandler
                 messages.add(new FavoriteRoomsCountComposer().compose());
                 messages.add(new UserEffectsListComposer().compose());
 
-                if(this.client.getHabbo().hasPermission("acc_supporttool"))
-                {
+                if (this.client.getHabbo().hasPermission("acc_supporttool")) {
                     messages.add(new ModToolComposer(this.client.getHabbo()).compose());
                 }
 
@@ -93,9 +88,7 @@ public class SecureLoginEvent extends MessageHandler
 
                 Emulator.getPluginManager().fireEvent(new UserLoginEvent(habbo, this.client.getChannel().localAddress()));
 
-            }
-            else
-            {
+            } else {
                 this.client.getChannel().close();
             }
         }

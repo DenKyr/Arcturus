@@ -11,21 +11,18 @@ import com.eu.habbo.messages.ServerMessage;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class InteractionMoodLight extends HabboItem
-{
-    public InteractionMoodLight(ResultSet set, Item baseItem) throws SQLException
-    {
+public class InteractionMoodLight extends HabboItem {
+
+    public InteractionMoodLight(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
 
-    public InteractionMoodLight(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public InteractionMoodLight(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
 
     @Override
-    public void serializeExtradata(ServerMessage serverMessage)
-    {
+    public void serializeExtradata(ServerMessage serverMessage) {
         serverMessage.appendInt32((this.isLimited() ? 256 : 0));
         serverMessage.appendString(this.getExtradata());
 
@@ -33,34 +30,27 @@ public class InteractionMoodLight extends HabboItem
     }
 
     @Override
-    public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects)
-    {
+    public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects) {
         return false;
     }
 
     @Override
-    public boolean isWalkable()
-    {
+    public boolean isWalkable() {
         return false;
     }
 
     @Override
-    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception
-    {
+    public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception {
 
     }
 
     @Override
-    public void onPlace()
-    {
+    public void onPlace() {
         Room room = Emulator.getGameEnvironment().getRoomManager().getRoom(this.getRoomId());
 
-        if(room != null)
-        {
-            for (RoomMoodlightData data : room.getMoodlightData().valueCollection())
-            {
-                if (data.isEnabled())
-                {
+        if (room != null) {
+            for (RoomMoodlightData data : room.getMoodlightData().valueCollection()) {
+                if (data.isEnabled()) {
                     this.setExtradata(data.toString());
                     this.needsUpdate(true);
                     room.updateItem(this);

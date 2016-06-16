@@ -8,20 +8,18 @@ import com.eu.habbo.messages.outgoing.Outgoing;
 
 import java.util.ArrayList;
 
-public class ModToolRoomChatlogComposer extends MessageComposer
-{
+public class ModToolRoomChatlogComposer extends MessageComposer {
+
     private Room room;
     private ArrayList<ModToolChatLog> chatlog;
 
-    public ModToolRoomChatlogComposer(Room room, ArrayList<ModToolChatLog> chatlog)
-    {
+    public ModToolRoomChatlogComposer(Room room, ArrayList<ModToolChatLog> chatlog) {
         this.room = room;
         this.chatlog = chatlog;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.ModToolRoomChatlogComposer);
         this.response.appendByte(1);
         this.response.appendShort(2);
@@ -33,8 +31,7 @@ public class ModToolRoomChatlogComposer extends MessageComposer
         this.response.appendInt32(this.room.getId());
 
         this.response.appendShort(this.chatlog.size());
-        for(ModToolChatLog line : this.chatlog)
-        {
+        for (ModToolChatLog line : this.chatlog) {
             this.response.appendInt32(line.timestamp);
             this.response.appendInt32(line.habboId);
             this.response.appendString(line.username);

@@ -4,18 +4,16 @@ import com.eu.habbo.core.ConfigurationManager;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-class DatabasePool
-{
+class DatabasePool {
+
     private HikariDataSource database;
 
-    public boolean getStoragePooling(ConfigurationManager config)
-    {
-        try
-        {
+    public boolean getStoragePooling(ConfigurationManager config) {
+        try {
             HikariConfig databaseConfiguration = new HikariConfig();
             databaseConfiguration.setMaximumPoolSize(20);
             databaseConfiguration.setInitializationFailFast(true);
-            databaseConfiguration.setJdbcUrl("jdbc:mysql://" + config.getValue("db.hostname", "localhost") + ":" + config.getValue("db.port", "3306")+ "/" + config.getValue("db.database", "habbo"));
+            databaseConfiguration.setJdbcUrl("jdbc:mysql://" + config.getValue("db.hostname", "localhost") + ":" + config.getValue("db.port", "3306") + "/" + config.getValue("db.database", "habbo"));
             databaseConfiguration.addDataSourceProperty("serverName", config.getValue("db.hostname", "localhost"));
             databaseConfiguration.addDataSourceProperty("port", config.getValue("db.port", "3306"));
             databaseConfiguration.addDataSourceProperty("databaseName", config.getValue("db.database", "habbo"));
@@ -28,16 +26,13 @@ class DatabasePool
             databaseConfiguration.setIdleTimeout(2874000L);
             databaseConfiguration.setDriverClassName("com.mysql.jdbc.jdbc2.optional.MysqlDataSource");
             this.database = new HikariDataSource(databaseConfiguration);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return false;
         }
         return true;
     }
-    
-    public HikariDataSource getDatabase()
-    {
+
+    public HikariDataSource getDatabase() {
         return this.database;
     }
 }

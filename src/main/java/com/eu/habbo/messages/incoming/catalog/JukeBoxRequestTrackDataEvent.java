@@ -8,21 +8,20 @@ import com.eu.habbo.messages.outgoing.rooms.JukeBoxTrackDataComposer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JukeBoxRequestTrackDataEvent extends MessageHandler
-{
+public class JukeBoxRequestTrackDataEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         int count = this.packet.readInt();
 
         List<SoundTrack> tracks = new ArrayList<SoundTrack>(count);
 
-        for(int i = 0; i < count; i++)
-        {
+        for (int i = 0; i < count; i++) {
             SoundTrack track = Emulator.getGameEnvironment().getItemManager().getSoundTrack(this.packet.readInt());
 
-            if(track != null)
+            if (track != null) {
                 tracks.add(track);
+            }
         }
 
         this.client.sendResponse(new JukeBoxTrackDataComposer(tracks));

@@ -16,59 +16,50 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class WiredTriggerBotReachedFurni extends InteractionWiredTrigger
-{
+public class WiredTriggerBotReachedFurni extends InteractionWiredTrigger {
+
     public final static WiredTriggerType type = WiredTriggerType.BOT_REACHED_STF;
 
     private THashSet<HabboItem> items;
     private String botName = "";
 
-    public WiredTriggerBotReachedFurni(ResultSet set, Item baseItem) throws SQLException
-    {
+    public WiredTriggerBotReachedFurni(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
         this.items = new THashSet<HabboItem>();
     }
 
-    public WiredTriggerBotReachedFurni(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public WiredTriggerBotReachedFurni(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
         this.items = new THashSet<HabboItem>();
     }
 
     @Override
-    public WiredTriggerType getType()
-    {
+    public WiredTriggerType getType() {
         return type;
     }
 
     @Override
-    public void serializeWiredData(ServerMessage message)
-    {
+    public void serializeWiredData(ServerMessage message) {
         THashSet<HabboItem> items = new THashSet<HabboItem>();
 
-        if(Emulator.getGameEnvironment().getRoomManager().getRoom(this.getRoomId()) == null)
-        {
+        if (Emulator.getGameEnvironment().getRoomManager().getRoom(this.getRoomId()) == null) {
             items.addAll(this.items);
-        }
-        else
-        {
-            for (HabboItem item : this.items)
-            {
-                if (Emulator.getGameEnvironment().getRoomManager().getRoom(this.getRoomId()).getHabboItem(item.getId()) == null)
+        } else {
+            for (HabboItem item : this.items) {
+                if (Emulator.getGameEnvironment().getRoomManager().getRoom(this.getRoomId()).getHabboItem(item.getId()) == null) {
                     items.add(item);
+                }
             }
         }
 
-        for(HabboItem item : items)
-        {
+        for (HabboItem item : items) {
             this.items.remove(item);
         }
 
         message.appendBoolean(false);
         message.appendInt32(5);
         message.appendInt32(this.items.size());
-        for(HabboItem item : this.items)
-        {
+        for (HabboItem item : this.items) {
             message.appendInt32(item.getId());
         }
         message.appendInt32(this.getBaseItem().getSpriteId());
@@ -82,8 +73,7 @@ public class WiredTriggerBotReachedFurni extends InteractionWiredTrigger
     }
 
     @Override
-    public boolean saveData(ClientMessage packet)
-    {
+    public boolean saveData(ClientMessage packet) {
         packet.readInt();
 
         this.botName = packet.readString();
@@ -92,8 +82,7 @@ public class WiredTriggerBotReachedFurni extends InteractionWiredTrigger
 
         int count = packet.readInt();
 
-        for(int i = 0; i < count; i++)
-        {
+        for (int i = 0; i < count; i++) {
             this.items.add(Emulator.getGameEnvironment().getRoomManager().getRoom(this.getRoomId()).getHabboItem(packet.readInt()));
         }
 
@@ -101,18 +90,15 @@ public class WiredTriggerBotReachedFurni extends InteractionWiredTrigger
     }
 
     @Override
-    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff)
-    {
+    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff) {
         List<Bot> bots = room.getBots(this.botName);
 
-        for(Bot bot : bots)
-        {
-            if(bot.getRoomUnit().equals(roomUnit))
-            {
-                for(Object o : stuff)
-                {
-                    if(this.items.contains(o))
+        for (Bot bot : bots) {
+            if (bot.getRoomUnit().equals(roomUnit)) {
+                for (Object o : stuff) {
+                    if (this.items.contains(o)) {
                         return true;
+                    }
                 }
             }
         }
@@ -121,14 +107,11 @@ public class WiredTriggerBotReachedFurni extends InteractionWiredTrigger
     }
 
     @Override
-    protected String getWiredData()
-    {
+    protected String getWiredData() {
         String wiredData = this.botName + ":";
 
-        if(!items.isEmpty())
-        {
-            for (HabboItem item : this.items)
-            {
+        if (!items.isEmpty()) {
+            for (HabboItem item : this.items) {
                 wiredData += item.getId() + ";";
             }
         }
@@ -137,33 +120,26 @@ public class WiredTriggerBotReachedFurni extends InteractionWiredTrigger
     }
 
     @Override
-    public void loadWiredData(ResultSet set, Room room) throws SQLException
-    {
+    public void loadWiredData(ResultSet set, Room room) throws SQLException {
         this.items.clear();
 
         String[] data = set.getString("wired_data").split(":");
 
-        if(data.length == 1)
-        {
+        if (data.length == 1) {
             this.botName = data[0];
-        }
-        else if(data.length == 2)
-        {
+        } else if (data.length == 2) {
             this.botName = data[0];
 
             String[] items = data[1].split(";");
 
-            for(int i = 0; i < items.length; i++)
-            {
-                try
-                {
+            for (int i = 0; i < items.length; i++) {
+                try {
                     HabboItem item = room.getHabboItem(Integer.valueOf(items[i]));
 
-                    if (item != null)
+                    if (item != null) {
                         this.items.add(item);
-                }
-                catch (Exception e)
-                {
+                    }
+                } catch (Exception e) {
                     Emulator.getLogging().logErrorLine(e);
                 }
             }
@@ -171,8 +147,7 @@ public class WiredTriggerBotReachedFurni extends InteractionWiredTrigger
     }
 
     @Override
-    public void onPickUp()
-    {
+    public void onPickUp() {
         this.items.clear();
         this.botName = "";
     }

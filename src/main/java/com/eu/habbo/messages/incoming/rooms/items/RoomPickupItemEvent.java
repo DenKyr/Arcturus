@@ -5,38 +5,37 @@ import com.eu.habbo.habbohotel.rooms.Room;
 import com.eu.habbo.habbohotel.users.HabboItem;
 import com.eu.habbo.messages.incoming.MessageHandler;
 
-public class RoomPickupItemEvent extends MessageHandler
-{
+public class RoomPickupItemEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         int unknown = this.packet.readInt();
         int itemId = this.packet.readInt();
 
         Room room = this.client.getHabbo().getHabboInfo().getCurrentRoom();
 
-        if (room == null)
+        if (room == null) {
             return;
+        }
 
         HabboItem item = room.getHabboItem(itemId);
 
-        if (item == null)
+        if (item == null) {
             return;
+        }
 
-        if(item instanceof InteractionPostIt)
+        if (item instanceof InteractionPostIt) {
             return;
+        }
 
-        if (room.hasRights(this.client.getHabbo()))
-        {
-            if(item.getUserId() == this.client.getHabbo().getHabboInfo().getId() || (room.getGuildId() > 0 && room.guildRightLevel(this.client.getHabbo()) >= 2) || this.client.getHabbo().hasPermission("acc_anyroomowner"))
-            {
-                if (room.getGuildId() == 0 && this.client.getHabbo().hasPermission("acc_anyroomowner"))
+        if (room.hasRights(this.client.getHabbo())) {
+            if (item.getUserId() == this.client.getHabbo().getHabboInfo().getId() || (room.getGuildId() > 0 && room.guildRightLevel(this.client.getHabbo()) >= 2) || this.client.getHabbo().hasPermission("acc_anyroomowner")) {
+                if (room.getGuildId() == 0 && this.client.getHabbo().hasPermission("acc_anyroomowner")) {
                     item.setUserId(this.client.getHabbo().getHabboInfo().getId());
+                }
 
                 room.pickUpItem(item, this.client.getHabbo());
-            }
-            else
-            {
+            } else {
                 room.ejectUserItem(item);
             }
         }

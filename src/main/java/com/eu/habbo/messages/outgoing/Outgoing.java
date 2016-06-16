@@ -1,8 +1,8 @@
 package com.eu.habbo.messages.outgoing;
 
-public class Outgoing
-{
-    public static final int PetStatusUpdateComposer = 3566; 
+public class Outgoing {
+
+    public static final int PetStatusUpdateComposer = 3566;
 
     public final static int FavoriteRoomsCountComposer = 604;//3829 //Updated
     public final static int UserCurrencyComposer = 1911;//3454 //Updated
@@ -332,7 +332,7 @@ public class Outgoing
     public final static int NotEnoughPointsTypeComposer = 934; //:test 334 b:0 b:1 i:105 //Updated
     public final static int WatchAndEarnRewardComposer = 1896; //:test 3325 s:s i:230 s:throne s:derp //Updated
     public final static int NewYearResolutionComposer = 3360; //Updated
-    public final static int WelcomeGiftErrorComposer =  3620; //:test 3268 i:3 //Updated
+    public final static int WelcomeGiftErrorComposer = 3620; //:test 3268 i:3 //Updated
     public final static int RentableItemBuyOutPriceComposer = 2137; //Updated
     public final static int VipTutorialsStartComposer = 3407; //Updated
     public final static int NewNavigatorCategoryUserCountComposer = 3191; //Updated
@@ -391,25 +391,15 @@ public class Outgoing
     public final static int DailyQuestComposer = 2689; //Updated
     public final static int NewNavigatorRoomEventComposer = 2274; //Updated //TODO: Implement this ASAP
     public final static int HotelViewHideCommunityVoteButtonComposer = 936; //Updated
-    public final static int CatalogSearchResultComposer = 3848 ; //:test 1142 i:4 s:a b:1 i:1 i:0 i:0 b:0 i:1 s:s i:230 s:throne i:230 b:0 i:0 b:0 //Updated
+    public final static int CatalogSearchResultComposer = 3848; //:test 1142 i:4 s:a b:1 i:1 i:0 i:0 b:0 i:1 s:s i:230 s:throne i:230 b:0 i:0 b:0 //Updated
     public final static int FriendFindingRoomComposer = 3763; //:test 1037 b:0 //Updated
     public final static int UnknownQuestComposer1 = 1477; //Updated
     public final static int ModToolSanctionDataComposer = 2254; //New In Production20160101
     public final static int CallForHelpTopicsComposer = 2067; //New In Production20160101
     /**
-     * int << count
-     * {
-     *     string << ?
-     *     int << Count
-     *     {
-     *         string << Name
-     *         int << ID
-     *         string << Consequence
-     *     }
-     * }
+     * int << count { string << ? int << Count { string << Name int << ID string
+     * << Consequence } }
      */
-
-
 
     /**
      * Music Disks / Trax / Jukebox
@@ -430,6 +420,5 @@ public class Outgoing
     public final static int CraftingRecipeComposer = 987; //:test 987 i:1 i:1 s:a
     public final static int CraftingResultComposer = 3543;
     public final static int CraftingComposerFour = 880; //:test 880 i:1 b:0
-
 
 }

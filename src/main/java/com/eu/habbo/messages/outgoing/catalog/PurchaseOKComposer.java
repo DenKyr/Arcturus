@@ -6,29 +6,25 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class PurchaseOKComposer extends MessageComposer
-{
+public class PurchaseOKComposer extends MessageComposer {
+
     private final CatalogItem catalogItem;
     private final Item item;
 
-    public PurchaseOKComposer(CatalogItem catalogItem, Item item)
-    {
+    public PurchaseOKComposer(CatalogItem catalogItem, Item item) {
         this.catalogItem = catalogItem;
         this.item = item;
     }
 
-    public PurchaseOKComposer()
-    {
+    public PurchaseOKComposer() {
         this.catalogItem = null;
         this.item = null;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.PurchaseOKComposer);
-        if(catalogItem != null && item != null)
-        {
+        if (catalogItem != null && item != null) {
             this.response.appendInt32(this.item.getId());
             this.response.appendString(this.item.getName());
             this.response.appendBoolean(false);
@@ -44,9 +40,7 @@ public class PurchaseOKComposer extends MessageComposer
             this.response.appendInt32(false);
             this.response.appendInt32(0);
             this.response.appendBoolean(true);
-        }
-        else if(catalogItem != null)
-        {
+        } else if (catalogItem != null) {
             this.response.appendInt32(0);
             this.response.appendString(this.catalogItem.getName());
             this.response.appendBoolean(false);
@@ -62,9 +56,7 @@ public class PurchaseOKComposer extends MessageComposer
             this.response.appendInt32(false);
             this.response.appendInt32(0);
             this.response.appendBoolean(true);
-        }
-        else
-        {
+        } else {
             this.response.appendInt32(0);
             this.response.appendString("");
             this.response.appendBoolean(false);

@@ -12,38 +12,30 @@ import gnu.trove.map.TIntObjectMap;
 
 import java.util.NoSuchElementException;
 
-public class RoomEffectCommand extends Command
-{
-    public RoomEffectCommand()
-    {
+public class RoomEffectCommand extends Command {
+
+    public RoomEffectCommand() {
         super("cmd_roomeffect", Emulator.getTexts().getValue("commands.keys.cmd_roomeffect").split(";"));
     }
 
     @Override
-    public boolean handle(GameClient gameClient, String[] params) throws Exception
-    {
-        if(params.length < 2)
-        {
+    public boolean handle(GameClient gameClient, String[] params) throws Exception {
+        if (params.length < 2) {
             gameClient.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.error.cmd_roomeffect.no_effect"), gameClient.getHabbo(), gameClient.getHabbo(), RoomChatMessageBubbles.ALERT)));
             return true;
         }
 
-        try
-        {
+        try {
             int effectId = Integer.valueOf(params[1]);
 
-            if(effectId >= 0)
-            {
+            if (effectId >= 0) {
                 TIntObjectMap<Habbo> habboList = gameClient.getHabbo().getHabboInfo().getCurrentRoom().getCurrentHabbos();
                 TIntObjectIterator<Habbo> habboIterator = habboList.iterator();
 
-                for (int i = habboList.size(); i-- > 0; )
-                {
-                    try
-                    {
+                for (int i = habboList.size(); i-- > 0;) {
+                    try {
                         habboIterator.advance();
-                    } catch (NoSuchElementException e)
-                    {
+                    } catch (NoSuchElementException e) {
                         return true;
                     }
 
@@ -52,15 +44,11 @@ public class RoomEffectCommand extends Command
                 }
 
                 return true;
-            }
-            else
-            {
+            } else {
                 gameClient.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.error.cmd_roomeffect.positive"), gameClient.getHabbo(), gameClient.getHabbo(), RoomChatMessageBubbles.ALERT)));
                 return true;
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             gameClient.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.error.cmd_roomeffect.numbers_only"), gameClient.getHabbo(), gameClient.getHabbo(), RoomChatMessageBubbles.ALERT)));
             return true;
         }

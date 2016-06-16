@@ -1,7 +1,7 @@
 package com.eu.habbo.plugin;
 
-public enum EventPriority
-{
+public enum EventPriority {
+
     /**
      * Event call is of very low importance and should be ran first, to allow
      * other plugins to further customise the outcome
@@ -12,8 +12,7 @@ public enum EventPriority
      */
     LOW(1),
     /**
-     * Event call is neither important nor unimportant, and may be ran
-     * normally
+     * Event call is neither important nor unimportant, and may be ran normally
      */
     NORMAL(2),
     /**
@@ -21,8 +20,8 @@ public enum EventPriority
      */
     HIGH(3),
     /**
-     * Event call is critical and must have the final say in what happens
-     * to the event
+     * Event call is critical and must have the final say in what happens to the
+     * event
      */
     HIGHEST(4),
     /**
@@ -34,13 +33,11 @@ public enum EventPriority
 
     private final int slot;
 
-    private EventPriority(int slot)
-    {
+    private EventPriority(int slot) {
         this.slot = slot;
     }
 
-    public int getSlot()
-    {
+    public int getSlot() {
         return this.slot;
     }
 }

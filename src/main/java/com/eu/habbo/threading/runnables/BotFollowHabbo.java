@@ -8,39 +8,32 @@ import com.eu.habbo.habbohotel.users.Habbo;
 import com.eu.habbo.util.pathfinding.PathFinder;
 import com.eu.habbo.util.pathfinding.Tile;
 
-public class BotFollowHabbo implements Runnable
-{
+public class BotFollowHabbo implements Runnable {
+
     private Bot bot;
     private Habbo habbo;
     private Room room;
 
-    public BotFollowHabbo(Bot bot, Habbo habbo, Room room)
-    {
+    public BotFollowHabbo(Bot bot, Habbo habbo, Room room) {
         this.bot = bot;
         this.habbo = habbo;
         this.room = room;
     }
 
     @Override
-    public void run()
-    {
-        if (this.bot != null)
-        {
-            if (this.habbo != null && this.bot.getFollowingHabboId() == this.habbo.getHabboInfo().getId())
-            {
-                if(this.habbo.getHabboInfo().getCurrentRoom() != null && this.habbo.getHabboInfo().getCurrentRoom() == this.room)
-                {
-                    if (this.habbo.getRoomUnit() != null)
-                    {
-                        if (this.bot.getRoomUnit() != null)
-                        {
+    public void run() {
+        if (this.bot != null) {
+            if (this.habbo != null && this.bot.getFollowingHabboId() == this.habbo.getHabboInfo().getId()) {
+                if (this.habbo.getHabboInfo().getCurrentRoom() != null && this.habbo.getHabboInfo().getCurrentRoom() == this.room) {
+                    if (this.habbo.getRoomUnit() != null) {
+                        if (this.bot.getRoomUnit() != null) {
                             Tile target = PathFinder.getSquareInFront(this.habbo.getRoomUnit().getX(), this.habbo.getRoomUnit().getY(), Math.abs((this.habbo.getRoomUnit().getBodyRotation().getValue() + 4)) % 8);
 
-                            if (target.X < 0 || target.Y < 0)
+                            if (target.X < 0 || target.Y < 0) {
                                 target = PathFinder.getSquareInFront(this.habbo.getRoomUnit().getX(), this.habbo.getRoomUnit().getY(), this.habbo.getRoomUnit().getBodyRotation().getValue());
+                            }
 
-                            if (target.X >= 0 && target.Y >= 0)
-                            {
+                            if (target.X >= 0 && target.Y >= 0) {
                                 this.bot.getRoomUnit().setGoalLocation(target);
                                 this.bot.getRoomUnit().setCanWalk(true);
                                 Emulator.getThreading().run(this, 500);

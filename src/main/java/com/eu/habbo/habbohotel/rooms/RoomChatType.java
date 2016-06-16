@@ -1,7 +1,7 @@
 package com.eu.habbo.habbohotel.rooms;
 
-public enum RoomChatType
-{
+public enum RoomChatType {
+
     TALK,
     SHOUT,
     WHISPER

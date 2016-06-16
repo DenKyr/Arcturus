@@ -10,11 +10,10 @@ import com.eu.habbo.messages.outgoing.generic.alerts.GenericAlertComposer;
 import com.eu.habbo.messages.outgoing.modtool.ModToolReportReceivedAlertComposer;
 import com.eu.habbo.threading.runnables.InsertModToolIssue;
 
-public class ReportEvent extends MessageHandler
-{
+public class ReportEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         String message = this.packet.readString();
         int topic = this.packet.readInt();
         int userId = this.packet.readInt();
@@ -23,21 +22,19 @@ public class ReportEvent extends MessageHandler
 
         Room room = Emulator.getGameEnvironment().getRoomManager().getRoom(roomId);
 
-        if(room == null)
+        if (room == null) {
             return;
+        }
 
-        if(Emulator.getGameEnvironment().getModToolManager().hasPendingTickets(this.client.getHabbo().getHabboInfo().getId()))
-        {
+        if (Emulator.getGameEnvironment().getModToolManager().hasPendingTickets(this.client.getHabbo().getHabboInfo().getId())) {
             this.client.sendResponse(new GenericAlertComposer("You've got still a pending ticket. Wait till the moderators are done reviewing your ticket."));
             return;
         }
 
-        if(userId != -1)
-        {
+        if (userId != -1) {
             Habbo reported = Emulator.getGameEnvironment().getHabboManager().getHabbo(userId);
 
-            if(reported != null)
-            {
+            if (reported != null) {
                 ModToolIssue issue = new ModToolIssue(this.client.getHabbo().getHabboInfo().getId(), this.client.getHabbo().getHabboInfo().getUsername(), reported.getHabboInfo().getId(), reported.getHabboInfo().getUsername(), roomId, message, ModToolTicketType.NORMAL);
                 issue.category = topic;
                 new InsertModToolIssue(issue).run();
@@ -46,14 +43,11 @@ public class ReportEvent extends MessageHandler
                 Emulator.getGameEnvironment().getModToolManager().updateTicketToMods(issue);
                 this.client.sendResponse(new ModToolReportReceivedAlertComposer(ModToolReportReceivedAlertComposer.REPORT_RECEIVED));
 
-                for(int i = 0; i < messageCount; i++)
-                {
+                for (int i = 0; i < messageCount; i++) {
                     //System.out.println(this.packet.readString());
                 }
             }
-        }
-        else
-        {
+        } else {
             ModToolIssue issue = new ModToolIssue(this.client.getHabbo().getHabboInfo().getId(), this.client.getHabbo().getHabboInfo().getUsername(), room.getOwnerId(), room.getOwnerName(), roomId, message, ModToolTicketType.ROOM);
             issue.category = topic;
             new InsertModToolIssue(issue).run();

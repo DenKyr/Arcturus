@@ -6,25 +6,20 @@ import com.eu.habbo.habbohotel.rooms.Room;
 import com.eu.habbo.messages.incoming.MessageHandler;
 import com.eu.habbo.messages.outgoing.wired.WiredSavedComposer;
 
-public class WiredTriggerSaveDataEvent extends MessageHandler
-{
+public class WiredTriggerSaveDataEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         int itemId = this.packet.readInt();
 
         Room room = this.client.getHabbo().getHabboInfo().getCurrentRoom();
 
-        if(room != null)
-        {
-            if(room.getOwnerId() == this.client.getHabbo().getHabboInfo().getId() || this.client.getHabbo().hasPermission("acc_anyroomowner") || this.client.getHabbo().hasPermission("acc_moverotate"))
-            {
+        if (room != null) {
+            if (room.getOwnerId() == this.client.getHabbo().getHabboInfo().getId() || this.client.getHabbo().hasPermission("acc_anyroomowner") || this.client.getHabbo().hasPermission("acc_moverotate")) {
                 InteractionWiredTrigger trigger = room.getRoomSpecialTypes().getTrigger(itemId);
 
-                if(trigger != null)
-                {
-                    if(trigger.saveData(this.packet))
-                    {
+                if (trigger != null) {
+                    if (trigger.saveData(this.packet)) {
                         this.client.sendResponse(new WiredSavedComposer());
 
                         trigger.needsUpdate(true);

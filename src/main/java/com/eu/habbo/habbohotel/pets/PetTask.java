@@ -1,7 +1,7 @@
 package com.eu.habbo.habbohotel.pets;
 
-public enum PetTask
-{
+public enum PetTask {
+
     FREE,
     SIT,
     DOWN,

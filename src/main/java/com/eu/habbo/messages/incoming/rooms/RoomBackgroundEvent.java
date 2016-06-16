@@ -7,34 +7,35 @@ import com.eu.habbo.messages.incoming.MessageHandler;
 import com.eu.habbo.messages.outgoing.rooms.items.FloorItemUpdateComposer;
 import com.eu.habbo.plugin.events.furniture.FurnitureRoomTonerEvent;
 
-public class RoomBackgroundEvent extends MessageHandler
-{
+public class RoomBackgroundEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         int itemId = this.packet.readInt();
 
         Room room = this.client.getHabbo().getHabboInfo().getCurrentRoom();
-        if(room == null)
+        if (room == null) {
             return;
+        }
 
-        if(room.getOwnerId() == this.client.getHabbo().getHabboInfo().getId() || this.client.getHabbo().hasPermission("acc_placefurni"))
-        {
+        if (room.getOwnerId() == this.client.getHabbo().getHabboInfo().getId() || this.client.getHabbo().hasPermission("acc_placefurni")) {
             HabboItem item = room.getHabboItem(itemId);
 
-            if(item == null)
+            if (item == null) {
                 return;
+            }
 
-            int hue         = this.packet.readInt();
-            int saturation  = this.packet.readInt();
-            int brightness  = this.packet.readInt();
+            int hue = this.packet.readInt();
+            int saturation = this.packet.readInt();
+            int brightness = this.packet.readInt();
 
-            FurnitureRoomTonerEvent event = (FurnitureRoomTonerEvent)Emulator.getPluginManager().fireEvent(new FurnitureRoomTonerEvent(item, this.client.getHabbo(), hue, saturation, brightness));
+            FurnitureRoomTonerEvent event = (FurnitureRoomTonerEvent) Emulator.getPluginManager().fireEvent(new FurnitureRoomTonerEvent(item, this.client.getHabbo(), hue, saturation, brightness));
 
-            if(event.isCancelled())
+            if (event.isCancelled()) {
                 return;
+            }
 
-            hue        = event.hue        % 255;
+            hue = event.hue % 255;
             saturation = event.saturation % 255;
             brightness = event.brightness % 255;
 

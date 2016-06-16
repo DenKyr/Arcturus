@@ -8,9 +8,9 @@ import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.URLClassLoader;
 
-public abstract class HabboPlugin
-{
-    public final THashMap<Class<? extends Event>, THashSet<Method>> registeredEvents = new THashMap<Class <? extends Event>, THashSet<Method>>();
+public abstract class HabboPlugin {
+
+    public final THashMap<Class<? extends Event>, THashSet<Method>> registeredEvents = new THashMap<Class<? extends Event>, THashSet<Method>>();
 
     public HabboPluginConfiguration configuration;
 
@@ -18,8 +18,7 @@ public abstract class HabboPlugin
 
     public abstract void onDisable();
 
-    public boolean isRegistered(Class<? extends  Event> clazz)
-    {
+    public boolean isRegistered(Class<? extends Event> clazz) {
         return this.registeredEvents.containsKey(clazz);
     }
 

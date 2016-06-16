@@ -13,24 +13,22 @@ import com.eu.habbo.messages.outgoing.rooms.ForwardToRoomComposer;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class WiredEffectForwardToRoom extends InteractionWiredEffect
-{
+public class WiredEffectForwardToRoom extends InteractionWiredEffect {
+
     public static final WiredEffectType type = WiredEffectType.SHOW_MESSAGE;
 
     private int roomId = 0;
-    public WiredEffectForwardToRoom(ResultSet set, Item baseItem) throws SQLException
-    {
+
+    public WiredEffectForwardToRoom(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
 
-    public WiredEffectForwardToRoom(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public WiredEffectForwardToRoom(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
 
     @Override
-    public void serializeWiredData(ServerMessage message)
-    {
+    public void serializeWiredData(ServerMessage message) {
         message.appendBoolean(false);
         message.appendInt32(0);
         message.appendInt32(0);
@@ -45,16 +43,12 @@ public class WiredEffectForwardToRoom extends InteractionWiredEffect
     }
 
     @Override
-    public boolean saveData(ClientMessage packet)
-    {
+    public boolean saveData(ClientMessage packet) {
         packet.readInt();
 
-        try
-        {
+        try {
             this.roomId = Integer.valueOf(packet.readString());
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return false;
         }
 
@@ -62,53 +56,47 @@ public class WiredEffectForwardToRoom extends InteractionWiredEffect
     }
 
     @Override
-    public WiredEffectType getType()
-    {
+    public WiredEffectType getType() {
         return type;
     }
 
     @Override
-    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff)
-    {
+    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff) {
         Habbo habbo = room.getHabbo(roomUnit);
 
-        if(habbo == null)
+        if (habbo == null) {
             return false;
+        }
 
-        if(this.roomId > 0)
+        if (this.roomId > 0) {
             habbo.getClient().sendResponse(new ForwardToRoomComposer(this.roomId));
+        }
 
         return true;
     }
 
     @Override
-    protected String getWiredData()
-    {
+    protected String getWiredData() {
         return this.getDelay() + "\t" + this.roomId;
     }
 
     @Override
-    public void loadWiredData(ResultSet set, Room room) throws SQLException
-    {
+    public void loadWiredData(ResultSet set, Room room) throws SQLException {
         String wireData = set.getString("wired_data");
         this.roomId = 0;
 
-        if(wireData.split("\t").length >= 2)
-        {
+        if (wireData.split("\t").length >= 2) {
             super.setDelay(Integer.valueOf(wireData.split("\t")[0]));
 
-            try
-            {
+            try {
                 this.roomId = Integer.valueOf(getWiredData().split("\t")[1]);
+            } catch (Exception e) {
             }
-            catch (Exception e)
-            {}
         }
     }
 
     @Override
-    public void onPickUp()
-    {
+    public void onPickUp() {
         this.roomId = 0;
     }
 }

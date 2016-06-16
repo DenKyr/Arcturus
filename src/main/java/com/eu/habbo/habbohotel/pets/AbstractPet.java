@@ -13,8 +13,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-public abstract class AbstractPet implements ISerialize, Runnable
-{
+public abstract class AbstractPet implements ISerialize, Runnable {
+
     int id;
     int userId;
     Room room;
@@ -33,174 +33,147 @@ public abstract class AbstractPet implements ISerialize, Runnable
     RoomUnit roomUnit;
     int chatTimeout;
 
-    void say(String message)
-    {
-        if(this.roomUnit != null && this.room != null && !message.isEmpty())
-        {
+    void say(String message) {
+        if (this.roomUnit != null && this.room != null && !message.isEmpty()) {
             RoomChatMessage chatMessage = new RoomChatMessage(message, this.roomUnit, RoomChatMessageBubbles.NORMAL);
             PetTalkEvent talkEvent = new PetTalkEvent(this, chatMessage);
-            if (!Emulator.getPluginManager().fireEvent(talkEvent).isCancelled())
-            {
+            if (!Emulator.getPluginManager().fireEvent(talkEvent).isCancelled()) {
                 this.room.sendComposer(new RoomUserTalkComposer(chatMessage).compose());
             }
         }
     }
 
-    public void say(PetVocal vocal)
-    {
-        if(vocal != null)
+    public void say(PetVocal vocal) {
+        if (vocal != null) {
             this.say(vocal.message);
+        }
     }
 
-    public int getId()
-    {
+    public int getId() {
         return id;
     }
 
-    public int getUserId()
-    {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId)
-    {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
-    public Room getRoom()
-    {
+    public Room getRoom() {
         return room;
     }
 
-    public void setRoom(Room room)
-    {
+    public void setRoom(Room room) {
         this.room = room;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public PetData getPetData()
-    {
+    public PetData getPetData() {
         return this.petData;
     }
 
-    public void setPetData(PetData petData)
-    {
+    public void setPetData(PetData petData) {
         this.petData = petData;
     }
 
-    public int getRace()
-    {
+    public int getRace() {
         return race;
     }
 
-    public void setRace(int race)
-    {
+    public void setRace(int race) {
         this.race = race;
     }
 
-    public String getColor()
-    {
+    public String getColor() {
         return this.color;
     }
 
-    public void setColor(String color)
-    {
+    public void setColor(String color) {
         this.color = color;
     }
 
-    public int getHappyness()
-    {
+    public int getHappyness() {
         return happyness;
     }
 
-    public void setHappyness(int happyness)
-    {
+    public void setHappyness(int happyness) {
         this.happyness = happyness;
     }
 
-    public int getExperience()
-    {
+    public int getExperience() {
         return experience;
     }
 
-    public void setExperience(int experience)
-    {
+    public void setExperience(int experience) {
         this.experience = experience;
     }
 
-    public synchronized void addExperience(int amount)
-    {
+    public synchronized void addExperience(int amount) {
         this.experience += amount;
     }
 
-    public int getEnergy()
-    {
+    public int getEnergy() {
         return energy;
     }
 
-    public synchronized void setEnergy(int energy)
-    {
+    public synchronized void setEnergy(int energy) {
         this.energy = energy;
     }
 
-    synchronized void addEnergy(int amount)
-    {
+    synchronized void addEnergy(int amount) {
         this.energy += amount;
 
-        if(this.energy > PetManager.maxEnergy(this.level))
+        if (this.energy > PetManager.maxEnergy(this.level)) {
             this.energy = PetManager.maxEnergy(this.level);
+        }
 
-        if(this.energy < 0)
+        if (this.energy < 0) {
             this.energy = 0;
+        }
     }
 
-    synchronized void addHappyness(int amount)
-    {
+    synchronized void addHappyness(int amount) {
         this.happyness += amount;
 
-        if(this.happyness > 100)
+        if (this.happyness > 100) {
             this.happyness = 100;
+        }
 
-        if(this.happyness < 0)
+        if (this.happyness < 0) {
             this.happyness = 0;
+        }
     }
 
-    public int getRespect()
-    {
+    public int getRespect() {
         return respect;
     }
 
-    public synchronized void addRespect()
-    {
+    public synchronized void addRespect() {
         this.respect++;
     }
 
-    public int getCreated()
-    {
+    public int getCreated() {
         return created;
     }
 
-    public void setCreated(int created)
-    {
+    public void setCreated(int created) {
         this.created = created;
     }
 
-    public int daysAlive()
-    {
+    public int daysAlive() {
         return (Emulator.getIntUnixTimestamp() - this.created) / 86400;
     }
 
-    public String bornDate()
-    {
+    public String bornDate() {
 
         Calendar cal = Calendar.getInstance(TimeZone.getDefault());
         cal.setTime(new Date(this.created));
@@ -208,23 +181,19 @@ public abstract class AbstractPet implements ISerialize, Runnable
         return cal.get(Calendar.DAY_OF_MONTH) + "/" + cal.get(Calendar.MONTH) + "/" + cal.get(Calendar.YEAR);
     }
 
-    public int getLevel()
-    {
+    public int getLevel() {
         return level;
     }
 
-    public void setLevel(int level)
-    {
+    public void setLevel(int level) {
         this.level = level;
     }
 
-    public RoomUnit getRoomUnit()
-    {
+    public RoomUnit getRoomUnit() {
         return roomUnit;
     }
 
-    public void setRoomUnit(RoomUnit roomUnit)
-    {
+    public void setRoomUnit(RoomUnit roomUnit) {
         this.roomUnit = roomUnit;
     }
 }

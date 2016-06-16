@@ -4,8 +4,8 @@ import com.eu.habbo.habbohotel.bots.Bot;
 import com.eu.habbo.habbohotel.users.Habbo;
 import com.eu.habbo.util.pathfinding.Tile;
 
-public class BotPlacedEvent extends BotEvent
-{
+public class BotPlacedEvent extends BotEvent {
+
     /**
      * The location of the bot.
      */
@@ -15,13 +15,13 @@ public class BotPlacedEvent extends BotEvent
      * The placer of this bot.
      */
     public final Habbo placer;
+
     /**
      * @param bot The Bot this event applies to.
      * @param location The location of the bot.
      * @param placer The placer of this bot.
      */
-    public BotPlacedEvent(Bot bot, Tile location, Habbo placer)
-    {
+    public BotPlacedEvent(Bot bot, Tile location, Habbo placer) {
         super(bot);
 
         this.location = location;

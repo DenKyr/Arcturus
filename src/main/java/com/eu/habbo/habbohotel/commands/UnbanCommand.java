@@ -8,28 +8,20 @@ import com.eu.habbo.messages.outgoing.rooms.users.RoomUserWhisperComposer;
 
 import java.sql.SQLException;
 
-public class UnbanCommand extends Command
-{
-    public UnbanCommand()
-    {
+public class UnbanCommand extends Command {
+
+    public UnbanCommand() {
         super("cmd_unban", Emulator.getTexts().getValue("commands.keys.cmd_unban").split(";"));
     }
 
     @Override
-    public boolean handle(GameClient gameClient, String[] params) throws Exception
-    {
-        if(params.length == 1)
-        {
+    public boolean handle(GameClient gameClient, String[] params) throws Exception {
+        if (params.length == 1) {
             gameClient.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.error.cmd_unban.not_specified"), gameClient.getHabbo(), gameClient.getHabbo(), RoomChatMessageBubbles.ALERT)));
-        }
-        else
-        {
-            if(Emulator.getGameEnvironment().getModToolManager().unban(params[1]))
-            {
+        } else {
+            if (Emulator.getGameEnvironment().getModToolManager().unban(params[1])) {
                 gameClient.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.error.cmd_unban.success").replace("%user%", params[1]), gameClient.getHabbo(), gameClient.getHabbo(), RoomChatMessageBubbles.ALERT)));
-            }
-            else
-            {
+            } else {
                 gameClient.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.error.cmd_unban.not_found").replace("%user%", params[1]), gameClient.getHabbo(), gameClient.getHabbo(), RoomChatMessageBubbles.ALERT)));
             }
         }

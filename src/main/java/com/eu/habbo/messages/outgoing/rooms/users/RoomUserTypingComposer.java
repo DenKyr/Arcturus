@@ -5,20 +5,18 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class RoomUserTypingComposer extends MessageComposer
-{
+public class RoomUserTypingComposer extends MessageComposer {
+
     private final RoomUnit roomUnit;
     private final boolean typing;
 
-    public RoomUserTypingComposer(RoomUnit roomUnit, boolean typing)
-    {
+    public RoomUserTypingComposer(RoomUnit roomUnit, boolean typing) {
         this.roomUnit = roomUnit;
         this.typing = typing;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.RoomUserTypingComposer);
         this.response.appendInt32(this.roomUnit.getId());
         this.response.appendInt32(this.typing ? 1 : 0);

@@ -5,11 +5,10 @@ import com.eu.habbo.habbohotel.guilds.Guild;
 import com.eu.habbo.messages.incoming.MessageHandler;
 import com.eu.habbo.messages.outgoing.guilds.GuildMembersComposer;
 
-public class RequestGuildMembersEvent extends MessageHandler
-{
+public class RequestGuildMembersEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         int groupId = this.packet.readInt();
         int pageId = this.packet.readInt();
         String query = this.packet.readString();

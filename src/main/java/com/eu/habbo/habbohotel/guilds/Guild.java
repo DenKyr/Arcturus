@@ -6,8 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Guild implements Runnable
-{
+public class Guild implements Runnable {
+
     private int id;
     private int ownerId;
     private String name;
@@ -26,8 +26,7 @@ public class Guild implements Runnable
     public boolean needsUpdate;
     public int lastRequested = Emulator.getIntUnixTimestamp();
 
-    public Guild(ResultSet set) throws SQLException
-    {
+    public Guild(ResultSet set) throws SQLException {
         this.id = set.getInt("id");
         this.ownerId = set.getInt("user_id");
         this.name = set.getString("name");
@@ -43,8 +42,7 @@ public class Guild implements Runnable
         this.requestCount = 0;
     }
 
-    public Guild(int ownerId, int roomId, String name, String description, int colorOne, int colorTwo, String badge)
-    {
+    public Guild(int ownerId, int roomId, String name, String description, int colorOne, int colorTwo, String badge) {
         this.id = 0;
         this.ownerId = ownerId;
         this.roomId = roomId;
@@ -58,17 +56,14 @@ public class Guild implements Runnable
         this.memberCount = 0;
     }
 
-    public void loadMemberCount()
-    {
-        try
-        {
+    public void loadMemberCount() {
+        try {
 
             PreparedStatement statement = Emulator.getDatabase().prepare("SELECT COUNT(id) as count FROM guilds_members WHERE level_id < 3 AND guild_id = ?");
             statement.setInt(1, this.id);
             ResultSet set = statement.executeQuery();
 
-            if(set.next())
-            {
+            if (set.next()) {
                 this.memberCount = set.getInt(1);
             }
 
@@ -80,28 +75,22 @@ public class Guild implements Runnable
             statement.setInt(1, this.id);
             set = statement.executeQuery();
 
-            if(set.next())
-            {
+            if (set.next()) {
                 this.requestCount = set.getInt(1);
             }
 
             set.close();
             statement.close();
             statement.getConnection().close();
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             Emulator.getLogging().logSQLException(e);
         }
     }
 
     @Override
-    public void run()
-    {
-        if(this.needsUpdate)
-        {
-            try
-            {
+    public void run() {
+        if (this.needsUpdate) {
+            try {
                 PreparedStatement statement = Emulator.getDatabase().prepare("UPDATE guilds SET name = ?, description = ?, state = ?, rights = ?, color_one = ?, color_two = ?, badge = ? WHERE id = ?");
                 statement.setString(1, this.name);
                 statement.setString(2, this.description);
@@ -114,137 +103,110 @@ public class Guild implements Runnable
                 statement.execute();
                 statement.close();
                 statement.getConnection().close();
-            }
-            catch (SQLException e)
-            {
+            } catch (SQLException e) {
                 Emulator.getLogging().logSQLException(e);
             }
             this.needsUpdate = false;
         }
     }
 
-    public int getId()
-    {
+    public int getId() {
         return this.id;
     }
 
-    public void setId(int id)
-    {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return this.name;
     }
 
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public String getDescription()
-    {
+    public String getDescription() {
         return this.description;
     }
 
-    public void setDescription(String description)
-    {
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public int getRoomId()
-    {
+    public int getRoomId() {
         return this.roomId;
     }
 
-    public GuildState getState()
-    {
+    public GuildState getState() {
         return this.state;
     }
 
-    public void setState(GuildState state)
-    {
+    public void setState(GuildState state) {
         this.state = state;
     }
 
-    public int getRights()
-    {
+    public int getRights() {
         return this.rights;
     }
 
-    public void setRights(int rights)
-    {
+    public void setRights(int rights) {
         this.rights = rights;
     }
 
-    public int getColorOne()
-    {
+    public int getColorOne() {
         return this.colorOne;
     }
 
-    public void setColorOne(int colorOne)
-    {
+    public void setColorOne(int colorOne) {
         this.colorOne = colorOne;
     }
 
-    public int getColorTwo()
-    {
+    public int getColorTwo() {
         return this.colorTwo;
     }
 
-    public void setColorTwo(int colorTwo)
-    {
+    public void setColorTwo(int colorTwo) {
         this.colorTwo = colorTwo;
     }
 
-    public String getBadge()
-    {
+    public String getBadge() {
         return this.badge;
     }
 
-    public void setBadge(String badge)
-    {
+    public void setBadge(String badge) {
         this.badge = badge;
     }
 
-    public int getOwnerId()
-    {
+    public int getOwnerId() {
         return this.ownerId;
     }
 
-    public int getDateCreated()
-    {
+    public int getDateCreated() {
         return dateCreated;
     }
 
-    public int getMemberCount()
-    {
+    public int getMemberCount() {
         return this.memberCount;
     }
 
-    public void increaseMemberCount()
-    {
+    public void increaseMemberCount() {
         this.memberCount++;
     }
 
-    public void decreaseMemberCount()
-    {
+    public void decreaseMemberCount() {
         this.memberCount--;
     }
 
-    public int getRequestCount()
-    {
+    public int getRequestCount() {
         return this.requestCount;
     }
 
-    public void increaseRequestCount()
-    {
+    public void increaseRequestCount() {
         this.requestCount++;
     }
 
-    public void decreaseRequestCount()
-    {
+    public void decreaseRequestCount() {
         this.requestCount--;
     }
 }

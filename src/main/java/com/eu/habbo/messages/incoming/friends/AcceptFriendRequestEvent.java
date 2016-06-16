@@ -5,23 +5,23 @@ import com.eu.habbo.habbohotel.achievements.Achievement;
 import com.eu.habbo.habbohotel.achievements.AchievementManager;
 import com.eu.habbo.messages.incoming.MessageHandler;
 
-public class AcceptFriendRequestEvent extends MessageHandler
-{
+public class AcceptFriendRequestEvent extends MessageHandler {
+
     @Override
-    public void handle() throws Exception
-    {
+    public void handle() throws Exception {
         int count = this.packet.readInt();
         int userId;
 
-        for(int i = 0; i < count; i++)
-        {
+        for (int i = 0; i < count; i++) {
             userId = this.packet.readInt();
 
-            if(userId == 0)
+            if (userId == 0) {
                 return;
+            }
 
-            if(this.client.getHabbo().getMessenger().getFriends().containsKey(userId))
+            if (this.client.getHabbo().getMessenger().getFriends().containsKey(userId)) {
                 continue;
+            }
 
             this.client.getHabbo().getMessenger().acceptFriendRequest(this.client.getHabbo().getHabboInfo().getId(), userId);
 
@@ -31,15 +31,14 @@ public class AcceptFriendRequestEvent extends MessageHandler
 
             Achievement achievement = Emulator.getGameEnvironment().getAchievementManager().achievements.get("FriendListSize");
 
-            if(achievement == null)
+            if (achievement == null) {
                 return;
+            }
 
-            if (progress > 0)
-            {
+            if (progress > 0) {
                 toProgress = this.client.getHabbo().getMessenger().getFriends().size() - progress;
 
-                if(toProgress < 0)
-                {
+                if (toProgress < 0) {
                     return;
                 }
             }

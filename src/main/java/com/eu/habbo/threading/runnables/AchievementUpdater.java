@@ -8,26 +8,23 @@ import gnu.trove.iterator.TIntObjectIterator;
 
 import java.util.Map;
 
-public class AchievementUpdater implements Runnable
-{
+public class AchievementUpdater implements Runnable {
+
     @Override
-    public void run()
-    {
+    public void run() {
         Emulator.getThreading().run(this, 5 * 60);
 
         Achievement onlineTime = Emulator.getGameEnvironment().getAchievementManager().achievements.get("AllTimeHotelPresence");
 
-        for(Map.Entry<Integer, Habbo> set : Emulator.getGameEnvironment().getHabboManager().getOnlineHabbos().entrySet())
-        {
+        for (Map.Entry<Integer, Habbo> set : Emulator.getGameEnvironment().getHabboManager().getOnlineHabbos().entrySet()) {
             Habbo habbo = set.getValue();
 
             int timeOnline = habbo.getHabboStats().getAchievementCache().get(onlineTime);
-            if(timeOnline == 0)
-            {
+            if (timeOnline == 0) {
                 habbo.getHabboStats().getAchievementCache().put(onlineTime, Emulator.getIntUnixTimestamp());
             }
 
-            AchievementManager.progressAchievement(habbo, onlineTime, (int)Math.floor((Emulator.getIntUnixTimestamp() - timeOnline) / 60));
+            AchievementManager.progressAchievement(habbo, onlineTime, (int) Math.floor((Emulator.getIntUnixTimestamp() - timeOnline) / 60));
             habbo.getHabboStats().getAchievementCache().put(onlineTime, timeOnline % 60);
         }
     }

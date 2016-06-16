@@ -10,24 +10,21 @@ import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.procedure.TIntObjectProcedure;
 
-public class RoomPetComposer extends MessageComposer implements TIntObjectProcedure<AbstractPet>
-{
+public class RoomPetComposer extends MessageComposer implements TIntObjectProcedure<AbstractPet> {
+
     private final TIntObjectMap<AbstractPet> pets;
 
-    public RoomPetComposer(AbstractPet pet)
-    {
+    public RoomPetComposer(AbstractPet pet) {
         this.pets = new TIntObjectHashMap<AbstractPet>();
         this.pets.put(pet.getId(), pet);
     }
 
-    public RoomPetComposer(TIntObjectMap<AbstractPet> pets)
-    {
+    public RoomPetComposer(TIntObjectMap<AbstractPet> pets) {
         this.pets = pets;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.RoomUsersComposer);
         this.response.appendInt32(this.pets.size());
         this.pets.forEachEntry(this);
@@ -35,21 +32,17 @@ public class RoomPetComposer extends MessageComposer implements TIntObjectProced
     }
 
     @Override
-    public boolean execute(int a, AbstractPet pet)
-    {
+    public boolean execute(int a, AbstractPet pet) {
         this.response.appendInt32(pet.getId());
         this.response.appendString(pet.getName());
         this.response.appendString("");
-        if(pet instanceof MonsterplantPet)
-        {
+        if (pet instanceof MonsterplantPet) {
             //Shape (Name 1)
             //Color (Name 2)
 
             String look = "16 0 ffffff 5 2 1 2 1 1 1 1 1 1 1 1 1 1 1 1";
             this.response.appendString(look);
-        }
-        else
-        {
+        } else {
             this.response.appendString(pet.getPetData().getType() + " " + pet.getRace() + " " + pet.getColor() + " " + ((pet instanceof HorsePet ? (((HorsePet) pet).hasSaddle() ? "3" : "2") + " 2 " + ((HorsePet) pet).getHairStyle() + " " + ((HorsePet) pet).getHairColor() + " 3 " + ((HorsePet) pet).getHairStyle() + " " + ((HorsePet) pet).getHairColor() + (((HorsePet) pet).hasSaddle() ? " 4 9 0" : "") : pet instanceof MonsterplantPet ? (((MonsterplantPet) pet).look.isEmpty() ? "2 1 8 6 0 -1 -1" : ((MonsterplantPet) pet).look) : "2 2 -1 0 3 -1 0")));
         }
         this.response.appendInt32(pet.getRoomUnit().getId());

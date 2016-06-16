@@ -6,8 +6,8 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class HTTPPostStatus implements Runnable
-{
+public class HTTPPostStatus implements Runnable {
+
     private void sendPost() throws Exception {
 
         String url = "http://arcturus.wf/callback/status.php";
@@ -37,21 +37,16 @@ public class HTTPPostStatus implements Runnable
 //            response.append(inputLine);
 //        }
 //        in.close();
-
         //print result
         con.disconnect();
         return;
     }
 
     @Override
-    public void run()
-    {
-        try
-        {
+    public void run() {
+        try {
             this.sendPost();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

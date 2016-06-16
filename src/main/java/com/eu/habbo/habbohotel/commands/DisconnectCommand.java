@@ -7,32 +7,27 @@ import com.eu.habbo.habbohotel.rooms.RoomChatMessageBubbles;
 import com.eu.habbo.habbohotel.users.Habbo;
 import com.eu.habbo.messages.outgoing.rooms.users.RoomUserWhisperComposer;
 
-public class DisconnectCommand extends Command
-{
-    public DisconnectCommand()
-    {
+public class DisconnectCommand extends Command {
+
+    public DisconnectCommand() {
         super("cmd_disconnect", Emulator.getTexts().getValue("commands.keys.cmd_disconnect").split(";"));
     }
 
     @Override
-    public boolean handle(GameClient gameClient, String[] params) throws Exception
-    {
-        if(params.length < 2)
-        {
+    public boolean handle(GameClient gameClient, String[] params) throws Exception {
+        if (params.length < 2) {
             gameClient.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.error.cmd_disconnect.forgot_username"), gameClient.getHabbo(), gameClient.getHabbo(), RoomChatMessageBubbles.ALERT)));
             return true;
         }
 
-        if(params[1].toLowerCase().equals(gameClient.getHabbo().getHabboInfo().getUsername().toLowerCase()))
-        {
+        if (params[1].toLowerCase().equals(gameClient.getHabbo().getHabboInfo().getUsername().toLowerCase())) {
             gameClient.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.error.cmd_disconnect.disconnect_self"), gameClient.getHabbo(), gameClient.getHabbo(), RoomChatMessageBubbles.ALERT)));
             return true;
         }
 
         Habbo target = Emulator.getGameEnvironment().getHabboManager().getHabbo(params[1]);
 
-        if(target == null)
-        {
+        if (target == null) {
             gameClient.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.error.cmd_disconnect.user_offline"), gameClient.getHabbo(), gameClient.getHabbo(), RoomChatMessageBubbles.ALERT)));
             return true;
         }

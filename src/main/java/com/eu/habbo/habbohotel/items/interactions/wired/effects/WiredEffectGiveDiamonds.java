@@ -14,25 +14,22 @@ import com.eu.habbo.messages.outgoing.users.UserPointsComposer;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class WiredEffectGiveDiamonds extends InteractionWiredEffect
-{
+public class WiredEffectGiveDiamonds extends InteractionWiredEffect {
+
     public static final WiredEffectType type = WiredEffectType.SHOW_MESSAGE;
 
     private int points = 0;
 
-    public WiredEffectGiveDiamonds(ResultSet set, Item baseItem) throws SQLException
-    {
+    public WiredEffectGiveDiamonds(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
 
-    public WiredEffectGiveDiamonds(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells)
-    {
+    public WiredEffectGiveDiamonds(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
 
     @Override
-    public void serializeWiredData(ServerMessage message)
-    {
+    public void serializeWiredData(ServerMessage message) {
         message.appendBoolean(false);
         message.appendInt32(0);
         message.appendInt32(0);
@@ -47,16 +44,12 @@ public class WiredEffectGiveDiamonds extends InteractionWiredEffect
     }
 
     @Override
-    public boolean saveData(ClientMessage packet)
-    {
+    public boolean saveData(ClientMessage packet) {
         packet.readInt();
 
-        try
-        {
+        try {
             this.points = Integer.valueOf(packet.readString());
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return false;
         }
 
@@ -64,18 +57,17 @@ public class WiredEffectGiveDiamonds extends InteractionWiredEffect
     }
 
     @Override
-    public WiredEffectType getType()
-    {
+    public WiredEffectType getType() {
         return type;
     }
 
     @Override
-    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff)
-    {
+    public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff) {
         Habbo habbo = room.getHabbo(roomUnit);
 
-        if(habbo == null)
+        if (habbo == null) {
             return false;
+        }
 
         habbo.getHabboInfo().addCurrencyAmount(Emulator.getConfig().getInt("seasonal.primary.type"), this.points);
         habbo.getClient().sendResponse(new UserPointsComposer(habbo.getHabboInfo().getCurrencyAmount(Emulator.getConfig().getInt("seasonal.primary.type")), this.points, Emulator.getConfig().getInt("seasonal.primary.type")));
@@ -84,36 +76,29 @@ public class WiredEffectGiveDiamonds extends InteractionWiredEffect
     }
 
     @Override
-    protected String getWiredData()
-    {
+    protected String getWiredData() {
         return this.getDelay() + "\t" + this.points;
     }
 
     @Override
-    public void loadWiredData(ResultSet set, Room room) throws SQLException
-    {
+    public void loadWiredData(ResultSet set, Room room) throws SQLException {
         String wireData = set.getString("wired_data");
         String[] data = wireData.split("\t");
         this.points = 0;
 
-        if(data.length >= 2)
-        {
+        if (data.length >= 2) {
             super.setDelay(Integer.valueOf(data[0]));
 
-            try
-            {
+            try {
                 this.points = Integer.valueOf(data[1]);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
     @Override
-    public void onPickUp()
-    {
+    public void onPickUp() {
         this.points = 0;
     }
 }

@@ -7,21 +7,19 @@ import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
 
-public class FloorItemUpdateComposer extends MessageComposer
-{
+public class FloorItemUpdateComposer extends MessageComposer {
+
     private final HabboItem item;
 
-    public FloorItemUpdateComposer(HabboItem item)
-    {
+    public FloorItemUpdateComposer(HabboItem item) {
         this.item = item;
     }
 
     @Override
-    public ServerMessage compose()
-    {
+    public ServerMessage compose() {
         this.response.init(Outgoing.FloorItemUpdateComposer);
         this.item.serializeFloorData(this.response);
-        this.response.appendInt32(this.item instanceof InteractionGift ? ((((InteractionGift) this.item).getColorId() * 1000) + ((InteractionGift) this.item).getRibbonId()) : (this.item instanceof InteractionMusicDisc ? ((InteractionMusicDisc)this.item).getSongId() : 1));
+        this.response.appendInt32(this.item instanceof InteractionGift ? ((((InteractionGift) this.item).getColorId() * 1000) + ((InteractionGift) this.item).getRibbonId()) : (this.item instanceof InteractionMusicDisc ? ((InteractionMusicDisc) this.item).getSongId() : 1));
         this.item.serializeExtradata(this.response);
         this.response.appendInt32(-1);
         this.response.appendInt32(this.item.getBaseItem().getStateCount() > 1 ? 1 : 0);
