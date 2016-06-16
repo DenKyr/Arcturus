@@ -6,7 +6,7 @@ import com.eu.habbo.util.callback.HTTPPostStatus;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class CleanerThread implements Runnable {
+public final class CleanerThread implements Runnable {
 
     /**
      * Delay between each execution of checking to clean up in MS.

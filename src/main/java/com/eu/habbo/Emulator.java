@@ -46,6 +46,7 @@ public final class Emulator {
 
     static {
         Thread hook = new Thread(new Runnable() {
+            @Override
             public void run() {
                 Emulator.dispose();
             }
@@ -73,7 +74,7 @@ public final class Emulator {
             Emulator.pluginManager = new PluginManager();
             Emulator.pluginManager.reload();
             Emulator.texts = new TextsManager();
-            new CleanerThread();
+            CleanerThread cleanerThread = new CleanerThread();
             Emulator.gameServer = new GameServer(getConfig().getValue("game.host", "127.0.0.1"), getConfig().getInt("game.port", 30000));
             Emulator.rconServer = new RCONServer(getConfig().getValue("rcon.host", "127.0.0.1"), getConfig().getInt("rcon.port", 30001));
             Emulator.gameEnvironment = new GameEnvironment();
