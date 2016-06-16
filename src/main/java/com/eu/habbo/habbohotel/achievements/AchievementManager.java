@@ -17,7 +17,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 
-public class AchievementManager {
+public final class AchievementManager {
 
     /**
      * All the achievements in the hotel are stored in this map where: String =
