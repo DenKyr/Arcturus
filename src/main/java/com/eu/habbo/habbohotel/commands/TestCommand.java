@@ -64,7 +64,7 @@ public class TestCommand extends Command {
             AbstractPet pet = gameClient.getHabbo().getHabboInfo().getCurrentRoom().getPet(Integer.valueOf(params[2]));
 
             if (pet instanceof Pet) {
-                String a = "";
+                String a;
                 String b = "";
                 String c = "";
                 if (params[3] != null) {

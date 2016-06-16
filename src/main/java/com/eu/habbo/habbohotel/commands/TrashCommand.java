@@ -31,7 +31,7 @@ public class TrashCommand extends Command {
                 }
             }
 
-            new RoomTrashing(gameClient.getHabbo(), gameClient.getHabbo().getHabboInfo().getCurrentRoom());
+            RoomTrashing roomTrashing = new RoomTrashing(gameClient.getHabbo(), gameClient.getHabbo().getHabboInfo().getCurrentRoom());
 
             gameClient.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage("Lulz mode activated |", gameClient.getHabbo(), gameClient.getHabbo(), RoomChatMessageBubbles.ALERT)));
 

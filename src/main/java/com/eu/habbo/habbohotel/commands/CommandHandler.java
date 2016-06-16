@@ -15,16 +15,16 @@ import gnu.trove.set.hash.THashSet;
 
 import java.util.*;
 
-public class CommandHandler {
-
+public final class CommandHandler {
+    
     private final static THashSet<Command> commands = new THashSet<Command>();
-
+    
     public CommandHandler() {
         long millis = System.currentTimeMillis();
         reloadCommands();
         Emulator.getLogging().logStart("Command Handler -> Loaded! (" + (System.currentTimeMillis() - millis) + " MS)");
     }
-
+    
     void reloadCommands() {
         addCommand(new AboutCommand());
         addCommand(new AlertCommand());
@@ -103,7 +103,7 @@ public class CommandHandler {
         addCommand(new UpdateTextsCommand());
         addCommand(new UpdateWordFilterCommand());
         addCommand(new UserInfoCommand());
-
+        
         if (Emulator.debugging) {
             addCommand(new TestCommand());
         }
@@ -118,7 +118,7 @@ public class CommandHandler {
         if (command == null) {
             return;
         }
-
+        
         commands.add(command);
     }
 
@@ -132,7 +132,13 @@ public class CommandHandler {
             command.getConstructor().setAccessible(true);
             addCommand(command.newInstance());
             Emulator.getLogging().logDebugLine("Added command: " + command.getName());
-        } catch (Exception e) {
+        } catch (NoSuchMethodException e) {
+            Emulator.getLogging().logErrorLine(e);
+        } catch (SecurityException e) {
+            Emulator.getLogging().logErrorLine(e);
+        } catch (InstantiationException e) {
+            Emulator.getLogging().logErrorLine(e);
+        } catch (IllegalAccessException e) {
             Emulator.getLogging().logErrorLine(e);
         }
     }
@@ -150,26 +156,26 @@ public class CommandHandler {
         if (gameClient != null) {
             if (commandLine.startsWith(":")) {
                 commandLine = commandLine.replaceFirst(":", "");
-
+                
                 String[] parts = commandLine.split(" ");
-
+                
                 for (Command command : commands) {
                     for (String s : command.keys) {
                         if (s.toLowerCase().equals(parts[0].toLowerCase())) {
                             if (command.permission == null || gameClient.getHabbo().hasPermission(command.permission)) {
                                 try {
                                     Emulator.getPluginManager().fireEvent(new UserExecuteCommandEvent(gameClient.getHabbo(), command, parts));
-
+                                    
                                     if (gameClient.getHabbo().getHabboInfo().getCurrentRoom() != null) {
                                         gameClient.getHabbo().getHabboInfo().getCurrentRoom().sendComposer(new RoomUserTypingComposer(gameClient.getHabbo().getRoomUnit(), false).compose());
                                     }
-
+                                    
                                     UserCommandEvent event = new UserCommandEvent(gameClient.getHabbo(), parts, command.handle(gameClient, parts));
                                     Emulator.getPluginManager().fireEvent(event);
-
+                                    
                                     return event.succes;
                                 } catch (Exception e) {
-                                    e.printStackTrace();
+                                    Emulator.getLogging().logErrorLine(e);
                                     return false;
                                 }
                             }
@@ -179,39 +185,39 @@ public class CommandHandler {
                 }
             } else {
                 String[] args = commandLine.split(" ");
-
+                
                 if (args.length <= 1) {
                     return false;
                 }
-
+                
                 if (gameClient.getHabbo().getHabboInfo().getCurrentRoom() != null) {
                     Room room = gameClient.getHabbo().getHabboInfo().getCurrentRoom();
-
+                    
                     if (room.getCurrentPets().isEmpty()) {
                         return false;
                     }
-
+                    
                     TIntObjectIterator<AbstractPet> petIterator = room.getCurrentPets().iterator();
-
+                    
                     for (int j = room.getCurrentPets().size(); j-- > 0;) {
                         try {
                             petIterator.advance();
                         } catch (NoSuchElementException e) {
                             break;
                         }
-
+                        
                         AbstractPet pet = petIterator.value();
-
+                        
                         if (pet instanceof Pet) {
                             if (pet.getName().equalsIgnoreCase(args[0])) {
                                 String s = "";
-
+                                
                                 for (int i = 1; i < args.length; i++) {
                                     s += args[i] + " ";
                                 }
-
+                                
                                 s = s.substring(0, s.length() - 1);
-
+                                
                                 for (PetCommand command : pet.getPetData().getPetCommands()) {
                                     if (command.key.equalsIgnoreCase(s)) {
                                         if (command.level <= pet.getLevel()) {
@@ -219,7 +225,7 @@ public class CommandHandler {
                                         } else {
                                             pet.say(pet.getPetData().randomVocal(PetVocalsType.UNKNOWN_COMMAND));
                                         }
-
+                                        
                                         break;
                                     }
                                 }
@@ -242,19 +248,19 @@ public class CommandHandler {
     public List<Command> getCommandsForRank(int rankId) {
         THashSet<String> permissions = Emulator.getGameEnvironment().getPermissionsManager().getPermissionsForRank(rankId);
         List<Command> allowedCommands = new ArrayList<Command>();
-
+        
         for (Command command : commands) {
             if (allowedCommands.contains(command)) {
                 continue;
             }
-
+            
             if (permissions.contains(command.permission)) {
                 allowedCommands.add(command);
             }
         }
-
+        
         Collections.sort(allowedCommands, CommandHandler.ALPHABETICAL_ORDER);
-
+        
         return allowedCommands;
     }
 
@@ -263,7 +269,7 @@ public class CommandHandler {
      */
     public void dispose() {
         commands.clear();
-
+        
         Emulator.getLogging().logShutdownLine("Command Handled -> Disposed!");
     }
 
@@ -271,6 +277,7 @@ public class CommandHandler {
      * Sort all commands based on their permission in alphabetical order.
      */
     private static final Comparator<Command> ALPHABETICAL_ORDER = new Comparator<Command>() {
+        @Override
         public int compare(Command c1, Command c2) {
             int res = String.CASE_INSENSITIVE_ORDER.compare(c1.permission, c2.permission);
             return (res != 0) ? res : c1.permission.compareTo(c2.permission);

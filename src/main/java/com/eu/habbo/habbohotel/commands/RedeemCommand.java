@@ -45,8 +45,8 @@ public class RedeemCommand extends Command {
                     } catch (Exception e) {
                     }
                 } else if (item.getBaseItem().getName().startsWith("PF_")) {
-                    int pointsType = 0;
-                    int pointsAmount = 0;
+                    int pointsType;
+                    int pointsAmount;
 
                     pointsType = Integer.valueOf(item.getBaseItem().getName().split("_")[1]);
                     pointsAmount = Integer.valueOf(item.getBaseItem().getName().split("_")[2]);

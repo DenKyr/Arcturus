@@ -6,8 +6,6 @@ import com.eu.habbo.habbohotel.rooms.RoomChatMessage;
 import com.eu.habbo.habbohotel.rooms.RoomChatMessageBubbles;
 import com.eu.habbo.messages.outgoing.rooms.users.RoomUserWhisperComposer;
 
-import java.sql.SQLException;
-
 public class UnbanCommand extends Command {
 
     public UnbanCommand() {

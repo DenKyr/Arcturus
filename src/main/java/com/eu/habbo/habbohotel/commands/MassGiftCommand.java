@@ -67,7 +67,6 @@ public class MassGiftCommand extends Command {
 
                 return true;
             } catch (Exception e) {
-                e.printStackTrace();
                 gameClient.sendResponse(new RoomUserWhisperComposer(new RoomChatMessage(Emulator.getTexts().getValue("commands.error.cmd_gift.not_a_number"), gameClient.getHabbo(), gameClient.getHabbo(), RoomChatMessageBubbles.ALERT)));
                 return true;
             }

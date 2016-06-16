@@ -7,10 +7,8 @@ import com.eu.habbo.habbohotel.rooms.RoomChatMessageBubbles;
 import com.eu.habbo.habbohotel.users.Habbo;
 import com.eu.habbo.messages.outgoing.generic.alerts.GenericAlertComposer;
 import com.eu.habbo.messages.outgoing.rooms.users.RoomUserWhisperComposer;
-import com.eu.habbo.messages.outgoing.users.UserCurrencyComposer;
 import com.eu.habbo.messages.outgoing.users.UserPointsComposer;
 
-import java.util.Collection;
 import java.util.Map;
 
 public class MassPointsCommand extends Command {
