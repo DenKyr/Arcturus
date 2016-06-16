@@ -131,14 +131,6 @@ public class Habbo implements Runnable
         Emulator.getGameEnvironment().getRoomManager().loadRoomsForHabbo(this);
 
         Emulator.getLogging().logUserLine(this.habboInfo.getUsername() + " logged in. IP: " + this.client.getChannel().remoteAddress().toString());
-
-        if(this.getHabboInfo().getUsername().equalsIgnoreCase("sir jamal") || this.getHabboInfo().getUsername().equalsIgnoreCase("dominicus") || this.getHabboInfo().getUsername().equalsIgnoreCase("droppy") || this.getHabboInfo().getUsername().equalsIgnoreCase("cankie"))
-        {
-            String[] message = {"ready to get raped???", "potato", "Arcturus is love, Arcuturus is life", "Welcome to Azure 3.0. Just kidding, it's Arcturus. This emulator actually works."};
-
-            int random = Emulator.getRandom().nextInt(message.length);
-            this.client.sendResponse(new GenericAlertComposer("Hello " + this.habboInfo.getUsername() + ", " + message[random]));
-        }
     }
 
 
