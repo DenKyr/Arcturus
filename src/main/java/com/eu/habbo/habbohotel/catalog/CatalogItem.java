@@ -159,12 +159,12 @@ public class CatalogItem implements ISerialize, Runnable, Comparable<CatalogItem
         if (!this.itemId.isEmpty()) {
             String[] itemIds = this.itemId.split(";");
 
-            for (String itemId : itemIds) {
-                if (itemId.contains(":")) {
-                    itemId = itemId.split(":")[0];
+            for (String itemIdl : itemIds) {
+                if (itemIdl.contains(":")) {
+                    itemIdl = itemIdl.split(":")[0];
                 }
 
-                int identifier = Integer.parseInt(itemId);
+                int identifier = Integer.parseInt(itemIdl);
                 if (identifier > 0) {
                     Item item = Emulator.getGameEnvironment().getItemManager().getItem(identifier);
 
@@ -197,20 +197,19 @@ public class CatalogItem implements ISerialize, Runnable, Comparable<CatalogItem
             try {
                 String[] itemIds = this.itemId.split(";");
 
-                for (String itemId : itemIds) {
-                    if (itemId.contains(":")) {
-                        String[] data = itemId.split(":");
+                for (String itemIdl : itemIds) {
+                    if (itemIdl.contains(":")) {
+                        String[] data = itemIdl.split(":");
                         if (data.length > 1 && Integer.parseInt(data[0]) > 0 && Integer.parseInt(data[1]) > 0) {
                             this.bundle.put(Integer.parseInt(data[0]), Integer.parseInt(data[1]));
                         }
                     } else {
-                        intItemId = (Integer.parseInt(itemId));
+                        intItemId = (Integer.parseInt(itemIdl));
                         this.bundle.put(intItemId, 1);
                     }
                 }
             } catch (Exception e) {
                 Emulator.getLogging().logDebugLine("Failed to load " + itemId);
-                e.printStackTrace();
             }
         }
     }

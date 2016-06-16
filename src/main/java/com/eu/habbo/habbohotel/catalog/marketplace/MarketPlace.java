@@ -117,7 +117,7 @@ public class MarketPlace {
                 Emulator.getLogging().logSQLException(e);
                 habbo.getClient().sendResponse(new MarketplaceCancelSaleComposer(offer, false));
             } catch (Exception e) {
-                e.printStackTrace();
+                Emulator.getLogging().logErrorLine(e);
             }
         }
     }
@@ -327,7 +327,6 @@ public class MarketPlace {
                 set.close();
                 statement.close();
                 statement.getConnection().close();
-                return;
             }
 
         } catch (SQLException e) {
@@ -386,18 +385,17 @@ public class MarketPlace {
         try {
             MarketPlaceOffer offer = new MarketPlaceOffer(item, calculateCommision(price), client.getHabbo());
 
-            if (offer != null) {
-                client.getHabbo().getHabboInventory().addMarketplaceOffer(offer);
+            client.getHabbo().getHabboInventory().addMarketplaceOffer(offer);
 
-                client.getHabbo().getHabboInventory().getItemsComponent().removeHabboItem(item);
-                client.sendResponse(new RemoveHabboItemComposer(item.getId()));
-                client.sendResponse(new InventoryRefreshComposer());
-                item.setUserId(-1);
-                item.needsUpdate(true);
-                Emulator.getThreading().run(item);
-            }
+            client.getHabbo().getHabboInventory().getItemsComponent().removeHabboItem(item);
+            client.sendResponse(new RemoveHabboItemComposer(item.getId()));
+            client.sendResponse(new InventoryRefreshComposer());
+            item.setUserId(-1);
+            item.needsUpdate(true);
+            Emulator.getThreading().run(item);
+
         } catch (SQLException e) {
-            return false;
+            Emulator.getLogging().logSQLException(e);
         }
 
         return true;

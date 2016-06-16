@@ -12,8 +12,8 @@ import java.sql.SQLException;
 public class MarketPlaceOffer implements Runnable {
 
     private int offerId;
-    private Item baseItem;
-    private int itemId;
+    private final Item baseItem;
+    private final int itemId;
     private int price;
     private int type;
     private int limitedStack;
@@ -32,12 +32,12 @@ public class MarketPlaceOffer implements Runnable {
         this.baseItem = Emulator.getGameEnvironment().getItemManager().getItem(set.getInt("base_item_id"));
         this.state = MarketPlaceState.getType(set.getInt("state"));
         this.itemId = set.getInt("item_id");
-        String type = set.getString("type");
+        String typel = set.getString("type");
 
-        if (type.equalsIgnoreCase("s")) {
+        if (typel.equalsIgnoreCase("s")) {
             this.type = 1;
         }
-        if (type.equalsIgnoreCase("i")) {
+        if (typel.equalsIgnoreCase("i")) {
             this.type = 2;
         }
         if (!set.getString("ltd_data").split(":")[1].equals("0")) {
