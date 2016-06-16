@@ -5,11 +5,9 @@ import com.eu.habbo.Emulator;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
-public class TextsManager {
+public final class TextsManager {
 
     /**
      * All emulator texts are stored in this object.
@@ -27,7 +25,7 @@ public class TextsManager {
 
             Emulator.getLogging().logStart("Texts Manager -> Loaded! (" + (System.currentTimeMillis() - millis) + " MS)");
         } catch (Exception e) {
-            e.printStackTrace();
+            Emulator.getLogging().logErrorLine("[CRITICAL] FAILED TO LOAD TEXTS MANAGER!");
         }
     }
 

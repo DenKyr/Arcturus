@@ -35,7 +35,7 @@ public class PixelScheduler implements Runnable {
 
         Emulator.getThreading().run(this, INTERVAL * 1000);
 
-        Habbo habbo = null;
+        Habbo habbo;
         for (Map.Entry<Integer, Habbo> map : Emulator.getGameEnvironment().getHabboManager().getOnlineHabbos().entrySet()) {
             habbo = map.getValue();
 

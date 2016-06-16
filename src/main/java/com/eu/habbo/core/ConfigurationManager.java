@@ -9,11 +9,9 @@ import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
-public class ConfigurationManager {
+public final class ConfigurationManager {
 
     public boolean loaded = false;
     /**
@@ -45,14 +43,13 @@ public class ConfigurationManager {
 
         } catch (IOException ex) {
 
-            ex.printStackTrace();
             Emulator.getLogging().logErrorLine("[CRITICAL] FAILED TO LOAD CONFIG.INI FILE!");
         } finally {
             if (input != null) {
                 try {
                     input.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Emulator.getLogging().logErrorLine("[CRITICAL] FAILED TO CLOSE CONFIG.INI FILE!");
                 }
             }
         }
