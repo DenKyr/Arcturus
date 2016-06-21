@@ -33,15 +33,15 @@ public class WiredEffectToggleFurni extends InteractionWiredEffect {
 
     @Override
     public void serializeWiredData(ServerMessage message) {
-        THashSet<HabboItem> items = new THashSet<HabboItem>();
+        THashSet<HabboItem> itemsl = new THashSet<HabboItem>();
 
         for (HabboItem item : this.items) {
             if (item.getRoomId() != this.getRoomId() || Emulator.getGameEnvironment().getRoomManager().getRoom(this.getRoomId()).getHabboItem(item.getId()) == null) {
-                items.add(item);
+                itemsl.add(item);
             }
         }
 
-        for (HabboItem item : items) {
+        for (HabboItem item : itemsl) {
             this.items.remove(item);
         }
 
@@ -80,9 +80,9 @@ public class WiredEffectToggleFurni extends InteractionWiredEffect {
     @Override
     public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff) {
         Habbo habbo = room.getHabbo(roomUnit);
-        THashSet<HabboItem> items = this.items;
+        THashSet<HabboItem> itemsl = this.items;
 
-        for (HabboItem item : items) {
+        for (HabboItem item : itemsl) {
             if (item.getRoomId() == 0) {
                 this.items.remove(item);
                 continue;

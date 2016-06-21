@@ -19,7 +19,7 @@ public class WiredConditionNotMatchStatePosition extends InteractionWiredConditi
 
     public static final WiredConditionType type = WiredConditionType.NOT_MATCH_SSHOT;
 
-    private THashSet<WiredMatchFurniSetting> settings;
+    private final THashSet<WiredMatchFurniSetting> settings;
 
     private boolean state;
     private boolean position;

@@ -20,7 +20,7 @@ public class WiredTriggerHabboWalkOffFurni extends InteractionWiredTrigger {
     public static final WiredTriggerType type = WiredTriggerType.WALKS_OFF_FURNI;
 
     private String tempString;
-    private THashSet<HabboItem> items;
+    private final THashSet<HabboItem> items;
     private String message = "";
 
     public WiredTriggerHabboWalkOffFurni(ResultSet set, Item baseItem) throws SQLException {
@@ -85,7 +85,7 @@ public class WiredTriggerHabboWalkOffFurni extends InteractionWiredTrigger {
                             this.items.add(item);
                         }
                     } catch (Exception e) {
-                        continue;
+                        Emulator.getLogging().logErrorLine(e);
                     }
                 }
             }
@@ -107,20 +107,20 @@ public class WiredTriggerHabboWalkOffFurni extends InteractionWiredTrigger {
 
     @Override
     public void serializeWiredData(ServerMessage message) {
-        THashSet<HabboItem> items = new THashSet<HabboItem>();
+        THashSet<HabboItem> itemsl = new THashSet<HabboItem>();
 
         Room room = Emulator.getGameEnvironment().getRoomManager().getRoom(this.getRoomId());
         if (room == null) {
-            items.addAll(this.items);
+            itemsl.addAll(this.items);
         } else {
             for (HabboItem item : this.items) {
                 if (room.getHabboItem(item.getId()) == null) {
-                    items.add(item);
+                    itemsl.add(item);
                 }
             }
         }
 
-        for (HabboItem item : items) {
+        for (HabboItem item : itemsl) {
             this.items.remove(item);
         }
 

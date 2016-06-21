@@ -70,7 +70,9 @@ public class WiredConditionHabboHasHandItem extends InteractionWiredCondition {
     public void loadWiredData(ResultSet set, Room room) throws SQLException {
         try {
             this.handItem = Integer.valueOf(set.getString("wired_data"));
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            Emulator.getLogging().logErrorLine(e);
+        } catch (NumberFormatException e) {
             Emulator.getLogging().logErrorLine(e);
         }
     }

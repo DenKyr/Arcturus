@@ -19,7 +19,7 @@ public class WiredConditionFurniHaveFurni extends InteractionWiredCondition {
     public static final WiredConditionType type = WiredConditionType.FURNI_HAS_FURNI;
 
     private boolean all;
-    private THashSet<HabboItem> items;
+    private final THashSet<HabboItem> items;
 
     public WiredConditionFurniHaveFurni(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
@@ -92,9 +92,9 @@ public class WiredConditionFurniHaveFurni extends InteractionWiredCondition {
             this.all = (data[0].equals("1"));
 
             if (data.length == 2) {
-                String[] items = data[1].split(";");
+                String[] itemsl = data[1].split(";");
 
-                for (String s : items) {
+                for (String s : itemsl) {
                     HabboItem item = room.getHabboItem(Integer.valueOf(s));
 
                     if (item != null) {
@@ -169,20 +169,20 @@ public class WiredConditionFurniHaveFurni extends InteractionWiredCondition {
     }
 
     private void refresh() {
-        THashSet<HabboItem> items = new THashSet<HabboItem>();
+        THashSet<HabboItem> itemsl = new THashSet<HabboItem>();
 
         Room room = Emulator.getGameEnvironment().getRoomManager().getRoom(this.getRoomId());
         if (room == null) {
-            items.addAll(this.items);
+            itemsl.addAll(this.items);
         } else {
             for (HabboItem item : this.items) {
                 if (room.getHabboItem(item.getId()) == null) {
-                    items.add(item);
+                    itemsl.add(item);
                 }
             }
         }
 
-        for (HabboItem item : items) {
+        for (HabboItem item : itemsl) {
             this.items.remove(item);
         }
     }

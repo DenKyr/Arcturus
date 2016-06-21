@@ -22,6 +22,7 @@ public class InteractionFootball extends InteractionPushable {
         super.cycle(room);
     }
 
+    @Override
     protected void calcState() {
         if (this.velocity > 0) {
             this.setExtradata(velocity + "");

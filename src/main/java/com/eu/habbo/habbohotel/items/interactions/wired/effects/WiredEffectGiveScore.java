@@ -25,7 +25,7 @@ public class WiredEffectGiveScore extends InteractionWiredEffect {
     private int score;
     private int count;
 
-    private TObjectIntMap<Map.Entry<Integer, Integer>> data = new TObjectIntHashMap<Map.Entry<Integer, Integer>>();
+    private final TObjectIntMap<Map.Entry<Integer, Integer>> data = new TObjectIntHashMap<Map.Entry<Integer, Integer>>();
 
     public WiredEffectGiveScore(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
@@ -85,11 +85,11 @@ public class WiredEffectGiveScore extends InteractionWiredEffect {
 
     @Override
     public void loadWiredData(ResultSet set, Room room) throws SQLException {
-        String[] data = set.getString("wired_data").split(";");
+        String[] datal = set.getString("wired_data").split(";");
 
-        if (data.length == 2) {
-            this.score = Integer.valueOf(data[0]);
-            this.count = Integer.valueOf(data[1]);
+        if (datal.length == 2) {
+            this.score = Integer.valueOf(datal[0]);
+            this.count = Integer.valueOf(datal[1]);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.eu.habbo.habbohotel.items.interactions.wired.effects;
 
+import com.eu.habbo.Emulator;
 import com.eu.habbo.habbohotel.items.Item;
 import com.eu.habbo.habbohotel.items.interactions.InteractionWiredEffect;
 import com.eu.habbo.habbohotel.rooms.Room;
@@ -89,7 +90,7 @@ public class WiredEffectGiveCredits extends InteractionWiredEffect {
             try {
                 this.credits = Integer.valueOf(data[1]);
             } catch (Exception e) {
-                e.printStackTrace();
+                Emulator.getLogging().logErrorLine(e);
             }
         }
     }

@@ -45,7 +45,7 @@ public class WiredConditionMoreTimeElapsed extends InteractionWiredCondition {
                 this.cycles = Integer.valueOf(data);
             }
         } catch (Exception e) {
-            return;
+            Emulator.getLogging().logErrorLine(e);
         }
     }
 

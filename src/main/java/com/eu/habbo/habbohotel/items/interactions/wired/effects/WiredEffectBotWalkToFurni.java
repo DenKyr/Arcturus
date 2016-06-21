@@ -35,15 +35,15 @@ public class WiredEffectBotWalkToFurni extends InteractionWiredEffect {
 
     @Override
     public void serializeWiredData(ServerMessage message) {
-        THashSet<HabboItem> items = new THashSet<HabboItem>();
+        THashSet<HabboItem> itemsl = new THashSet<HabboItem>();
 
         for (HabboItem item : this.items) {
             if (item.getRoomId() != this.getRoomId() || Emulator.getGameEnvironment().getRoomManager().getRoom(this.getRoomId()).getHabboItem(item.getId()) == null) {
-                items.add(item);
+                itemsl.add(item);
             }
         }
 
-        for (HabboItem item : items) {
+        for (HabboItem item : itemsl) {
             this.items.remove(item);
         }
 
@@ -97,15 +97,15 @@ public class WiredEffectBotWalkToFurni extends InteractionWiredEffect {
             return false;
         }
 
-        THashSet<HabboItem> items = new THashSet<HabboItem>();
+        THashSet<HabboItem> itemsl = new THashSet<HabboItem>();
 
         for (HabboItem item : this.items) {
             if (Emulator.getGameEnvironment().getRoomManager().getRoom(this.getRoomId()).getHabboItem(item.getId()) == null) {
-                items.add(item);
+                itemsl.add(item);
             }
         }
 
-        for (HabboItem item : items) {
+        for (HabboItem item : itemsl) {
             this.items.remove(item);
         }
 

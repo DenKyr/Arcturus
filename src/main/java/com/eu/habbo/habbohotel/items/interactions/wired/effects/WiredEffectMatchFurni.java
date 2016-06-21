@@ -21,7 +21,7 @@ public class WiredEffectMatchFurni extends InteractionWiredEffect {
 
     private static final WiredEffectType type = WiredEffectType.MATCH_SSHOT;
 
-    private THashSet<WiredMatchFurniSetting> settings;
+    private final THashSet<WiredMatchFurniSetting> settings;
 
     private boolean state = false;
     private boolean direction = false;

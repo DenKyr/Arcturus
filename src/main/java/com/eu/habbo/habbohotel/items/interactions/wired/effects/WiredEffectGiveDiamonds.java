@@ -92,7 +92,7 @@ public class WiredEffectGiveDiamonds extends InteractionWiredEffect {
             try {
                 this.points = Integer.valueOf(data[1]);
             } catch (Exception e) {
-                e.printStackTrace();
+                Emulator.getLogging().logErrorLine(e);
             }
         }
     }

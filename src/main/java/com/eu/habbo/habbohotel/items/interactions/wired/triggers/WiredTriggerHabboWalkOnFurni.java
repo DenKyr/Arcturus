@@ -19,7 +19,7 @@ public class WiredTriggerHabboWalkOnFurni extends InteractionWiredTrigger {
 
     public static final WiredTriggerType type = WiredTriggerType.WALKS_ON_FURNI;
 
-    private THashSet<HabboItem> items;
+    private final THashSet<HabboItem> items;
     private String message = "";
 
     public WiredTriggerHabboWalkOnFurni(ResultSet set, Item baseItem) throws SQLException {
@@ -55,19 +55,19 @@ public class WiredTriggerHabboWalkOnFurni extends InteractionWiredTrigger {
 
     @Override
     public void serializeWiredData(ServerMessage message) {
-        THashSet<HabboItem> items = new THashSet<HabboItem>();
+        THashSet<HabboItem> itemsl = new THashSet<HabboItem>();
 
         if (Emulator.getGameEnvironment().getRoomManager().getRoom(this.getRoomId()) == null) {
-            items.addAll(this.items);
+            itemsl.addAll(this.items);
         } else {
             for (HabboItem item : this.items) {
                 if (Emulator.getGameEnvironment().getRoomManager().getRoom(this.getRoomId()).getHabboItem(item.getId()) == null) {
-                    items.add(item);
+                    itemsl.add(item);
                 }
             }
         }
 
-        for (HabboItem item : items) {
+        for (HabboItem item : itemsl) {
             this.items.remove(item);
         }
 
@@ -139,7 +139,7 @@ public class WiredTriggerHabboWalkOnFurni extends InteractionWiredTrigger {
                             this.items.add(item);
                         }
                     } catch (Exception e) {
-                        continue;
+                        Emulator.getLogging().logErrorLine(e);
                     }
                 }
             }
