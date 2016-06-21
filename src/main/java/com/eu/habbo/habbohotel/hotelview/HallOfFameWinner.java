@@ -8,22 +8,22 @@ public class HallOfFameWinner implements Comparable<HallOfFameWinner> {
     /**
      * Habbo ID
      */
-    private int id;
+    private final int id;
 
     /**
      * Name
      */
-    private String username;
+    private final String username;
 
     /**
      * Look
      */
-    private String look;
+    private final String look;
 
     /**
      * Score
      */
-    private int points;
+    private final int points;
 
     public HallOfFameWinner(ResultSet set) throws SQLException {
         this.id = set.getInt("id");
@@ -34,6 +34,8 @@ public class HallOfFameWinner implements Comparable<HallOfFameWinner> {
 
     /**
      * Habbo ID
+     *
+     * @return ID of winner
      */
     public int getId() {
         return this.id;
@@ -41,6 +43,8 @@ public class HallOfFameWinner implements Comparable<HallOfFameWinner> {
 
     /**
      * Name
+     *
+     * @return Username of winner
      */
     public String getUsername() {
         return this.username;
@@ -48,6 +52,8 @@ public class HallOfFameWinner implements Comparable<HallOfFameWinner> {
 
     /**
      * Look
+     *
+     * @return Look of winner
      */
     public String getLook() {
         return this.look;
@@ -55,6 +61,8 @@ public class HallOfFameWinner implements Comparable<HallOfFameWinner> {
 
     /**
      * Score
+     *
+     * @return Score of winner
      */
     public int getPoints() {
         return this.points;

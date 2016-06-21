@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class HallOfFame {
+public final class HallOfFame {
 
     /**
      * Hall of Fame winners are in here.

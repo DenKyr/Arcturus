@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.NoSuchElementException;
 
-public class GuildManager {
+public final class GuildManager {
 
     /**
      * Guildparts. The things you use to create the badge.
@@ -182,16 +182,16 @@ public class GuildManager {
      * Removes inactive guilds from the cache.
      */
     public void clearInactiveGuilds() {
-        TIntObjectIterator<Guild> guilds = this.guilds.iterator();
+        TIntObjectIterator<Guild> guildsl = this.guilds.iterator();
         for (int i = this.guilds.size(); i-- > 0;) {
             try {
-                guilds.advance();
+                guildsl.advance();
             } catch (NoSuchElementException e) {
                 break;
             }
 
-            if (guilds.value().lastRequested < Emulator.getIntUnixTimestamp() - 300) {
-                this.guilds.remove(guilds.value().getId());
+            if (guildsl.value().lastRequested < Emulator.getIntUnixTimestamp() - 300) {
+                this.guilds.remove(guildsl.value().getId());
             }
         }
     }

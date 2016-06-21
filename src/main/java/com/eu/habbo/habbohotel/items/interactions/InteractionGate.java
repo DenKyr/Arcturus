@@ -6,7 +6,6 @@ import com.eu.habbo.habbohotel.rooms.Room;
 import com.eu.habbo.habbohotel.rooms.RoomUnit;
 import com.eu.habbo.habbohotel.users.HabboItem;
 import com.eu.habbo.messages.ServerMessage;
-import com.eu.habbo.messages.outgoing.rooms.items.FloorItemUpdateComposer;
 import com.eu.habbo.util.pathfinding.Tile;
 
 import java.sql.ResultSet;
@@ -30,10 +29,12 @@ public class InteractionGate extends HabboItem {
         super.serializeExtradata(serverMessage);
     }
 
+    @Override
     public boolean canWalkOn(RoomUnit roomUnit, Room room, Object[] objects) {
         return true;
     }
 
+    @Override
     public boolean isWalkable() {
         return this.getExtradata().equals("1");
     }
@@ -57,6 +58,7 @@ public class InteractionGate extends HabboItem {
         room.updateItem(this);
     }
 
+    @Override
     public void onWalk(RoomUnit roomUnit, Room room, Object[] objects) throws Exception {
         super.onWalkOn(roomUnit, room, objects);
     }

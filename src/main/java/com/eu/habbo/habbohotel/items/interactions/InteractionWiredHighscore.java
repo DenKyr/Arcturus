@@ -10,7 +10,6 @@ import com.eu.habbo.habbohotel.wired.WiredHighscoreClearType;
 import com.eu.habbo.habbohotel.wired.WiredHighscoreData;
 import com.eu.habbo.habbohotel.wired.WiredHighscoreScoreType;
 import com.eu.habbo.messages.ServerMessage;
-import com.eu.habbo.messages.outgoing.rooms.items.FloorItemUpdateComposer;
 import gnu.trove.set.hash.THashSet;
 
 import java.sql.ResultSet;

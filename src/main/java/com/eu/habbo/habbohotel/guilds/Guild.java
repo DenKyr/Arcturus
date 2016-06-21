@@ -9,10 +9,10 @@ import java.sql.SQLException;
 public class Guild implements Runnable {
 
     private int id;
-    private int ownerId;
+    private final int ownerId;
     private String name;
     private String description;
-    private int roomId;
+    private final int roomId;
     private GuildState state;
     private int rights;
     private int colorOne;

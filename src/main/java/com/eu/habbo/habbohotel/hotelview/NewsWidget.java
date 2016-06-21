@@ -8,37 +8,37 @@ public class NewsWidget {
     /**
      * News ID
      */
-    private int id;
+    private final int id;
 
     /**
      * Title
      */
-    private String title;
+    private final String title;
 
     /**
      * Message
      */
-    private String message;
+    private final String message;
 
     /**
      * Text on the button
      */
-    private String buttonMessage;
+    private final String buttonMessage;
 
     /**
      * Type
      */
-    private int type;
+    private final int type;
 
     /**
      * Link
      */
-    private String link;
+    private final String link;
 
     /**
      * Image
      */
-    private String image;
+    private final String image;
 
     public NewsWidget(ResultSet set) throws SQLException {
         this.id = set.getInt("id");
@@ -52,6 +52,8 @@ public class NewsWidget {
 
     /**
      * News ID
+     *
+     * @return ID of news
      */
     public int getId() {
         return this.id;
@@ -59,6 +61,8 @@ public class NewsWidget {
 
     /**
      * Title
+     *
+     * @return Title of news
      */
     public String getTitle() {
         return this.title;
@@ -66,6 +70,8 @@ public class NewsWidget {
 
     /**
      * Message
+     *
+     * @return Message of news
      */
     public String getMessage() {
         return this.message;
@@ -73,6 +79,8 @@ public class NewsWidget {
 
     /**
      * Text on the button
+     *
+     * @return Button text of news
      */
     public String getButtonMessage() {
         return this.buttonMessage;
@@ -80,6 +88,8 @@ public class NewsWidget {
 
     /**
      * Type
+     *
+     * @return Type of news
      */
     public int getType() {
         return this.type;
@@ -87,6 +97,8 @@ public class NewsWidget {
 
     /**
      * Link
+     *
+     * @return Link of news
      */
     public String getLink() {
         return this.link;
@@ -94,6 +106,8 @@ public class NewsWidget {
 
     /**
      * Image
+     *
+     * @return Image of news
      */
     public String getImage() {
         return this.image;

@@ -7,7 +7,6 @@ import com.eu.habbo.habbohotel.rooms.Room;
 import com.eu.habbo.habbohotel.rooms.RoomUnit;
 import com.eu.habbo.habbohotel.users.HabboItem;
 import com.eu.habbo.messages.ServerMessage;
-import com.eu.habbo.messages.outgoing.rooms.items.FloorItemUpdateComposer;
 import com.eu.habbo.threading.runnables.hopper.HopperActionOne;
 import com.eu.habbo.util.pathfinding.Tile;
 
@@ -100,10 +99,6 @@ public class InteractionHopper extends HabboItem {
             return false;
         }
 
-        if (!this.getExtradata().equals("0")) {
-            return false;
-        }
-
-        return true;
+        return this.getExtradata().equals("0");
     }
 }

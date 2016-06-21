@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class NewsList {
+public final class NewsList {
 
     private final THashSet<NewsWidget> newsWidgets;
 

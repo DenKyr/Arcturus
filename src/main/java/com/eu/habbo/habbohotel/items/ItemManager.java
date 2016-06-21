@@ -27,6 +27,7 @@ import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.set.hash.THashSet;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -207,7 +208,7 @@ public class ItemManager {
         /*
          Battle Banzai Items
          */
-            //battlebanzai_pyramid
+        //battlebanzai_pyramid
         //battlebanzai_puck extends pushable
         this.interactionsList.add(new ItemInteraction("battlebanzai_timer", InteractionBattleBanzaiTimer.class));
         this.interactionsList.add(new ItemInteraction("battlebanzai_tile", InteractionBattleBanzaiTile.class));
@@ -373,7 +374,7 @@ public class ItemManager {
         } catch (SQLException e) {
             Emulator.getLogging().logSQLException(e);
         } catch (Exception e) {
-            e.printStackTrace();
+            Emulator.getLogging().logErrorLine(e);
         }
     }
 
@@ -469,7 +470,19 @@ public class ItemManager {
                 if (itemClass != null) {
                     try {
                         return itemClass.getDeclaredConstructor(int.class, int.class, Item.class, String.class, int.class, int.class).newInstance(set.getInt(1), habboId, item, extraData, limitedStack, limitedSells);
-                    } catch (Exception e) {
+                    } catch (NoSuchMethodException e) {
+                        return new InteractionDefault(set.getInt(1), habboId, item, extraData, limitedStack, limitedSells);
+                    } catch (SecurityException e) {
+                        return new InteractionDefault(set.getInt(1), habboId, item, extraData, limitedStack, limitedSells);
+                    } catch (SQLException e) {
+                        return new InteractionDefault(set.getInt(1), habboId, item, extraData, limitedStack, limitedSells);
+                    } catch (InstantiationException e) {
+                        return new InteractionDefault(set.getInt(1), habboId, item, extraData, limitedStack, limitedSells);
+                    } catch (IllegalAccessException e) {
+                        return new InteractionDefault(set.getInt(1), habboId, item, extraData, limitedStack, limitedSells);
+                    } catch (IllegalArgumentException e) {
+                        return new InteractionDefault(set.getInt(1), habboId, item, extraData, limitedStack, limitedSells);
+                    } catch (InvocationTargetException e) {
                         return new InteractionDefault(set.getInt(1), habboId, item, extraData, limitedStack, limitedSells);
                     }
                 }
@@ -481,7 +494,7 @@ public class ItemManager {
                 try {
                     set.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    Emulator.getLogging().logSQLException(e);
                 }
             }
 
@@ -490,7 +503,7 @@ public class ItemManager {
                     statement.close();
                     statement.getConnection().close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    Emulator.getLogging().logSQLException(e);
                 }
             }
         }
@@ -680,7 +693,17 @@ public class ItemManager {
                 c.setAccessible(true);
 
                 return (HabboItem) c.newInstance(set, baseItem);
-            } catch (Exception e) {
+            } catch (NoSuchMethodException e) {
+                Emulator.getLogging().logErrorLine(e);
+            } catch (SecurityException e) {
+                Emulator.getLogging().logErrorLine(e);
+            } catch (InstantiationException e) {
+                Emulator.getLogging().logErrorLine(e);
+            } catch (IllegalAccessException e) {
+                Emulator.getLogging().logErrorLine(e);
+            } catch (IllegalArgumentException e) {
+                Emulator.getLogging().logErrorLine(e);
+            } catch (InvocationTargetException e) {
                 Emulator.getLogging().logErrorLine(e);
             }
         }

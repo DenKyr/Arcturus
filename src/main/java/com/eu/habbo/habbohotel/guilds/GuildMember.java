@@ -5,8 +5,8 @@ import java.sql.SQLException;
 
 public class GuildMember implements Comparable {
 
-    private int userId;
-    private String username;
+    private final int userId;
+    private final String username;
     private String look;
     private int joinDate;
     private GuildRank rank;

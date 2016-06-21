@@ -13,7 +13,6 @@ import com.eu.habbo.habbohotel.rooms.RoomUserRotation;
 import com.eu.habbo.habbohotel.users.Habbo;
 import com.eu.habbo.habbohotel.users.HabboItem;
 import com.eu.habbo.messages.ServerMessage;
-import com.eu.habbo.messages.outgoing.rooms.items.FloorItemUpdateComposer;
 import com.eu.habbo.threading.runnables.HabboItemNewState;
 
 import java.sql.ResultSet;
@@ -44,11 +43,7 @@ public class InteractionObstacle extends HabboItem {
         if (pet == null) {
             Habbo habbo = room.getHabbo(roomUnit);
 
-            if (habbo != null && habbo.getHabboInfo().getRiding() != null) {
-                return true;
-            }
-
-            return false;
+            return habbo != null && habbo.getHabboInfo().getRiding() != null;
         } else {
             return pet.getRider() != null;
         }

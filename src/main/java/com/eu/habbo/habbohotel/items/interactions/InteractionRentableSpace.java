@@ -18,7 +18,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class InteractionRentableSpace extends HabboItem {
+public final class InteractionRentableSpace extends HabboItem {
 
     private int renterId;
     private String renterName;

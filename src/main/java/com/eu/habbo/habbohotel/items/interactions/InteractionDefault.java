@@ -10,8 +10,6 @@ import com.eu.habbo.habbohotel.users.Habbo;
 import com.eu.habbo.habbohotel.users.HabboGender;
 import com.eu.habbo.habbohotel.users.HabboItem;
 import com.eu.habbo.messages.ServerMessage;
-import com.eu.habbo.messages.outgoing.rooms.items.FloorItemUpdateComposer;
-import com.eu.habbo.messages.outgoing.rooms.items.WallItemUpdateComposer;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -95,7 +93,6 @@ public class InteractionDefault extends HabboItem {
 
                     if (habbo.getHabboInfo().getGender().equals(HabboGender.F) && this.getBaseItem().getEffectF() > 0) {
                         room.giveEffect(habbo, this.getBaseItem().getEffectF());
-                        return;
                     }
                 }
             }
@@ -118,7 +115,6 @@ public class InteractionDefault extends HabboItem {
 
                     if (habbo.getHabboInfo().getGender().equals(HabboGender.F) && this.getBaseItem().getEffectF() > 0) {
                         room.giveEffect(habbo, 0);
-                        return;
                     }
                 }
             }

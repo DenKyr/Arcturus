@@ -7,7 +7,6 @@ import com.eu.habbo.habbohotel.rooms.RoomUnit;
 import com.eu.habbo.habbohotel.rooms.RoomUserRotation;
 import com.eu.habbo.messages.outgoing.rooms.items.FloorItemOnRollerComposer;
 import com.eu.habbo.util.pathfinding.PathFinder;
-import com.eu.habbo.util.pathfinding.Rotation;
 import com.eu.habbo.util.pathfinding.Tile;
 
 import java.sql.ResultSet;
@@ -63,14 +62,14 @@ public abstract class InteractionPushable extends InteractionDefault {
     protected void cycle(final Room room) {
         Tile newLocation = new Tile(this.getX(), this.getY());
 
-        int skip = 0;
+        int skipl = 0;
         if (this.velocity == 6) {
-            skip = 2;
+            skipl = 2;
         } else if (this.velocity < 6 && this.velocity >= 3) {
-            skip = 1;
+            skipl = 1;
         }
 
-        for (int i = 0; i <= skip; i++) {
+        for (int i = 0; i <= skipl; i++) {
             newLocation = PathFinder.getSquareInFront(newLocation.X, newLocation.Y, this.direction.getValue());
 
             if (room.hasHabbosAt(newLocation.X, newLocation.Y)) {
