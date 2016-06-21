@@ -71,7 +71,7 @@ public class CatalogPagesListComposer extends MessageComposer {
 
             return this.response;
         } catch (Exception e) {
-            e.printStackTrace();
+            Emulator.getLogging().logErrorLine(e);
         }
 
         return null;

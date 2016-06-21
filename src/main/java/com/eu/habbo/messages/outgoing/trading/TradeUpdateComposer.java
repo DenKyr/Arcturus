@@ -9,7 +9,7 @@ import com.eu.habbo.messages.outgoing.Outgoing;
 
 public class TradeUpdateComposer extends MessageComposer {
 
-    private RoomTrade roomTrade;
+    private final RoomTrade roomTrade;
 
     public TradeUpdateComposer(RoomTrade roomTrade) {
         this.roomTrade = roomTrade;

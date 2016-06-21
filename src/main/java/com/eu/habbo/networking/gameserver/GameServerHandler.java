@@ -13,7 +13,6 @@ public class GameServerHandler extends SimpleChannelInboundHandler<byte[]> {
     public void channelRegistered(ChannelHandlerContext ctx) {
         if (!Emulator.getGameServer().getGameClientManager().addClient(ctx)) {
             ctx.channel().disconnect();
-            return;
         }
     }
 

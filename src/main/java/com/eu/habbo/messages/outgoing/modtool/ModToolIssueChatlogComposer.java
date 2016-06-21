@@ -13,9 +13,9 @@ import java.util.Collections;
 
 public class ModToolIssueChatlogComposer extends MessageComposer {
 
-    private ModToolIssue issue;
-    private ArrayList<ModToolChatLog> chatlog;
-    private String roomName;
+    private final ModToolIssue issue;
+    private final ArrayList<ModToolChatLog> chatlog;
+    private final String roomName;
 
     public ModToolIssueChatlogComposer(ModToolIssue issue, ArrayList<ModToolChatLog> chatlog, String roomName) {
         this.issue = issue;

@@ -4,6 +4,7 @@ import com.eu.habbo.Emulator;
 import com.eu.habbo.messages.rcon.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import gnu.trove.map.hash.THashMap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -11,8 +12,9 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import java.lang.reflect.InvocationTargetException;
 
-public class RCONServer {
+public final class RCONServer {
 
     public static String[] allowedAdresses;
 
@@ -92,7 +94,19 @@ public class RCONServer {
                 Emulator.getLogging().logPacketLine("[RCON] Handled: " + message.getName());
 
                 return response;
-            } catch (Exception ex) {
+            } catch (NoSuchMethodException ex) {
+                Emulator.getLogging().logPacketError("[RCON] Failed to handle RCONMessage: " + message.getName() + ex.getMessage() + " by: " + ctx.channel().remoteAddress());
+            } catch (SecurityException ex) {
+                Emulator.getLogging().logPacketError("[RCON] Failed to handle RCONMessage: " + message.getName() + ex.getMessage() + " by: " + ctx.channel().remoteAddress());
+            } catch (InstantiationException ex) {
+                Emulator.getLogging().logPacketError("[RCON] Failed to handle RCONMessage: " + message.getName() + ex.getMessage() + " by: " + ctx.channel().remoteAddress());
+            } catch (IllegalAccessException ex) {
+                Emulator.getLogging().logPacketError("[RCON] Failed to handle RCONMessage: " + message.getName() + ex.getMessage() + " by: " + ctx.channel().remoteAddress());
+            } catch (IllegalArgumentException ex) {
+                Emulator.getLogging().logPacketError("[RCON] Failed to handle RCONMessage: " + message.getName() + ex.getMessage() + " by: " + ctx.channel().remoteAddress());
+            } catch (InvocationTargetException ex) {
+                Emulator.getLogging().logPacketError("[RCON] Failed to handle RCONMessage: " + message.getName() + ex.getMessage() + " by: " + ctx.channel().remoteAddress());
+            } catch (JsonSyntaxException ex) {
                 Emulator.getLogging().logPacketError("[RCON] Failed to handle RCONMessage: " + message.getName() + ex.getMessage() + " by: " + ctx.channel().remoteAddress());
             }
         } else {

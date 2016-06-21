@@ -6,7 +6,7 @@ import com.eu.habbo.messages.outgoing.Outgoing;
 
 public class MachineIDComposer extends MessageComposer {
 
-    private String machineID;
+    private final String machineID;
 
     public MachineIDComposer(String machineID) {
         this.machineID = machineID;

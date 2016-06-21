@@ -4,7 +4,7 @@ import com.eu.habbo.habbohotel.games.Game;
 
 public class GameStop implements Runnable {
 
-    private Game game;
+    private final Game game;
 
     public GameStop(Game game) {
         this.game = game;

@@ -12,6 +12,7 @@ public class BotPickedUpEvent extends BotEvent {
 
     /**
      * @param bot The Bot this event applies to.
+     * @param picker The Habbo picking the bot.
      */
     public BotPickedUpEvent(Bot bot, Habbo picker) {
         super(bot);

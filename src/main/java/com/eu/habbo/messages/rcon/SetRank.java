@@ -1,9 +1,7 @@
 package com.eu.habbo.messages.rcon;
 
 import com.eu.habbo.Emulator;
-import com.eu.habbo.habbohotel.rooms.Room;
 import com.eu.habbo.habbohotel.users.Habbo;
-import com.eu.habbo.messages.outgoing.users.UserClubComposer;
 import com.eu.habbo.messages.outgoing.users.UserPermissionsComposer;
 import com.google.gson.Gson;
 

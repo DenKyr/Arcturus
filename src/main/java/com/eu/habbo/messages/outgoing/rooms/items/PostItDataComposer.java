@@ -8,8 +8,8 @@ import com.eu.habbo.messages.outgoing.Outgoing;
 
 public class PostItDataComposer extends MessageComposer {
 
-    private InteractionPostIt postIt;
-    private boolean hasRights;
+    private final InteractionPostIt postIt;
+    private final boolean hasRights;
 
     public PostItDataComposer(InteractionPostIt postIt, boolean hasRights) {
         this.postIt = postIt;

@@ -14,7 +14,6 @@ public class GameMessageHandler extends ChannelInboundHandlerAdapter {
     public void channelRegistered(ChannelHandlerContext ctx) {
         if (!Emulator.getGameServer().getGameClientManager().addClient(ctx)) {
             ctx.channel().disconnect();
-            return;
         }
     }
 

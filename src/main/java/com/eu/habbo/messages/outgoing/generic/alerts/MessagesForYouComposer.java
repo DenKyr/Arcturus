@@ -6,7 +6,7 @@ import com.eu.habbo.messages.outgoing.Outgoing;
 
 public class MessagesForYouComposer extends MessageComposer {
 
-    private String[] messages;
+    private final String[] messages;
 
     public MessagesForYouComposer(String[] messages) {
         this.messages = messages;

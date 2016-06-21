@@ -39,6 +39,14 @@ public class Tile extends Point {
         return o instanceof Tile && ((Tile) o).X == this.X && ((Tile) o).Y == this.Y;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 83 * hash + this.X;
+        hash = 83 * hash + this.Y;
+        return hash;
+    }
+
 //    public static THashSet<Tile> getTilesAt(int x, int y, int width, int length, int rotation)
 //    {
 //        THashSet<Tile> PointList = new THashSet<Tile>();

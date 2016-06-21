@@ -11,6 +11,7 @@ public class UserKickEvent extends UserEvent {
 
     /**
      * @param habbo The Habbo this event applies to.
+     * @param target
      */
     public UserKickEvent(Habbo habbo, Habbo target) {
         super(habbo);

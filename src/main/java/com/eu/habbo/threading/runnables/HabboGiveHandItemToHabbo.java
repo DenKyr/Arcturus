@@ -6,8 +6,8 @@ import com.eu.habbo.messages.outgoing.rooms.users.RoomUserReceivedHandItemCompos
 
 public class HabboGiveHandItemToHabbo implements Runnable {
 
-    private Habbo target;
-    private Habbo from;
+    private final Habbo target;
+    private final Habbo from;
     private int handItem;
 
     public HabboGiveHandItemToHabbo(Habbo from, Habbo target) {

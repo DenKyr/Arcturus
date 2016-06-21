@@ -28,6 +28,7 @@ public class GuildDeclinedMembershipEvent extends GuildEvent {
      * @param userId The userID that gets declined.
      * @param user The Habbo that gets declined. Can be NULL when user is
      * offline.
+     * @param admin The group admin.
      */
     public GuildDeclinedMembershipEvent(Guild guild, int userId, Habbo user, Habbo admin) {
         super(guild);

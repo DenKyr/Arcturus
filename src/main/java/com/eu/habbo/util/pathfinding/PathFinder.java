@@ -1,5 +1,6 @@
 package com.eu.habbo.util.pathfinding;
 
+import com.eu.habbo.Emulator;
 import com.eu.habbo.habbohotel.rooms.Room;
 import com.eu.habbo.habbohotel.rooms.RoomUnit;
 
@@ -40,7 +41,7 @@ public class PathFinder {
                     try {
                         gameMap.finalize();
                     } catch (Throwable e) {
-                        e.printStackTrace();
+                        Emulator.getLogging().logErrorLine(e);
                     }
 
                     return nodeQueue;
@@ -86,11 +87,7 @@ public class PathFinder {
             return false;
         }
 
-        if (outerSquare.y + outerSquare.height < innerSquare.y + innerSquare.height) {
-            return false;
-        }
-
-        return true;
+        return outerSquare.y + outerSquare.height >= innerSquare.y + innerSquare.height;
     }
 
     public static boolean pointInSquare(int x1, int y1, int x2, int y2, int pointX, int pointY) {

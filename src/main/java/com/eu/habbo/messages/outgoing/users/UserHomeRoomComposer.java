@@ -6,8 +6,8 @@ import com.eu.habbo.messages.outgoing.Outgoing;
 
 public class UserHomeRoomComposer extends MessageComposer {
 
-    private int homeRoom;
-    private int newRoom;
+    private final int homeRoom;
+    private final int newRoom;
 
     public UserHomeRoomComposer(int homeRoom, int newRoom) {
         this.homeRoom = homeRoom;

@@ -42,7 +42,7 @@ class RSA {
     }
 
     public String Encrypt(String text) {
-        text.length();
+        int length = text.length();
         GetBlockSize();
 
         BigInteger m = new BigInteger(pkcs1pad2(text.getBytes(), GetBlockSize()));
@@ -114,16 +114,14 @@ class RSA {
             }
         }
         byte[] out = new byte[bytes.length - i + 1];
-        int p = 0;
+        int pp = 0;
         do {
-            out[(p++)] = bytes[i];
+            out[(pp++)] = bytes[i];
             i++;
         } while (i < bytes.length);
         return out;
     }
 }
-
-
 
 /* Location:           C:\Users\Admin\Desktop\HabboEmulator.jar
 

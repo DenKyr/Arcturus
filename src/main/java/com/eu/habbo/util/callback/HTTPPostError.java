@@ -2,9 +2,6 @@ package com.eu.habbo.util.callback;
 
 import com.eu.habbo.Emulator;
 
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 public class HTTPPostError implements Runnable {
 
@@ -19,30 +16,31 @@ public class HTTPPostError implements Runnable {
             return;
         }
 
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        stackTrace.printStackTrace(pw);
-        sw.toString(); // stack trace as a string
+        int responseCode = 0;
 
-        String url = "http://arcturus.wf/callback/error.php";
-        URL obj = new URL(url);
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        /*StringWriter sw = new StringWriter();
+         PrintWriter pw = new PrintWriter(sw);
+         stackTrace.printStackTrace(pw);
+         sw.toString(); // stack trace as a string
 
-        //add reuqest header
-        con.setRequestMethod("POST");
-        con.setRequestProperty("User-Agent", "arcturus");
+         String url = "http://arcturus.wf/callback/error.php";
+         URL obj = new URL(url);
+         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
-        String urlParameters = "errors=1&stacktrace=" + sw.toString() + "&users=" + Emulator.getGameEnvironment().getHabboManager().getOnlineCount() + "&rooms=" + Emulator.getGameEnvironment().getRoomManager().getActiveRooms().size() + "&username=" + Emulator.getConfig().getValue("username");
+         //add reuqest header
+         con.setRequestMethod("POST");
+         con.setRequestProperty("User-Agent", "arcturus");
 
-        // Send post request
-        con.setDoOutput(true);
-        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-        wr.writeBytes(urlParameters);
-        wr.flush();
-        wr.close();
+         String urlParameters = "errors=1&stacktrace=" + sw.toString() + "&users=" + Emulator.getGameEnvironment().getHabboManager().getOnlineCount() + "&rooms=" + Emulator.getGameEnvironment().getRoomManager().getActiveRooms().size() + "&username=" + Emulator.getConfig().getValue("username");
 
-        int responseCode = con.getResponseCode();
-        return;
+         // Send post request
+         con.setDoOutput(true);
+         DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+         wr.writeBytes(urlParameters);
+         wr.flush();
+         wr.close();
+
+         int responseCode = con.getResponseCode();*/
     }
 
     @Override
@@ -50,7 +48,7 @@ public class HTTPPostError implements Runnable {
         try {
             this.sendPost();
         } catch (Exception e) {
-            e.printStackTrace();
+            Emulator.getLogging().logErrorLine(e);
         }
     }
 }

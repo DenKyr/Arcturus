@@ -9,9 +9,9 @@ import gnu.trove.set.hash.THashSet;
 
 public class BattleBanzaiTilesFlicker implements Runnable {
 
-    private THashSet<HabboItem> items;
-    private GameTeamColors color;
-    private Room room;
+    private final THashSet<HabboItem> items;
+    private final GameTeamColors color;
+    private final Room room;
 
     private boolean on = false;
     private int count = 0;

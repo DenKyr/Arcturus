@@ -10,15 +10,15 @@ public class NavigatorPopularRoomsEvent extends NavigatorRoomsEvent {
     /**
      * The rooms displayed.
      */
-    public final ArrayList<Room> rooms;
+    public final ArrayList<Room> roomsl;
 
     /**
      * @param habbo The Habbo this event applies to.
-     * @param rooms The rooms displayed.
+     * @param rooms The roomsl displayed.
      */
     public NavigatorPopularRoomsEvent(Habbo habbo, ArrayList<Room> rooms) {
         super(habbo, rooms);
 
-        this.rooms = rooms;
+        this.roomsl = rooms;
     }
 }

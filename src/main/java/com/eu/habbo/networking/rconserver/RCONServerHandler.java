@@ -41,7 +41,7 @@ public class RCONServerHandler extends ChannelInboundHandlerAdapter {
             response = Emulator.getRconServer().handle(ctx, key, object.get("data").toString());
         } catch (Exception e) {
             Emulator.getLogging().logDebugLine("[RCON] Not JSON: " + message);
-            e.printStackTrace();
+
         }
 
         ChannelFuture f = ctx.channel().write(Unpooled.copiedBuffer(response.getBytes()), ctx.channel().voidPromise());

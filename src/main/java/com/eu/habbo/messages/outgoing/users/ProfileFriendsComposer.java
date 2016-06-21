@@ -1,5 +1,6 @@
 package com.eu.habbo.messages.outgoing.users;
 
+import com.eu.habbo.Emulator;
 import com.eu.habbo.habbohotel.messenger.MessengerBuddy;
 import com.eu.habbo.habbohotel.users.Habbo;
 import com.eu.habbo.messages.ServerMessage;
@@ -27,7 +28,7 @@ public class ProfileFriendsComposer extends MessageComposer {
             friends.addAll(map.get(2));
             haters.addAll(map.get(3));
         } catch (Exception e) {
-            e.printStackTrace();
+            Emulator.getLogging().logErrorLine(e);
         }
 
         this.userId = userId;
@@ -55,7 +56,7 @@ public class ProfileFriendsComposer extends MessageComposer {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Emulator.getLogging().logErrorLine(e);
         }
 
         this.userId = habbo.getHabboInfo().getId();
@@ -114,7 +115,7 @@ public class ProfileFriendsComposer extends MessageComposer {
                 this.response.appendString(this.haters.get(hatersIndex).getLook());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Emulator.getLogging().logErrorLine(e);
         }
         return this.response;
     }

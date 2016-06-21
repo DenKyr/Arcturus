@@ -1,7 +1,6 @@
 package com.eu.habbo.messages.outgoing.navigator;
 
 import com.eu.habbo.habbohotel.navigation.SearchResultList;
-import com.eu.habbo.habbohotel.rooms.Room;
 import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
@@ -12,8 +11,8 @@ import java.util.List;
 
 public class NewNavigatorSearchResultsComposer extends MessageComposer {
 
-    private String searchCode;
-    private String searchQuery;
+    private final String searchCode;
+    private final String searchQuery;
     private final List<SearchResultList> resultList;
 
     public NewNavigatorSearchResultsComposer(String searchCode, String searchQuery, List<SearchResultList> resultList) {

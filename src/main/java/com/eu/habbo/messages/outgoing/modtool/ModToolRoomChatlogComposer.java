@@ -10,8 +10,8 @@ import java.util.ArrayList;
 
 public class ModToolRoomChatlogComposer extends MessageComposer {
 
-    private Room room;
-    private ArrayList<ModToolChatLog> chatlog;
+    private final Room room;
+    private final ArrayList<ModToolChatLog> chatlog;
 
     public ModToolRoomChatlogComposer(Room room, ArrayList<ModToolChatLog> chatlog) {
         this.room = room;

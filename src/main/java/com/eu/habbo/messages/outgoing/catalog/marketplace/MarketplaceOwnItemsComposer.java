@@ -10,7 +10,7 @@ import com.eu.habbo.messages.outgoing.Outgoing;
 
 public class MarketplaceOwnItemsComposer extends MessageComposer {
 
-    private Habbo habbo;
+    private final Habbo habbo;
 
     public MarketplaceOwnItemsComposer(Habbo habbo) {
         this.habbo = habbo;
@@ -54,7 +54,7 @@ public class MarketplaceOwnItemsComposer extends MessageComposer {
 
                 this.response.appendInt32(0);
             } catch (Exception e) {
-                e.printStackTrace();
+                Emulator.getLogging().logErrorLine(e);
             }
         }
 

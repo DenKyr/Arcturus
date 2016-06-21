@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class QueryDeleteHabboItems implements Runnable {
 
-    private TIntObjectMap<HabboItem> items;
+    private final TIntObjectMap<HabboItem> items;
 
     public QueryDeleteHabboItems(TIntObjectMap<HabboItem> items) {
         this.items = items;

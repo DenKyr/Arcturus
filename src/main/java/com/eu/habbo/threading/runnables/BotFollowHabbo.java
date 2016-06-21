@@ -3,16 +3,15 @@ package com.eu.habbo.threading.runnables;
 import com.eu.habbo.Emulator;
 import com.eu.habbo.habbohotel.bots.Bot;
 import com.eu.habbo.habbohotel.rooms.Room;
-import com.eu.habbo.habbohotel.rooms.RoomUnit;
 import com.eu.habbo.habbohotel.users.Habbo;
 import com.eu.habbo.util.pathfinding.PathFinder;
 import com.eu.habbo.util.pathfinding.Tile;
 
 public class BotFollowHabbo implements Runnable {
 
-    private Bot bot;
-    private Habbo habbo;
-    private Room room;
+    private final Bot bot;
+    private final Habbo habbo;
+    private final Room room;
 
     public BotFollowHabbo(Bot bot, Habbo habbo, Room room) {
         this.bot = bot;

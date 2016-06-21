@@ -8,7 +8,7 @@ import gnu.trove.map.TIntObjectMap;
 
 public class MoodLightDataComposer extends MessageComposer {
 
-    private TIntObjectMap<RoomMoodlightData> moodLightData;
+    private final TIntObjectMap<RoomMoodlightData> moodLightData;
 
     public MoodLightDataComposer(TIntObjectMap<RoomMoodlightData> moodLightData) {
         this.moodLightData = moodLightData;

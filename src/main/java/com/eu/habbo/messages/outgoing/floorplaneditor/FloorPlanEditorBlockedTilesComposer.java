@@ -1,15 +1,12 @@
 package com.eu.habbo.messages.outgoing.floorplaneditor;
 
 import com.eu.habbo.habbohotel.rooms.Room;
-import com.eu.habbo.habbohotel.rooms.RoomTileState;
 import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.outgoing.MessageComposer;
 import com.eu.habbo.messages.outgoing.Outgoing;
-import com.eu.habbo.util.pathfinding.Node;
 import com.eu.habbo.util.pathfinding.Tile;
 import gnu.trove.set.hash.THashSet;
 
-import java.util.ArrayList;
 
 public class FloorPlanEditorBlockedTilesComposer extends MessageComposer {
 

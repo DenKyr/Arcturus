@@ -51,7 +51,7 @@ public class AchievementListComposer extends MessageComposer {
                 this.response.appendString("");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Emulator.getLogging().logErrorLine(e);
         }
 
         return this.response;

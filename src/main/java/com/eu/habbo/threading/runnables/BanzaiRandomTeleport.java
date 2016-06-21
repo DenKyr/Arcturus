@@ -3,14 +3,13 @@ package com.eu.habbo.threading.runnables;
 import com.eu.habbo.habbohotel.rooms.Room;
 import com.eu.habbo.habbohotel.users.Habbo;
 import com.eu.habbo.habbohotel.users.HabboItem;
-import com.eu.habbo.messages.outgoing.rooms.items.FloorItemUpdateComposer;
 
 public class BanzaiRandomTeleport implements Runnable {
 
-    private HabboItem item;
-    private HabboItem toItem;
-    private Habbo habbo;
-    private Room room;
+    private final HabboItem item;
+    private final HabboItem toItem;
+    private final Habbo habbo;
+    private final Room room;
 
     public BanzaiRandomTeleport(HabboItem item, HabboItem toItem, Habbo habbo, Room room) {
         this.item = item;

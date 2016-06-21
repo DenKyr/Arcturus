@@ -7,7 +7,7 @@ import com.eu.habbo.messages.outgoing.Outgoing;
 
 public class ModToolRoomInfoComposer extends MessageComposer {
 
-    private Room room;
+    private final Room room;
 
     public ModToolRoomInfoComposer(Room room) {
         this.room = room;
@@ -26,8 +26,8 @@ public class ModToolRoomInfoComposer extends MessageComposer {
             this.response.appendString(this.room.getName());
             this.response.appendString(this.room.getDescription());
             this.response.appendInt32(this.room.getTags().split(";").length);
-            for (int i = 0; i < this.room.getTags().split(";").length; i++) {
-                this.response.appendString(this.room.getTags().split(";")[i]);
+            for (String split : this.room.getTags().split(";")) {
+                this.response.appendString(split);
             }
         }
         return this.response;

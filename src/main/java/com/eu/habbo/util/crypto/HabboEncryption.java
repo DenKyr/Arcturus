@@ -1,5 +1,6 @@
 package com.eu.habbo.util.crypto;
 
+import com.eu.habbo.Emulator;
 import java.math.BigInteger;
 
 class HabboEncryption {
@@ -33,8 +34,8 @@ class HabboEncryption {
             this.Initialized = true;
 
             return true;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            Emulator.getLogging().logErrorLine(ex);
         }
         return false;
     }

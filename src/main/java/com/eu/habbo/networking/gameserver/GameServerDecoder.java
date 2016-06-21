@@ -6,7 +6,6 @@ import com.eu.habbo.messages.ClientMessage;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.bytes.ByteArrayDecoder;
 
 import java.nio.charset.Charset;
@@ -40,7 +39,6 @@ public class GameServerDecoder extends ByteArrayDecoder {
 
                 ++handledObjects;
             } catch (final Exception e) {
-                e.printStackTrace();
                 Emulator.getLogging().logErrorLine(msg.toString(Charset.defaultCharset()));
             }
         }

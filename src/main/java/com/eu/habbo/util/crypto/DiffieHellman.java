@@ -57,7 +57,7 @@ public class DiffieHellman {
     }
 
     private static String GenerateRandomHexString(int len) {
-        int rand = 0;
+        int rand;
         String result = "";
 
         Random rnd = new Random();

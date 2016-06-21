@@ -11,9 +11,9 @@ import java.util.ArrayList;
 
 public class ModToolUserChatlogComposer extends MessageComposer {
 
-    private ArrayList<ModToolRoomVisit> set;
-    private int userId;
-    private String username;
+    private final ArrayList<ModToolRoomVisit> set;
+    private final int userId;
+    private final String username;
 
     public ModToolUserChatlogComposer(ArrayList<ModToolRoomVisit> set, int userId, String username) {
         this.set = set;

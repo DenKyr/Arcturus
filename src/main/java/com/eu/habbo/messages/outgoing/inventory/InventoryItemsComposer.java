@@ -11,7 +11,7 @@ import gnu.trove.procedure.TIntObjectProcedure;
 
 public class InventoryItemsComposer extends MessageComposer implements TIntObjectProcedure<HabboItem> {
 
-    private Habbo habbo;
+    private final Habbo habbo;
 
     public InventoryItemsComposer(Habbo habbo) {
         this.habbo = habbo;

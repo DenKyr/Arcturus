@@ -7,7 +7,7 @@ import gnu.trove.list.array.TIntArrayList;
 
 public class RemoveFriendComposer extends MessageComposer {
 
-    private TIntArrayList unfriendIds;
+    private final TIntArrayList unfriendIds;
 
     public RemoveFriendComposer(TIntArrayList unfriendIds) {
         this.unfriendIds = unfriendIds;

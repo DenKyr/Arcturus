@@ -4,16 +4,14 @@ import com.eu.habbo.Emulator;
 import com.eu.habbo.habbohotel.gameclients.GameClient;
 import com.eu.habbo.habbohotel.rooms.Room;
 import com.eu.habbo.habbohotel.users.HabboItem;
-import com.eu.habbo.messages.outgoing.rooms.items.FloorItemUpdateComposer;
-import com.eu.habbo.messages.outgoing.rooms.users.RoomUserStatusComposer;
 import com.eu.habbo.util.pathfinding.PathFinder;
 import com.eu.habbo.util.pathfinding.Tile;
 
 public class OneWayGateActionOne implements Runnable {
 
-    private HabboItem oneWayGate;
-    private Room room;
-    private GameClient client;
+    private final HabboItem oneWayGate;
+    private final Room room;
+    private final GameClient client;
 
     public OneWayGateActionOne(GameClient client, Room room, HabboItem item) {
         this.oneWayGate = item;

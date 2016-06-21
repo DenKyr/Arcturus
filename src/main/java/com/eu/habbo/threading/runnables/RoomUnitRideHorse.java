@@ -9,9 +9,9 @@ import com.eu.habbo.util.pathfinding.Tile;
 
 public class RoomUnitRideHorse implements Runnable {
 
-    private HorsePet pet;
-    private Habbo habbo;
-    private Tile goalTile;
+    private final HorsePet pet;
+    private final Habbo habbo;
+    private final Tile goalTile;
 
     public RoomUnitRideHorse(HorsePet pet, Habbo habbo, Tile goalTile) {
         this.pet = pet;

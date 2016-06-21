@@ -21,7 +21,7 @@ public class UserCurrencyComposer extends MessageComposer {
         String[] pointsTypes = Emulator.getConfig().getValue("seasonal.types").split(";");
         this.response.appendInt32(pointsTypes.length);
         for (String s : pointsTypes) {
-            int type = 0;
+            int type;
             try {
                 type = Integer.valueOf(s);
             } catch (Exception e) {

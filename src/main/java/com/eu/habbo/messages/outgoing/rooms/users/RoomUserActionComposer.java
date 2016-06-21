@@ -7,8 +7,8 @@ import com.eu.habbo.messages.outgoing.Outgoing;
 
 public class RoomUserActionComposer extends MessageComposer {
 
-    private int action;
-    private RoomUnit roomUnit;
+    private final int action;
+    private final RoomUnit roomUnit;
 
     public RoomUserActionComposer(RoomUnit roomUnit, int action) {
         this.roomUnit = roomUnit;

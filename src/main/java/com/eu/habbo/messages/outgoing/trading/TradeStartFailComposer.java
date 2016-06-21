@@ -26,6 +26,7 @@ public class TradeStartFailComposer extends MessageComposer {
         this.username = username;
     }
 
+    @Override
     public ServerMessage compose() {
         this.response.init(Outgoing.TradeStartFailComposer);
         this.response.appendInt32(code);

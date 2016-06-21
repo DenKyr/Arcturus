@@ -14,6 +14,7 @@ public class FurnitureRoomTonerEvent extends FurnitureUserEvent {
      * saved.
      *
      * @param furniture The furniture this event applies to.
+     * @param habbo The habbo this event applies to.
      * @param hue The hue.
      * @param saturation The saturation.
      * @param brightness The brightness.

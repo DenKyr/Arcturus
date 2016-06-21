@@ -7,8 +7,8 @@ import com.eu.habbo.messages.outgoing.Outgoing;
 
 public class RoomUnitUpdateUsernameComposer extends MessageComposer {
 
-    private RoomUnit roomUnit;
-    private String name;
+    private final RoomUnit roomUnit;
+    private final String name;
 
     public RoomUnitUpdateUsernameComposer(RoomUnit roomUnit, String name) {
         this.roomUnit = roomUnit;

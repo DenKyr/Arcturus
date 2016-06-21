@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class ModToolUserInfoComposer extends MessageComposer {
 
-    private ResultSet set;
+    private final ResultSet set;
 
     public ModToolUserInfoComposer(ResultSet set) {
         this.set = set;

@@ -9,10 +9,12 @@ import com.eu.habbo.plugin.events.users.UserTakeStepEvent;
 import com.eu.habbo.threading.runnables.RoomTrashing;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 import gnu.trove.set.hash.THashSet;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -34,12 +36,13 @@ public class PluginManager {
         }
 
         for (File file : loc.listFiles(new FileFilter() {
+            @Override
             public boolean accept(File file) {
                 return file.getPath().toLowerCase().endsWith(".jar");
             }
         })) {
-            URLClassLoader urlClassLoader = null;
-            InputStream stream = null;
+            URLClassLoader urlClassLoader;
+            InputStream stream;
             try {
                 urlClassLoader = URLClassLoader.newInstance(new URL[]{file.toURI().toURL()});
                 stream = urlClassLoader.getResourceAsStream("plugin.json");
@@ -66,13 +69,35 @@ public class PluginManager {
                         plugin.stream = stream;
                         this.plugins.add(plugin);
                         plugin.onEnable();
-                    } catch (Exception e) {
+                    } catch (ClassNotFoundException e) {
+                        Emulator.getLogging().logErrorLine("Could not load plugin " + pluginConfigurtion.name + "!");
+                        Emulator.getLogging().logErrorLine(e);
+                    } catch (NoSuchMethodException e) {
+                        Emulator.getLogging().logErrorLine("Could not load plugin " + pluginConfigurtion.name + "!");
+                        Emulator.getLogging().logErrorLine(e);
+                    } catch (SecurityException e) {
+                        Emulator.getLogging().logErrorLine("Could not load plugin " + pluginConfigurtion.name + "!");
+                        Emulator.getLogging().logErrorLine(e);
+                    } catch (InstantiationException e) {
+                        Emulator.getLogging().logErrorLine("Could not load plugin " + pluginConfigurtion.name + "!");
+                        Emulator.getLogging().logErrorLine(e);
+                    } catch (IllegalAccessException e) {
+                        Emulator.getLogging().logErrorLine("Could not load plugin " + pluginConfigurtion.name + "!");
+                        Emulator.getLogging().logErrorLine(e);
+                    } catch (IllegalArgumentException e) {
+                        Emulator.getLogging().logErrorLine("Could not load plugin " + pluginConfigurtion.name + "!");
+                        Emulator.getLogging().logErrorLine(e);
+                    } catch (InvocationTargetException e) {
                         Emulator.getLogging().logErrorLine("Could not load plugin " + pluginConfigurtion.name + "!");
                         Emulator.getLogging().logErrorLine(e);
                     }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (NullPointerException e) {
+                Emulator.getLogging().logErrorLine(e);
+            } catch (IOException e) {
+                Emulator.getLogging().logErrorLine(e);
+            } catch (JsonSyntaxException e) {
+                Emulator.getLogging().logErrorLine(e);
             }
         }
     }
@@ -85,9 +110,9 @@ public class PluginManager {
      */
     public void registerEvents(HabboPlugin plugin, EventListener listener) {
         synchronized (plugin.registeredEvents) {
-            Method[] methods = listener.getClass().getMethods();
+            Method[] methodsl = listener.getClass().getMethods();
 
-            for (Method method : methods) {
+            for (Method method : methodsl) {
                 if (method.getAnnotation(EventHandler.class) != null) {
                     if (method.getParameterTypes().length == 1) {
                         if (Event.class.isAssignableFrom(method.getParameterTypes()[0])) {
@@ -109,13 +134,20 @@ public class PluginManager {
      * Fires an event and passes it down to all plugins handling it.
      *
      * @param event The event to be passed down.
+     * @return
      */
     public Event fireEvent(Event event) {
         for (Method method : this.methods) {
             if (method.getParameterTypes().length == 1 && method.getParameterTypes()[0].isAssignableFrom(event.getClass())) {
                 try {
                     method.invoke(null, event);
-                } catch (Exception e) {
+                } catch (IllegalAccessException e) {
+                    Emulator.getLogging().logErrorLine("Could not pass default event " + event.getClass().getName() + " to " + method.getName());
+                    Emulator.getLogging().logErrorLine(e);
+                } catch (IllegalArgumentException e) {
+                    Emulator.getLogging().logErrorLine("Could not pass default event " + event.getClass().getName() + " to " + method.getName());
+                    Emulator.getLogging().logErrorLine(e);
+                } catch (InvocationTargetException e) {
                     Emulator.getLogging().logErrorLine("Could not pass default event " + event.getClass().getName() + " to " + method.getName());
                     Emulator.getLogging().logErrorLine(e);
                 }
@@ -124,16 +156,21 @@ public class PluginManager {
 
         synchronized (this.plugins) {
             for (HabboPlugin plugin : this.plugins) {
-                THashSet<Method> methods = plugin.registeredEvents.get(event.getClass().asSubclass(Event.class));
+                THashSet<Method> methodsl = plugin.registeredEvents.get(event.getClass().asSubclass(Event.class));
 
-                if (methods != null) {
-                    for (Method method : methods) {
+                if (methodsl != null) {
+                    for (Method method : methodsl) {
                         try {
                             method.invoke(plugin, event);
-                        } catch (Exception e) {
+                        } catch (IllegalAccessException e) {
                             Emulator.getLogging().logErrorLine("Could not pass event " + event.getClass().getName() + " to " + plugin.configuration.name);
                             Emulator.getLogging().logErrorLine(e);
-                            e.printStackTrace();
+                        } catch (IllegalArgumentException e) {
+                            Emulator.getLogging().logErrorLine("Could not pass event " + event.getClass().getName() + " to " + plugin.configuration.name);
+                            Emulator.getLogging().logErrorLine(e);
+                        } catch (InvocationTargetException e) {
+                            Emulator.getLogging().logErrorLine("Could not pass event " + event.getClass().getName() + " to " + plugin.configuration.name);
+                            Emulator.getLogging().logErrorLine(e);
                         }
                     }
                 }

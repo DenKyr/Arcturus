@@ -2,19 +2,18 @@ package com.eu.habbo.threading.runnables;
 
 import com.eu.habbo.habbohotel.rooms.Room;
 import com.eu.habbo.habbohotel.rooms.RoomUnit;
-import com.eu.habbo.habbohotel.users.Habbo;
 import com.eu.habbo.messages.outgoing.rooms.users.RoomUnitOnRollerComposer;
 import com.eu.habbo.util.pathfinding.Tile;
 
 public class RoomUnitTeleport implements Runnable {
 
-    private RoomUnit roomUnit;
-    private Room room;
-    private int x;
-    private int y;
-    private double z;
+    private final RoomUnit roomUnit;
+    private final Room room;
+    private final int x;
+    private final int y;
+    private final double z;
 
-    private int newEffect;
+    private final int newEffect;
 
     public RoomUnitTeleport(RoomUnit roomUnit, Room room, int x, int y, double z, int newEffect) {
         this.roomUnit = roomUnit;

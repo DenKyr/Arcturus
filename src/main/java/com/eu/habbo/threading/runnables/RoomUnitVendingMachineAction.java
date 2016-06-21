@@ -28,7 +28,7 @@ public class RoomUnitVendingMachineAction implements Runnable {
                         try {
                             this.habboItem.onClick(this.habbo.getClient(), this.room, new Object[]{0});
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            Emulator.getLogging().logErrorLine(e);
                         }
                     } else {
                         if (room.getGameMap().getNode(tile.X, tile.Y).isWalkable()) {

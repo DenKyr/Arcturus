@@ -48,13 +48,13 @@ public class GameMap<T extends AbstractNode> {
     }
 
     public synchronized final List<T> getNodes() {
-        List<T> nodes = new ArrayList<T>();
+        List<T> nodesl = new ArrayList<T>();
         for (int x = 0; x < this.nodes.length; x++) {
             for (int y = 0; y < this.nodes[x].length; y++) {
-                nodes.add(getNode(x, y));
+                nodesl.add(getNode(x, y));
             }
         }
-        return nodes;
+        return nodesl;
     }
 
     private boolean done = false;
@@ -111,14 +111,14 @@ public class GameMap<T extends AbstractNode> {
         LinkedList<T> path = new LinkedList();
 
         T curr = goal;
-        boolean done = false;
-        while (!done) {
+        boolean donel = false;
+        while (!donel) {
             if (curr != null) {
                 path.addFirst(curr);
                 curr = getNode(curr.getPrevious().getX(), curr.getPrevious().getY());
                 //curr.getPrevious();
                 if ((curr != null) && (start != null) && (curr.equals(start))) {
-                    done = true;
+                    donel = true;
                 }
             }
         }
@@ -204,6 +204,7 @@ public class GameMap<T extends AbstractNode> {
         return adj;
     }
 
+    @Override
     public void finalize()
             throws Throwable {
         super.finalize();

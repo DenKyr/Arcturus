@@ -107,10 +107,12 @@ public abstract class AbstractNode {
 
     public abstract void sethCosts(AbstractNode paramAbstractNode);
 
+    @Override
     public String toString() {
         return "(" + getX() + ", " + getY() + "): h: " + gethCosts() + " g: " + getgCosts() + " f: " + getfCosts();
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;
@@ -125,6 +127,7 @@ public abstract class AbstractNode {
         return this.xPosition == other.xPosition && this.yPosition == other.yPosition;
     }
 
+    @Override
     public int hashCode() {
         int hash = 3;
         hash = 17 * hash + this.xPosition;

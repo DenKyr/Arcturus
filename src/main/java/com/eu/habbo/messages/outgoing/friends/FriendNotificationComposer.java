@@ -14,9 +14,9 @@ public class FriendNotificationComposer extends MessageComposer {
     public final static int FINISHED_GAME = 4;
     public final static int INVITE_TO_PLAY_GAME = 5;
 
-    private int userId;
-    private int type;
-    private String data;
+    private final int userId;
+    private final int type;
+    private final String data;
 
     public FriendNotificationComposer(int userId, int type, String data) {
         this.userId = userId;
