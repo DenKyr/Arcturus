@@ -7,7 +7,6 @@ import com.eu.habbo.habbohotel.rooms.RoomCategory;
 import com.eu.habbo.messages.incoming.MessageHandler;
 import com.eu.habbo.messages.outgoing.navigator.NewNavigatorSearchResultsComposer;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -166,7 +165,7 @@ public class RequestNewNavigatorRoomsEvent extends MessageHandler {
             if (query.contains(":")) {
                 String[] parts = query.split(":");
 
-                String filterField = "";
+                String filterField;
                 if (parts.length > 1) {
                     filterField = parts[0];
                     part = parts[1];

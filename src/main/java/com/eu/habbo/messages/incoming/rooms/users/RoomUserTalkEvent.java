@@ -1,13 +1,8 @@
 package com.eu.habbo.messages.incoming.rooms.users;
 
-import com.eu.habbo.Emulator;
-import com.eu.habbo.habbohotel.commands.CommandHandler;
 import com.eu.habbo.habbohotel.rooms.RoomChatMessage;
 import com.eu.habbo.habbohotel.rooms.RoomChatType;
-import com.eu.habbo.habbohotel.wired.WiredHandler;
-import com.eu.habbo.habbohotel.wired.WiredTriggerType;
 import com.eu.habbo.messages.incoming.MessageHandler;
-import com.eu.habbo.messages.outgoing.rooms.users.RoomUserTalkComposer;
 
 public class RoomUserTalkEvent extends MessageHandler {
 

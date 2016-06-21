@@ -2,8 +2,6 @@ package com.eu.habbo.messages.incoming.friends;
 
 import com.eu.habbo.messages.ServerMessage;
 import com.eu.habbo.messages.incoming.MessageHandler;
-import com.eu.habbo.messages.outgoing.friends.FriendsComposer;
-import com.eu.habbo.messages.outgoing.friends.MessengerInitComposer;
 
 import java.util.ArrayList;
 

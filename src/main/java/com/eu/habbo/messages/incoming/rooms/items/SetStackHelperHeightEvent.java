@@ -4,7 +4,6 @@ import com.eu.habbo.habbohotel.items.interactions.InteractionStackHelper;
 import com.eu.habbo.habbohotel.users.HabboItem;
 import com.eu.habbo.messages.incoming.MessageHandler;
 import com.eu.habbo.messages.outgoing.rooms.UpdateStackHeightComposer;
-import com.eu.habbo.messages.outgoing.rooms.items.FloorItemUpdateComposer;
 import com.eu.habbo.messages.outgoing.rooms.items.UpdateStackHeightTileHeightComposer;
 import com.eu.habbo.util.pathfinding.Tile;
 import gnu.trove.set.hash.THashSet;

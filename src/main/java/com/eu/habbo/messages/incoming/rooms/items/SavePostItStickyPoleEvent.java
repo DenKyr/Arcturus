@@ -17,7 +17,7 @@ public class SavePostItStickyPoleEvent extends MessageHandler {
                 String[] commands = this.packet.readString().split("\r");
 
                 for (String command : commands) {
-                    command.replace("<br>", "\r");
+                    command = command.replace("<br>", "\r");
                     CommandHandler.handleCommand(this.client, command);
                 }
             } else {

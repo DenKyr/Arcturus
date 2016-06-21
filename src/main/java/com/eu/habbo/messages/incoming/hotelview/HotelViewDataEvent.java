@@ -1,5 +1,6 @@
 package com.eu.habbo.messages.incoming.hotelview;
 
+import com.eu.habbo.Emulator;
 import com.eu.habbo.messages.incoming.MessageHandler;
 import com.eu.habbo.messages.outgoing.hotelview.HotelViewDataComposer;
 
@@ -52,7 +53,7 @@ public class HotelViewDataEvent extends MessageHandler {
                 this.client.sendResponse(new HotelViewDataComposer(data, data.split(",")[data.split(",").length - 1]));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Emulator.getLogging().logErrorLine(e);
         }
     }
 }

@@ -15,7 +15,6 @@ import com.eu.habbo.messages.outgoing.generic.alerts.GenericAlertComposer;
 import com.eu.habbo.messages.outgoing.inventory.AddHabboItemComposer;
 import com.eu.habbo.messages.outgoing.inventory.InventoryRefreshComposer;
 import com.eu.habbo.messages.outgoing.users.UserCreditsComposer;
-import com.eu.habbo.messages.outgoing.users.UserCurrencyComposer;
 import com.eu.habbo.messages.outgoing.users.UserPointsComposer;
 import gnu.trove.set.hash.THashSet;
 
@@ -294,7 +293,6 @@ public class CatalogBuyItemAsGiftEvent extends MessageHandler {
         } catch (Exception e) {
             Emulator.getLogging().logPacketError(e);
             this.client.sendResponse(new AlertPurchaseFailedComposer(AlertPurchaseFailedComposer.SERVER_ERROR));
-            return;
         }
     }
 }

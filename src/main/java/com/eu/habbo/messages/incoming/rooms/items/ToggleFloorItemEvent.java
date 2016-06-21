@@ -91,7 +91,7 @@ public class ToggleFloorItemEvent extends MessageHandler {
                 this.client.getHabbo().getRoomUnit().setGoalLocation(this.client.getHabbo().getRoomUnit().getX(), this.client.getHabbo().getRoomUnit().getY());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Emulator.getLogging().logErrorLine(e);
         }
     }
 }

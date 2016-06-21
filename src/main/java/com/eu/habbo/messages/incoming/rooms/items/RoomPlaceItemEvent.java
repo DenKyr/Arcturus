@@ -2,7 +2,6 @@ package com.eu.habbo.messages.incoming.rooms.items;
 
 import com.eu.habbo.Emulator;
 import com.eu.habbo.habbohotel.items.interactions.*;
-import com.eu.habbo.habbohotel.items.interactions.games.InteractionGameGate;
 import com.eu.habbo.habbohotel.rooms.Room;
 import com.eu.habbo.habbohotel.users.HabboItem;
 import com.eu.habbo.messages.incoming.MessageHandler;
@@ -13,7 +12,6 @@ import com.eu.habbo.messages.outgoing.rooms.items.AddFloorItemComposer;
 import com.eu.habbo.messages.outgoing.rooms.items.AddWallItemComposer;
 import com.eu.habbo.messages.outgoing.rooms.UpdateStackHeightComposer;
 import com.eu.habbo.plugin.Event;
-import com.eu.habbo.plugin.PluginManager;
 import com.eu.habbo.plugin.events.furniture.FurniturePlacedEvent;
 import com.eu.habbo.util.pathfinding.PathFinder;
 import com.eu.habbo.util.pathfinding.Tile;

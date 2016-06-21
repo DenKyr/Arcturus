@@ -1,8 +1,6 @@
 package com.eu.habbo.messages.incoming.rooms;
 
 import com.eu.habbo.Emulator;
-import com.eu.habbo.habbohotel.modtool.ModToolIssue;
-import com.eu.habbo.habbohotel.modtool.ModToolTicketType;
 import com.eu.habbo.habbohotel.rooms.Room;
 import com.eu.habbo.habbohotel.rooms.RoomCategory;
 import com.eu.habbo.habbohotel.rooms.RoomState;
@@ -32,7 +30,7 @@ public class RoomSettingsSaveEvent extends MessageHandler {
                 } else {
                     RoomCategory category = Emulator.getGameEnvironment().getRoomManager().getCategory(categoryId);
 
-                    String message = "";
+                    String message;
 
                     if (category == null) {
                         message = Emulator.getTexts().getValue("scripter.warning.roomsettings.category.nonexisting").replace("%username%", client.getHabbo().getHabboInfo().getUsername());

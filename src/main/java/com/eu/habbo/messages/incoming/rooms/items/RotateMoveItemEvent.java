@@ -14,7 +14,6 @@ import com.eu.habbo.messages.outgoing.rooms.users.RoomUserStatusComposer;
 import com.eu.habbo.messages.outgoing.rooms.UpdateStackHeightComposer;
 import com.eu.habbo.plugin.Event;
 import com.eu.habbo.plugin.events.furniture.FurnitureMovedEvent;
-import com.eu.habbo.plugin.events.furniture.FurniturePlacedEvent;
 import com.eu.habbo.plugin.events.furniture.FurnitureRotatedEvent;
 import com.eu.habbo.util.pathfinding.PathFinder;
 import com.eu.habbo.util.pathfinding.Tile;

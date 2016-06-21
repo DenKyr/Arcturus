@@ -4,7 +4,6 @@ import com.eu.habbo.Emulator;
 import com.eu.habbo.habbohotel.bots.Bot;
 import com.eu.habbo.habbohotel.rooms.Room;
 import com.eu.habbo.messages.incoming.MessageHandler;
-import com.eu.habbo.plugin.events.bots.BotPlacedEvent;
 import com.eu.habbo.util.pathfinding.Tile;
 
 public class BotPlaceEvent extends MessageHandler {

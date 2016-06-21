@@ -1,6 +1,5 @@
 package com.eu.habbo.messages.incoming.handshake;
 
-import com.eu.habbo.Emulator;
 import com.eu.habbo.messages.incoming.MessageHandler;
 
 import java.io.ByteArrayOutputStream;
