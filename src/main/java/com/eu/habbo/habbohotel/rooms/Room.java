@@ -75,9 +75,9 @@ public class Room implements Comparable<Room>, ISerialize, Runnable {
             defaultMoodData.put(i, data);
         }
     }
-    private int id;
-    private int ownerId;
-    private String ownerName;
+    private final int id;
+    private final int ownerId;
+    private final String ownerName;
     private String name;
     private String description;
     private RoomLayout layout;
@@ -881,11 +881,11 @@ public class Room implements Comparable<Room>, ISerialize, Runnable {
                 statement.setInt(13, this.floorSize);
                 String moodLightData = "";
 
-                int id = 1;
+                int idl = 1;
                 for (RoomMoodlightData data : this.moodlightData.valueCollection()) {
-                    data.setId(id);
+                    data.setId(idl);
                     moodLightData += data.toString() + ";";
-                    id++;
+                    idl++;
                 }
 
                 statement.setString(14, moodLightData);
@@ -1425,10 +1425,10 @@ public class Room implements Comparable<Room>, ISerialize, Runnable {
 
     public String getGuildName() {
         if (this.hasGuild()) {
-            Guild guild = Emulator.getGameEnvironment().getGuildManager().getGuild(this.guild);
+            Guild guildl = Emulator.getGameEnvironment().getGuildManager().getGuild(this.guild);
 
-            if (guild != null) {
-                return guild.getName();
+            if (guildl != null) {
+                return guildl.getName();
             }
         }
 
@@ -2800,11 +2800,7 @@ public class Room implements Comparable<Room>, ISerialize, Runnable {
 
             if (lowestSitItem != null) {
                 if (item.getZ() > lowestSitItem.getZ()) {
-                    if (item.getZ() - lowestSitItem.getZ() > 0.8) {
-                        canSitUnder = true;
-                    } else {
-                        canSitUnder = false;
-                    }
+                    canSitUnder = item.getZ() - lowestSitItem.getZ() > 0.8;
                 }
             }
 
@@ -2963,13 +2959,13 @@ public class Room implements Comparable<Room>, ISerialize, Runnable {
 
     public int guildRightLevel(Habbo habbo) {
         if (this.guild > 0 && habbo.getHabboStats().hasGuild(this.guild)) {
-            Guild guild = Emulator.getGameEnvironment().getGuildManager().getGuild(this.guild);
+            Guild guildl = Emulator.getGameEnvironment().getGuildManager().getGuild(this.guild);
 
-            if (Emulator.getGameEnvironment().getGuildManager().getOnlyAdmins(guild).get(habbo.getHabboInfo().getId()) != null) {
+            if (Emulator.getGameEnvironment().getGuildManager().getOnlyAdmins(guildl).get(habbo.getHabboInfo().getId()) != null) {
                 return 3;
             }
 
-            if (guild.getRights() == 0) {
+            if (guildl.getRights() == 0) {
                 return 2;
             }
         }

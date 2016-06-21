@@ -9,7 +9,7 @@ import java.sql.SQLException;
 public class CustomRoomLayout extends RoomLayout implements Runnable {
 
     private boolean needsUpdate;
-    private Room room;
+    private final Room room;
 
     public CustomRoomLayout(ResultSet set, Room room) throws SQLException {
         super(set);

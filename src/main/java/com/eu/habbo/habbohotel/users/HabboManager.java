@@ -64,7 +64,7 @@ public class HabboManager {
                     //Emulator.getGameServer().getGameClientManager().disposeClient(h.getClient().getChannel());
                     h.getClient().sendResponse(new GenericAlertComposer("You logged in from somewhere else."));
                     h.getClient().getChannel().close();
-                    h = null;
+
                 }
 
                 ModToolBan ban = Emulator.getGameEnvironment().getModToolManager().checkForBan(set.getInt("id"));
@@ -89,7 +89,7 @@ public class HabboManager {
         } catch (SQLException e) {
             Emulator.getLogging().logSQLException(e);
         } catch (Exception e) {
-            e.printStackTrace();
+            Emulator.getLogging().logErrorLine(e);
         }
 
         return habbo;

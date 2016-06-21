@@ -30,9 +30,9 @@ public class PetData {
 
     private List<PetCommand> petCommands;
 
-    private List<Item> nestItems;
-    private List<Item> foodItems;
-    private List<Item> drinkItems;
+    private final List<Item> nestItems;
+    private final List<Item> foodItems;
+    private final List<Item> drinkItems;
 
     public static final List<Item> generalDrinkItems = new ArrayList<Item>();
     public static final List<Item> generalFoodItems = new ArrayList<Item>();
@@ -54,13 +54,13 @@ public class PetData {
 
         this.petVocals = new THashMap<PetVocalsType, THashSet<PetVocal>>();
 
-        for (PetVocalsType type : PetVocalsType.values()) {
-            this.petVocals.put(type, new THashSet<PetVocal>());
+        for (PetVocalsType typel : PetVocalsType.values()) {
+            this.petVocals.put(typel, new THashSet<PetVocal>());
         }
 
         if (PetData.generalPetVocals.size() == 0) {
-            for (PetVocalsType type : PetVocalsType.values()) {
-                PetData.generalPetVocals.put(type, new THashSet<PetVocal>());
+            for (PetVocalsType typel : PetVocalsType.values()) {
+                PetData.generalPetVocals.put(typel, new THashSet<PetVocal>());
             }
         }
     }

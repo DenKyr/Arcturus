@@ -8,12 +8,12 @@ import java.sql.SQLException;
 
 public class ModToolBan implements Runnable {
 
-    private int userId;
-    private int staffId;
+    private final int userId;
+    private final int staffId;
     public int expireDate;
     public String reason;
 
-    private boolean needsInsert;
+    private final boolean needsInsert;
 
     public ModToolBan(ResultSet set) throws SQLException {
         this.userId = set.getInt("user_id");

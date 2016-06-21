@@ -80,7 +80,7 @@ public class ServerMessage {
 
     public void appendInt32(Integer obj) {
         try {
-            this.stream.writeInt(obj.intValue());
+            this.stream.writeInt(obj);
         } catch (IOException e) {
             Emulator.getLogging().logPacketError(e);
         }
@@ -112,7 +112,7 @@ public class ServerMessage {
 
     public void appendByte(Integer b) {
         try {
-            this.stream.writeByte(b.intValue());
+            this.stream.writeByte(b);
         } catch (IOException e) {
             Emulator.getLogging().logPacketError(e);
         }
@@ -120,7 +120,7 @@ public class ServerMessage {
 
     public void appendBoolean(Boolean obj) {
         try {
-            this.stream.writeBoolean(obj.booleanValue());
+            this.stream.writeBoolean(obj);
         } catch (IOException e) {
             Emulator.getLogging().logPacketError(e);
         }

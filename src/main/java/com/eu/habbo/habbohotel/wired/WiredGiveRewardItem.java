@@ -15,12 +15,12 @@ public class WiredGiveRewardItem {
     }
 
     public WiredGiveRewardItem(String dataString) {
-        String[] data = dataString.split(",");
+        String[] datal = dataString.split(",");
 
-        this.id = Integer.valueOf(data[0]);
-        this.badge = data[1].equalsIgnoreCase("0");
-        this.data = data[2];
-        this.probability = Integer.valueOf(data[3]);
+        this.id = Integer.valueOf(datal[0]);
+        this.badge = datal[1].equalsIgnoreCase("0");
+        this.data = datal[2];
+        this.probability = Integer.valueOf(datal[3]);
     }
 
     @Override

@@ -2,10 +2,8 @@ package com.eu.habbo.habbohotel.users;
 
 import com.eu.habbo.Emulator;
 import com.eu.habbo.habbohotel.achievements.Achievement;
-import com.eu.habbo.habbohotel.achievements.AchievementManager;
 import com.eu.habbo.habbohotel.catalog.CatalogItem;
 import com.eu.habbo.habbohotel.rooms.RoomChatMessageBubbles;
-import gnu.trove.list.array.TIntArrayList;
 import gnu.trove.map.hash.THashMap;
 import gnu.trove.set.hash.TIntHashSet;
 import gnu.trove.stack.array.TIntArrayStack;

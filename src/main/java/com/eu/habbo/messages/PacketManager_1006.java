@@ -52,7 +52,7 @@ import com.eu.habbo.messages.incoming.wired.WiredEffectSaveDataEvent;
 import com.eu.habbo.messages.incoming.wired.WiredTriggerSaveDataEvent;
 import gnu.trove.map.hash.THashMap;
 
-public class PacketManager_1006 {
+public final class PacketManager_1006 {
 
     private final THashMap<Integer, Class<? extends MessageHandler>> incoming;
 

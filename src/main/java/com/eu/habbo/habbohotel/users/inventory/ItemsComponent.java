@@ -92,17 +92,17 @@ public class ItemsComponent {
     }
 
     public THashSet<HabboItem> getItemsAsValueCollection() {
-        THashSet<HabboItem> items = new THashSet<HabboItem>();
-        items.addAll(this.items.valueCollection());
+        THashSet<HabboItem> itemsl = new THashSet<HabboItem>();
+        itemsl.addAll(this.items.valueCollection());
 
-        return items;
+        return itemsl;
     }
 
     public void dispose() {
         synchronized (this.items) {
-            TIntObjectIterator<HabboItem> items = this.items.iterator();
+            TIntObjectIterator<HabboItem> itemsl = this.items.iterator();
 
-            if (items == null) {
+            if (itemsl == null) {
                 Emulator.getLogging().logErrorLine(new NullPointerException("Items is NULL!"));
                 return;
             }
@@ -110,12 +110,12 @@ public class ItemsComponent {
             if (!this.items.isEmpty()) {
                 for (int i = this.items.size(); i-- > 0;) {
                     try {
-                        items.advance();
+                        itemsl.advance();
                     } catch (NoSuchElementException e) {
                         break;
                     }
-                    if (items.value().needsUpdate()) {
-                        Emulator.getThreading().run(items.value());
+                    if (itemsl.value().needsUpdate()) {
+                        Emulator.getThreading().run(itemsl.value());
                     }
                 }
             }

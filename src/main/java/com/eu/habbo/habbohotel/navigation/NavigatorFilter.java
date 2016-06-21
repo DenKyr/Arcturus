@@ -3,6 +3,7 @@ package com.eu.habbo.habbohotel.navigation;
 import com.eu.habbo.Emulator;
 import com.eu.habbo.habbohotel.rooms.Room;
 import com.eu.habbo.habbohotel.users.Habbo;
+import java.lang.reflect.InvocationTargetException;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -81,7 +82,14 @@ public abstract class NavigatorFilter {
                     }
                 }
             }
-        } catch (Exception e) {
+        } catch (SecurityException e) {
+            Emulator.getLogging().logErrorLine(e);
+        } catch (IllegalAccessException e) {
+            Emulator.getLogging().logErrorLine(e);
+        } catch (IllegalArgumentException e) {
+            Emulator.getLogging().logErrorLine(e);
+        } catch (InvocationTargetException e) {
+            Emulator.getLogging().logErrorLine(e);
         }
 
         result.removeAll(toRemove);

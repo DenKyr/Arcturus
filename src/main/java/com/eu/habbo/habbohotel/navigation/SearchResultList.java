@@ -1,6 +1,5 @@
 package com.eu.habbo.habbohotel.navigation;
 
-import com.eu.habbo.Emulator;
 import com.eu.habbo.habbohotel.rooms.Room;
 import com.eu.habbo.messages.ISerialize;
 import com.eu.habbo.messages.ServerMessage;

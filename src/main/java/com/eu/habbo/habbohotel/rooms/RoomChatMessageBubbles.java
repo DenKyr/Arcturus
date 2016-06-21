@@ -40,7 +40,7 @@ public enum RoomChatMessageBubbles {
     GOAT(35),
     SANTA(36);
 
-    private int type;
+    private final int type;
 
     RoomChatMessageBubbles(int type) {
         this.type = type;

@@ -60,6 +60,7 @@ public class RoomMoodlightData {
         this.intensity = intensity;
     }
 
+    @Override
     public String toString() {
         return (this.enabled ? 2 : 1) + "," + this.id + "," + (this.backgroundOnly ? 2 : 1) + "," + this.color + "," + this.intensity;
     }

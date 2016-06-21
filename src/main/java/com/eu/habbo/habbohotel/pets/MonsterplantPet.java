@@ -8,11 +8,11 @@ import java.sql.SQLException;
 
 public class MonsterplantPet extends Pet {
 
-    private int type;
-    private int hue;
-    private int nose;
-    private int eyes;
-    private int mouth;
+    private final int type;
+    private final int hue;
+    private final int nose;
+    private final int eyes;
+    private final int mouth;
 
     public String look;
 

@@ -10,7 +10,6 @@ import com.eu.habbo.habbohotel.items.interactions.games.battlebanzai.Interaction
 import com.eu.habbo.habbohotel.items.interactions.games.battlebanzai.InteractionBattleBanzaiTimer;
 import com.eu.habbo.habbohotel.items.interactions.games.battlebanzai.gates.InteractionBattleBanzaiGate;
 import com.eu.habbo.habbohotel.items.interactions.games.battlebanzai.scoreboards.InteractionBattleBanzaiScoreboard;
-import com.eu.habbo.habbohotel.items.interactions.games.freeze.InteractionFreezeBlock;
 import com.eu.habbo.habbohotel.items.interactions.games.freeze.InteractionFreezeExitTile;
 import com.eu.habbo.habbohotel.items.interactions.games.freeze.InteractionFreezeTimer;
 import com.eu.habbo.habbohotel.items.interactions.games.freeze.gates.InteractionFreezeGate;
@@ -104,10 +103,10 @@ public class RoomSpecialTypes {
     }
 
     public synchronized THashSet<InteractionNest> getNests() {
-        THashSet<InteractionNest> nests = new THashSet<InteractionNest>();
-        nests.addAll(this.nests.values());
+        THashSet<InteractionNest> nestsl = new THashSet<InteractionNest>();
+        nestsl.addAll(this.nests.values());
 
-        return nests;
+        return nestsl;
     }
 
     /*
@@ -126,10 +125,10 @@ public class RoomSpecialTypes {
     }
 
     public synchronized THashSet<InteractionPetDrink> getPetDrinks() {
-        THashSet<InteractionPetDrink> petDrinks = new THashSet<InteractionPetDrink>();
-        petDrinks.addAll(this.petDrinks.values());
+        THashSet<InteractionPetDrink> petDrinksl = new THashSet<InteractionPetDrink>();
+        petDrinksl.addAll(this.petDrinks.values());
 
-        return petDrinks;
+        return petDrinksl;
     }
 
     /*
@@ -148,10 +147,10 @@ public class RoomSpecialTypes {
     }
 
     public synchronized THashSet<InteractionPetFood> getPetFoods() {
-        THashSet<InteractionPetFood> petFoods = new THashSet<InteractionPetFood>();
-        petFoods.addAll(this.petFoods.values());
+        THashSet<InteractionPetFood> petFoodsl = new THashSet<InteractionPetFood>();
+        petFoodsl.addAll(this.petFoods.values());
 
-        return petFoods;
+        return petFoodsl;
     }
 
     /*
@@ -170,10 +169,10 @@ public class RoomSpecialTypes {
     }
 
     public synchronized THashSet<InteractionRoller> getRollers() {
-        THashSet<InteractionRoller> rollers = new THashSet<InteractionRoller>();
-        rollers.addAll(this.rollers.values());
+        THashSet<InteractionRoller> rollersl = new THashSet<InteractionRoller>();
+        rollersl.addAll(this.rollers.values());
 
-        return rollers;
+        return rollersl;
     }
 
     /*

@@ -13,7 +13,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Map;
 
-public class PermissionsManager {
+public final class PermissionsManager {
 
     private final THashMap<Integer, THashSet<String>> permissions;
     private final THashMap<Integer, String> rankNames;

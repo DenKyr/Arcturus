@@ -36,7 +36,7 @@ import com.eu.habbo.messages.incoming.users.*;
 import com.eu.habbo.messages.incoming.wired.*;
 import gnu.trove.map.hash.THashMap;
 
-public class PacketManager {
+public final class PacketManager {
 
     private final THashMap<Integer, Class<? extends MessageHandler>> incoming;
 

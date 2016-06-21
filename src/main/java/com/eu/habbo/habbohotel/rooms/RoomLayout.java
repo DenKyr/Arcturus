@@ -34,7 +34,7 @@ public class RoomLayout {
 
             this.parse();
         } catch (Exception e) {
-            e.printStackTrace();
+            Emulator.getLogging().logErrorLine(e);
         }
     }
 

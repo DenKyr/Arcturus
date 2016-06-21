@@ -23,6 +23,7 @@ public class ClientMessage {
         this.buffer = ((buffer == null) || (buffer.readableBytes() == 0) ? Unpooled.EMPTY_BUFFER : buffer);
     }
 
+    @Override
     public ClientMessage clone() throws CloneNotSupportedException {
         return new ClientMessage(this.header, this.buffer.duplicate());
     }

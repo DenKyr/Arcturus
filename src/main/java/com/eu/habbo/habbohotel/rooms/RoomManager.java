@@ -80,7 +80,6 @@ public class RoomManager {
             statement.close();
             statement.getConnection().close();
         } catch (SQLException e) {
-            e.printStackTrace();
             Emulator.getLogging().logSQLException(e);
         }
         return (CustomRoomLayout) layout;

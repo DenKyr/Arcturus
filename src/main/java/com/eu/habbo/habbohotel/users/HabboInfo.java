@@ -12,7 +12,6 @@ import gnu.trove.procedure.TIntIntProcedure;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Map;
 
 public class HabboInfo implements Runnable {
 
@@ -226,11 +225,7 @@ public class HabboInfo implements Runnable {
             return false;
         }
 
-        if (this.getCurrencies().get(item.getPointsType()) < item.getPoints()) {
-            return false;
-        }
-
-        return true;
+        return this.getCurrencies().get(item.getPointsType()) >= item.getPoints();
     }
 
     public int getCredits() {

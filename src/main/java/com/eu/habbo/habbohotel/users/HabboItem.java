@@ -19,18 +19,18 @@ import java.sql.SQLException;
 
 public abstract class HabboItem implements Runnable, IEventTriggers {
 
-    private int id;
+    private final int id;
     private int userId;
     private int roomId;
-    private Item baseItem;
+    private final Item baseItem;
     private String wallPosition;
     private int x;
     private int y;
     private double z;
     private int rotation;
     private String extradata;
-    private int limitedStack;
-    private int limitedSells;
+    private final int limitedStack;
+    private final int limitedSells;
     private boolean needsUpdate = false;
     private boolean needsDelete = false;
 
@@ -77,7 +77,7 @@ public abstract class HabboItem implements Runnable, IEventTriggers {
             //serverMessage.appendString( ? "1.0" : ((this.getBaseItem().allowWalk() || this.getBaseItem().allowSit() && this.roomId != 0) ? Item.getCurrentHeight(this) : ""));
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Emulator.getLogging().logErrorLine(e);
         }
     }
 

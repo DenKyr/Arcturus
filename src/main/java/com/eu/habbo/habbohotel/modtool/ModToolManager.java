@@ -18,7 +18,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class ModToolManager {
+public final class ModToolManager {
 
     private final TIntObjectMap<ModToolCategory> category;
     private final THashMap<String, THashSet<String>> presets;
@@ -54,12 +54,12 @@ public class ModToolManager {
                 this.category.put(set.getInt("id"), new ModToolCategory(set.getString("name")));
                 PreparedStatement settings = Emulator.getDatabase().prepare("SELECT * FROM support_issue_presets WHERE category = ?");
                 settings.setInt(1, set.getInt("id"));
-                ResultSet presets = settings.executeQuery();
+                ResultSet presetsl = settings.executeQuery();
 
-                while (presets.next()) {
-                    this.category.get(set.getInt("id")).addPreset(new ModToolPreset(presets));
+                while (presetsl.next()) {
+                    this.category.get(set.getInt("id")).addPreset(new ModToolPreset(presetsl));
                 }
-                presets.close();
+                presetsl.close();
                 settings.close();
                 settings.getConnection().close();
             }
@@ -134,7 +134,7 @@ public class ModToolManager {
         } catch (SQLException e) {
             Emulator.getLogging().logSQLException(e);
         } catch (Exception e) {
-            e.printStackTrace();
+            Emulator.getLogging().logErrorLine(e);
         }
     }
 
@@ -156,7 +156,7 @@ public class ModToolManager {
         } catch (SQLException e) {
             Emulator.getLogging().logSQLException(e);
         } catch (Exception e) {
-            e.printStackTrace();
+            Emulator.getLogging().logErrorLine(e);
         }
 
         return chatlogs;
@@ -179,7 +179,7 @@ public class ModToolManager {
         } catch (SQLException e) {
             Emulator.getLogging().logSQLException(e);
         } catch (Exception e) {
-            e.printStackTrace();
+            Emulator.getLogging().logErrorLine(e);
         }
 
         return chatlogs;
@@ -225,7 +225,7 @@ public class ModToolManager {
         } catch (SQLException e) {
             Emulator.getLogging().logSQLException(e);
         } catch (Exception e) {
-            e.printStackTrace();
+            Emulator.getLogging().logErrorLine(e);
         }
 
         return chatlogs;

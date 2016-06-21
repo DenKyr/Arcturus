@@ -85,7 +85,6 @@ public class RoomUnit {
         this.effectId = 0;
         this.wiredMuted = false;
         this.modMuted = false;
-        this.room = room;
     }
 
     public void clearWalking() {
@@ -266,7 +265,7 @@ public class RoomUnit {
             return false;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Emulator.getLogging().logErrorLine(e);
             return false;
         }
     }

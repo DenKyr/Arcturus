@@ -6,12 +6,12 @@ import java.sql.SQLException;
 @SuppressWarnings("NullableProblems")
 public class RoomCategory implements Comparable<RoomCategory> {
 
-    private int id;
-    private int minRank;
-    private String caption;
-    private boolean canTrade;
-    private int maxUserCount;
-    private boolean official;
+    private final int id;
+    private final int minRank;
+    private final String caption;
+    private final boolean canTrade;
+    private final int maxUserCount;
+    private final boolean official;
 
     public RoomCategory(ResultSet set) throws SQLException {
         this.id = set.getInt("id");

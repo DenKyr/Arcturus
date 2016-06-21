@@ -12,7 +12,7 @@ import com.eu.habbo.messages.outgoing.trading.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RoomTrade {
+public final class RoomTrade {
 
     private final List<RoomTradeUser> users;
     private boolean tradeCompleted;

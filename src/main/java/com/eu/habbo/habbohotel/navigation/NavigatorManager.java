@@ -3,18 +3,14 @@ package com.eu.habbo.habbohotel.navigation;
 import com.eu.habbo.Emulator;
 import com.eu.habbo.habbohotel.rooms.Room;
 import gnu.trove.map.hash.THashMap;
-import gnu.trove.set.hash.THashSet;
-
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.AbstractMap;
-import java.util.List;
 import java.util.Map;
 
-public class NavigatorManager {
+public final class NavigatorManager {
 
     public final THashMap<Integer, NavigatorPublicCategory> publicCategories = new THashMap<Integer, NavigatorPublicCategory>();
     public final THashMap<String, Map.Entry<Method, NavigatorFilterComparator>> filterSettings = new THashMap<String, Map.Entry<Method, NavigatorFilterComparator>>();
@@ -86,15 +82,20 @@ public class NavigatorManager {
                             try {
                                 field = clazz.getDeclaredMethod(s);
                                 clazz = field.getReturnType();
-                            } catch (Exception e) {
+                            } catch (NoSuchMethodException e) {
+                                break;
+                            } catch (SecurityException e) {
                                 break;
                             }
                         }
                     } else {
                         try {
                             field = clazz.getDeclaredMethod(set.getString("field"));
-                            clazz = field.getReturnType();
-                        } catch (Exception e) {
+                        } catch (SQLException e) {
+                            continue;
+                        } catch (NoSuchMethodException e) {
+                            continue;
+                        } catch (SecurityException e) {
                             continue;
                         }
                     }

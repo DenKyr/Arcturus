@@ -7,12 +7,12 @@ import java.sql.SQLException;
 
 public class Poll {
 
-    private int id;
-    private String title;
-    private String thanksMessage;
-    private String badgeReward;
+    private final int id;
+    private final String title;
+    private final String thanksMessage;
+    private final String badgeReward;
 
-    private THashMap<Integer, PollQuestion> questions;
+    private final THashMap<Integer, PollQuestion> questions;
 
     public Poll(ResultSet set) throws SQLException {
         set.first();

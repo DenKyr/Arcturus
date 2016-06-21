@@ -249,8 +249,8 @@ public class Pet extends AbstractPet {
 
             if (!this.muted) {
                 if (super.chatTimeout <= time) {
-                    Room room = this.roomUnit.getPathFinder().getRoom();
-                    if (room != null) {
+                    Room rooml = this.roomUnit.getPathFinder().getRoom();
+                    if (rooml != null) {
                         if (this.energy <= 30) {
                             super.say(this.petData.randomVocal(PetVocalsType.TIRED));
                             if (this.energy <= 10) {

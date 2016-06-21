@@ -7,11 +7,11 @@ import java.sql.SQLException;
 
 public class PollQuestion {
 
-    private int id;
-    private int type;
-    private String question;
-    private THashMap<Integer, String[]> options;
-    private int minSelections;
+    private final int id;
+    private final int type;
+    private final String question;
+    private final THashMap<Integer, String[]> options;
+    private final int minSelections;
 
     public PollQuestion(ResultSet set) throws SQLException {
         this.id = set.getInt("id");

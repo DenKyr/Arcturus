@@ -10,7 +10,7 @@ import com.eu.habbo.messages.incoming.MessageHandler;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class RoomChatMessage implements Runnable, ISerialize {
+public final class RoomChatMessage implements Runnable, ISerialize {
 
     private String message;
     private RoomChatMessageBubbles bubbleId;
@@ -184,7 +184,7 @@ public class RoomChatMessage implements Runnable, ISerialize {
             message.appendInt32(0);
             message.appendInt32(this.getMessage().length());
         } catch (Exception e) {
-            e.printStackTrace();
+            Emulator.getLogging().logErrorLine(e);
         }
     }
 
