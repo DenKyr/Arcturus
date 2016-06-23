@@ -7,7 +7,6 @@ import com.eu.habbo.messages.outgoing.Outgoing;
 import com.eu.habbo.util.pathfinding.Tile;
 import gnu.trove.set.hash.THashSet;
 
-
 public class FloorPlanEditorBlockedTilesComposer extends MessageComposer {
 
     private final Room room;

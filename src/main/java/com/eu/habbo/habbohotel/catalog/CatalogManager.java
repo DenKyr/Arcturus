@@ -89,7 +89,7 @@ public final class CatalogManager {
      * The amount of items that are on sale.
      */
     public static int catalogItemAmount;
-    
+
     public static final THashMap<String, Class<? extends CatalogPage>> pageDefinitions = new THashMap<String, Class<? extends CatalogPage>>() {
         {
             for (CatalogPageLayouts layout : CatalogPageLayouts.values()) {
@@ -198,7 +198,7 @@ public final class CatalogManager {
             }
         }
     };
-    
+
     public CatalogManager() {
         long millis = System.currentTimeMillis();
         this.catalogPages = TCollections.synchronizedMap(new TIntObjectHashMap<CatalogPage>());
@@ -219,7 +219,7 @@ public final class CatalogManager {
      */
     public synchronized void initialize() {
         Emulator.getPluginManager().fireEvent(new EmulatorLoadCatalogManagerEvent());
-        
+
         try {
             loadCatalogPages();
             loadCatalogItems();
@@ -239,23 +239,23 @@ public final class CatalogManager {
      */
     private synchronized void loadCatalogPages() throws SQLException {
         this.catalogPages.clear();
-        
+
         this.catalogPages.put(-1, new CatalogRootLayout(null));
-        
+
         PreparedStatement statement = null;
         try {
             statement = Emulator.getDatabase().prepare("SELECT * FROM catalog_pages ORDER BY parent_id, id");
             ResultSet set = statement.executeQuery();
-            
+
             while (set.next()) {
                 CatalogPage page;
                 Class<? extends CatalogPage> pageClazz = pageDefinitions.get(set.getString("page_layout"));
-                
+
                 if (pageClazz == null) {
                     Emulator.getLogging().logStart("Unknown Page Layout: " + set.getString("page_layout"));
                     continue;
                 }
-                
+
                 try {
                     page = pageClazz.getConstructor(ResultSet.class).newInstance(set);
                     this.catalogPages.put(page.getId(), page);
@@ -291,49 +291,49 @@ public final class CatalogManager {
      */
     private synchronized void loadCatalogItems() throws SQLException {
         this.clubItems.clear();
-        
+
         PreparedStatement statement = null;
-        
+
         catalogItemAmount = 0;
-        
+
         try {
             statement = Emulator.getDatabase().prepare("SELECT * FROM catalog_items");
             ResultSet set = statement.executeQuery();
-            
+
             CatalogItem item;
             while (set.next()) {
                 if (set.getString("item_ids").equals("0")) {
                     continue;
                 }
-                
+
                 if (set.getString("catalog_name").contains("HABBO_CLUB_")) {
                     this.clubItems.add(new CatalogItem(set));
                     continue;
                 }
-                
+
                 CatalogPage page = this.catalogPages.get(set.getInt("page_id"));
-                
+
                 if (page == null) {
                     continue;
                 }
-                
+
                 item = page.getCatalogItem(set.getInt("id"));
-                
+
                 if (item == null) {
                     ++catalogItemAmount;
                     item = new CatalogItem(set);
                     page.addItem(item);
-                    
+
                     if (item.getOfferId() != -1) {
                         page.addOfferId(item.getOfferId());
-                        
+
                         this.offerDefs.put(item.getOfferId(), page.getId());
                     }
                 } else {
                     item.update(set);
                 }
             }
-            
+
             set.close();
         } catch (SQLException e) {
             Emulator.getLogging().logSQLException(e);
@@ -353,7 +353,7 @@ public final class CatalogManager {
     private void loadVouchers() throws SQLException {
         synchronized (this.vouchers) {
             this.vouchers.clear();
-            
+
             PreparedStatement statement = Emulator.getDatabase().prepare("SELECT * FROM vouchers");
             ResultSet set = statement.executeQuery();
             while (set.next()) {
@@ -379,12 +379,12 @@ public final class CatalogManager {
                 ResultSet set = statement.executeQuery();
                 while (set.next()) {
                     Item item = Emulator.getGameEnvironment().getItemManager().getItem(set.getInt("item_id"));
-                    
+
                     if (item != null) {
                         if (this.prizes.get(set.getInt("rarity")) == null) {
                             this.prizes.put(set.getInt("rarity"), new THashSet<Item>());
                         }
-                        
+
                         this.prizes.get(set.getInt("rarity")).add(item);
                     } else {
                         Emulator.getLogging().logErrorLine("Cannot load item with ID:" + set.getInt("item_id") + " as recycler reward!");
@@ -412,17 +412,17 @@ public final class CatalogManager {
     public void loadGiftWrappers() throws SQLException {
         synchronized (this.giftWrappers) {
             this.giftWrappers.clear();
-            
+
             PreparedStatement statement = null;
             try {
                 statement = Emulator.getDatabase().prepare("SELECT * FROM gift_wrappers WHERE type = ? ORDER BY sprite_id DESC");
                 statement.setString(1, "wrapper");
                 ResultSet set = statement.executeQuery();
-                
+
                 while (set.next()) {
                     this.giftWrappers.put(set.getInt("sprite_id"), set.getInt("item_id"));
                 }
-                
+
                 set.close();
             } catch (SQLException e) {
                 Emulator.getLogging().logSQLException(e);
@@ -437,20 +437,20 @@ public final class CatalogManager {
                 }
             }
         }
-        
+
         synchronized (this.giftFurnis) {
             this.giftFurnis.clear();
-            
+
             PreparedStatement statement = null;
             try {
                 statement = Emulator.getDatabase().prepare("SELECT * FROM gift_wrappers WHERE type = ? ORDER BY sprite_id DESC");
                 statement.setString(1, "gift");
                 ResultSet set = statement.executeQuery();
-                
+
                 while (set.next()) {
                     this.giftFurnis.put(set.getInt("sprite_id"), set.getInt("item_id"));
                 }
-                
+
                 set.close();
             } catch (SQLException e) {
                 Emulator.getLogging().logSQLException(e);
@@ -466,36 +466,36 @@ public final class CatalogManager {
             }
         }
     }
-    
+
     public void loadClothing() {
         synchronized (this.clothing) {
             this.clothing.clear();
-            
+
             try {
                 PreparedStatement statement = Emulator.getDatabase().prepare("SELECT * FROM catalog_clothing");
                 ResultSet set = statement.executeQuery();
-                
+
                 while (set.next()) {
                     this.clothing.put(set.getInt("id"), new ClothItem(set));
                 }
-                
+
                 set.close();
                 statement.close();
                 statement.getConnection().close();
-                
+
             } catch (SQLException e) {
                 Emulator.getLogging().logSQLException(e);
             }
         }
     }
-    
+
     public ClothItem getClothing(String name) {
         for (ClothItem item : this.clothing.values()) {
             if (item.name.equalsIgnoreCase(name)) {
                 return item;
             }
         }
-        
+
         return null;
     }
 
@@ -524,27 +524,27 @@ public final class CatalogManager {
      */
     public void redeemVoucher(GameClient client, String voucherCode) {
         Voucher voucher = Emulator.getGameEnvironment().getCatalogManager().getVoucher(voucherCode);
-        
+
         if (voucher != null) {
             if (Emulator.getGameEnvironment().getCatalogManager().deleteVoucher(voucher)) {
                 client.getHabbo().getHabboInfo().addCredits(voucher.credits);
-                
+
                 if (voucher.points > 0) {
                     client.getHabbo().getHabboInfo().addCurrencyAmount(voucher.pointsType, voucher.points);
                     client.sendResponse(new UserPointsComposer(client.getHabbo().getHabboInfo().getCurrencyAmount(voucher.pointsType), voucher.points, voucher.pointsType));
                 }
-                
+
                 if (voucher.credits > 0) {
                     client.getHabbo().getHabboInfo().addCredits(voucher.credits);
                     client.sendResponse(new UserCreditsComposer(client.getHabbo()));
                 }
-                
+
                 client.sendResponse(new RedeemVoucherOKComposer());
-                
+
                 return;
             }
         }
-        
+
         client.sendResponse(new RedeemVoucherErrorComposer(RedeemVoucherErrorComposer.INVALID_CODE));
     }
 
@@ -558,20 +558,20 @@ public final class CatalogManager {
         try {
             PreparedStatement statement = Emulator.getDatabase().prepare("DELETE FROM vouchers WHERE code = ?");
             statement.setString(1, voucher.code);
-            
+
             synchronized (this.vouchers) {
                 this.vouchers.remove(voucher);
             }
-            
+
             int affected = statement.executeUpdate();
             statement.close();
             statement.getConnection().close();
-            
+
             return affected >= 1;
         } catch (SQLException e) {
             Emulator.getLogging().logSQLException(e);
         }
-        
+
         return false;
     }
 
@@ -584,10 +584,10 @@ public final class CatalogManager {
     public CatalogPage getCatalogPage(int pageId) {
         return this.catalogPages.get(pageId);
     }
-    
+
     public CatalogPage getCatalogPage(final String captionSafe) {
         final CatalogPage[] page = {null};
-        
+
         synchronized (this.catalogPages) {
             this.catalogPages.forEachValue(new TObjectProcedure<CatalogPage>() {
                 @Override
@@ -596,11 +596,11 @@ public final class CatalogManager {
                         page[0] = object;
                         return false;
                     }
-                    
+
                     return true;
                 }
             });
-            
+
             return page[0];
         }
     }
@@ -614,9 +614,9 @@ public final class CatalogManager {
      */
     public List<CatalogPage> getCatalogPages(int parentId, Habbo habbo) {
         List<CatalogPage> pages = new ArrayList<CatalogPage>();
-        
+
         TIntObjectIterator<CatalogPage> pagesIterator = this.catalogPages.iterator();
-        
+
         for (int i = this.catalogPages.size(); i-- > 0;) {
             try {
                 pagesIterator.advance();
@@ -627,9 +627,9 @@ public final class CatalogManager {
                 break;
             }
         }
-        
+
         Collections.sort(pages);
-        
+
         return pages;
     }
 
@@ -645,25 +645,25 @@ public final class CatalogManager {
                 }
             }
         }
-        
+
         return null;
     }
-    
+
     public boolean moveCatalogItem(CatalogItem item, int pageId) {
         CatalogPage page = this.getCatalogPage(item.getPageId());
-        
+
         if (page == null) {
             return false;
         }
-        
+
         page.getCatalogItems().remove(item.getId());
-        
+
         page = this.getCatalogPage(pageId);
-        
+
         page.getCatalogItems().put(item.getId(), item);
-        
+
         item.setPageId(pageId);
-        
+
         return true;
     }
 
@@ -672,7 +672,7 @@ public final class CatalogManager {
      */
     public Item getRandomRecyclerPrize() {
         int level = 1;
-        
+
         if (Emulator.getRandom().nextInt(Emulator.getConfig().getInt("hotel.ecotron.rarity.chance.5")) + 1 == Emulator.getConfig().getInt("hotel.ecotron.rarity.chance.5")) {
             level = 5;
         } else if (Emulator.getRandom().nextInt(Emulator.getConfig().getInt("hotel.ecotron.rarity.chance.4")) + 1 == Emulator.getConfig().getInt("hotel.ecotron.rarity.chance.4")) {
@@ -682,10 +682,10 @@ public final class CatalogManager {
         } else if (Emulator.getRandom().nextInt(Emulator.getConfig().getInt("hotel.ecotron.rarity.chance.2")) + 1 == Emulator.getConfig().getInt("hotel.ecotron.rarity.chance.2")) {
             level = 2;
         }
-        
+
         return (Item) this.prizes.get(level).toArray()[Emulator.getRandom().nextInt(this.prizes.get(level).size())];
     }
-    
+
     public CatalogPage createCatalogPage(String caption, String captionSave, int icon, CatalogPageLayouts layout, int minRank, int parentId) {
         CatalogPage catalogPage = null;
         try {
@@ -700,15 +700,15 @@ public final class CatalogManager {
             statement.setString(8, layout.name());
             statement.execute();
             ResultSet set = statement.getGeneratedKeys();
-            
+
             if (set.next()) {
                 PreparedStatement stmt = Emulator.getDatabase().prepare("SELECT * FROM catalog_pages WHERE id = ?");
                 stmt.setInt(1, set.getInt(1));
                 ResultSet page = stmt.executeQuery();
-                
+
                 if (page.next()) {
                     Class<? extends CatalogPage> pageClazz = pageDefinitions.get(set.getString("page_layout"));
-                    
+
                     if (pageClazz != null) {
                         try {
                             catalogPage = pageClazz.getConstructor(ResultSet.class).newInstance(set);
@@ -728,24 +728,24 @@ public final class CatalogManager {
                     } else {
                         Emulator.getLogging().logErrorLine("Unknown Page Layout: " + set.getString("page_layout"));
                     }
-                    
+
                     page.close();
                     stmt.close();
                     stmt.getConnection().close();
                 }
             }
-            
+
             set.close();
             statement.close();
             statement.getConnection().close();
         } catch (SQLException e) {
             Emulator.getLogging().logSQLException(e);
         }
-        
+
         if (catalogPage != null) {
             this.catalogPages.put(catalogPage.getId(), catalogPage);
         }
-        
+
         return catalogPage;
     }
 
@@ -754,33 +754,33 @@ public final class CatalogManager {
      */
     public void dispose() {
         TIntObjectIterator<CatalogPage> pageIterator = this.catalogPages.iterator();
-        
+
         while (pageIterator.hasNext()) {
             pageIterator.advance();
-            
+
             for (CatalogItem item : pageIterator.value().getCatalogItems().valueCollection()) {
                 if (!item.isLimited()) {
                     item.run();
                 }
             }
         }
-        
+
         Emulator.getLogging().logShutdownLine("Catalog Manager -> Disposed!");
     }
-    
+
     public void purchaseItem(CatalogPage page, CatalogItem item, Habbo habbo, int amount, String extradata) {
         Item cBaseItem = null;
-        
+
         if (item == null) {
             habbo.getClient().sendResponse(new AlertPurchaseFailedComposer(AlertPurchaseFailedComposer.SERVER_ERROR).compose());
             return;
         }
-        
+
         if (item.isClubOnly() && !habbo.getClient().getHabbo().getHabboStats().hasActiveClub()) {
             habbo.getClient().sendResponse(new AlertPurchaseUnavailableComposer(AlertPurchaseUnavailableComposer.REQUIRES_CLUB));
             return;
         }
-        
+
         try {
             if (item.isLimited()) {
                 amount = 1;
@@ -790,7 +790,7 @@ public final class CatalogManager {
                 }
                 item.sellRare();
             }
-            
+
             if (amount > 1) {
                 if (amount == item.getAmount()) {
                     amount = 1;
@@ -802,10 +802,10 @@ public final class CatalogManager {
                     }
                 }
             }
-            
+
             int totalCredits = 0;
             int totalPoints = 0;
-            
+
             THashSet<HabboItem> itemsList = new THashSet<HabboItem>();
 
             /*
@@ -821,7 +821,7 @@ public final class CatalogManager {
                 habbo.getClient().sendResponse(new AlertPurchaseUnavailableComposer(AlertPurchaseUnavailableComposer.ILLEGAL));
                 return;
             }
-            
+
             for (int i = 0; i < amount; i++) {
                 if (item.getCredits() <= habbo.getClient().getHabbo().getHabboInfo().getCredits() - totalCredits) {
                     if (item.getPoints() <= habbo.getClient().getHabbo().getHabboInfo().getCurrencyAmount(item.getPointsType()) - totalPoints) {
@@ -839,17 +839,17 @@ public final class CatalogManager {
                                     if (baseItem.getName().startsWith("rentable_bot_") || baseItem.getName().startsWith("bot_")) {
                                         String type = item.getName().replace("rentable_bot_", "");
                                         type = type.replace("bot_", "");
-                                        
+
                                         THashMap<String, String> data = new THashMap<String, String>();
-                                        
+
                                         for (String s : item.getExtradata().split(";")) {
                                             if (s.contains(":")) {
                                                 data.put(s.split(":")[0], s.split(":")[1]);
                                             }
                                         }
-                                        
+
                                         Bot bot = Emulator.getGameEnvironment().getBotManager().createBot(data, type);
-                                        
+
                                         if (bot != null) {
                                             bot.setOwnerId(habbo.getClient().getHabbo().getHabboInfo().getId());
                                             bot.setOwnerName(habbo.getClient().getHabbo().getHabboInfo().getUsername());
@@ -870,15 +870,15 @@ public final class CatalogManager {
                                             Emulator.getLogging().logErrorLine(e);
                                             habbo.getClient().sendResponse(new AlertPurchaseFailedComposer(AlertPurchaseFailedComposer.SERVER_ERROR));
                                         }
-                                        
+
                                         if (pet == null) {
                                             return;
                                         }
-                                        
+
                                         habbo.getClient().getHabbo().getHabboInventory().getPetsComponent().addPet(pet);
                                         habbo.getClient().sendResponse(new AddPetComposer(pet));
                                         habbo.getClient().sendResponse(new PetBoughtNotificationComposer(pet, false));
-                                        
+
                                         AchievementManager.progressAchievement(habbo.getClient().getHabbo(), Emulator.getGameEnvironment().getAchievementManager().achievements.get("PetLover"));
                                     } else {
                                         if (baseItem.getInteractionType().getType() == InteractionTrophy.class || baseItem.getInteractionType().getType() == InteractionBadgeDisplay.class) {
@@ -886,11 +886,11 @@ public final class CatalogManager {
                                                 Emulator.getGameEnvironment().getModToolManager().quickTicket(habbo.getClient().getHabbo(), "Scripter", Emulator.getTexts().getValue("scripter.warning.catalog.badge_display").replace("%username%", habbo.getClient().getHabbo().getHabboInfo().getUsername()).replace("%badge%", extradata));
                                                 extradata = "UMAD";
                                             }
-                                            
+
                                             extradata = habbo.getClient().getHabbo().getHabboInfo().getUsername() + (char) 9 + Calendar.getInstance().get(Calendar.DAY_OF_MONTH) + "-" + (Calendar.getInstance().get(Calendar.MONTH) + 1) + "-" + Calendar.getInstance().get(Calendar.YEAR) + (char) 9 + extradata;
-                                            
+
                                         }
-                                        
+
                                         if (baseItem.getInteractionType().getType() == InteractionTeleport.class) {
                                             HabboItem teleportOne = Emulator.getGameEnvironment().getItemManager().createItem(habbo.getClient().getHabbo(), item, baseItem, extradata);
                                             HabboItem teleportTwo = Emulator.getGameEnvironment().getItemManager().createItem(habbo.getClient().getHabbo(), item, baseItem, extradata);
@@ -899,9 +899,9 @@ public final class CatalogManager {
                                             itemsList.add(teleportTwo);
                                         } else if (baseItem.getInteractionType().getType() == InteractionHopper.class) {
                                             HabboItem hopper = Emulator.getGameEnvironment().getItemManager().createItem(0, baseItem, item.getLimitedSells(), item.getLimitedSells(), extradata);
-                                            
+
                                             Emulator.getGameEnvironment().getItemManager().insertHopper(hopper);
-                                            
+
                                             itemsList.add(hopper);
                                         } else if (baseItem.getInteractionType().getType() == InteractionGuildFurni.class || baseItem.getInteractionType().getType() == InteractionGuildGate.class) {
                                             InteractionGuildFurni habboItem = (InteractionGuildFurni) Emulator.getGameEnvironment().getItemManager().createItem(habbo.getClient().getHabbo(), item, baseItem, extradata);
@@ -920,15 +920,15 @@ public final class CatalogManager {
                                             itemsList.add(habboItem);
                                         } else if (baseItem.getInteractionType().getType() == InteractionMusicDisc.class) {
                                             SoundTrack track = Emulator.getGameEnvironment().getItemManager().getSoundTrack(item.getExtradata());
-                                            
+
                                             if (track == null) {
                                                 habbo.getClient().sendResponse(new AlertPurchaseFailedComposer(AlertPurchaseFailedComposer.SERVER_ERROR));
                                                 return;
                                             }
-                                            
+
                                             InteractionMusicDisc habboItem = (InteractionMusicDisc) Emulator.getGameEnvironment().getItemManager().createItem(habbo.getClient().getHabbo(), item, baseItem, habbo.getClient().getHabbo().getHabboInfo().getUsername() + "\n" + Calendar.getInstance().get(Calendar.DAY_OF_MONTH) + "\n" + (Calendar.getInstance().get(Calendar.MONTH) + 1) + "\n" + Calendar.getInstance().get(Calendar.YEAR) + "\n" + track.getLength() + "\n" + track.getName() + "\n" + track.getId());
                                             habboItem.needsUpdate(true);
-                                            
+
                                             Emulator.getThreading().run(habboItem);
                                             itemsList.add(habboItem);
                                         } else {
@@ -946,41 +946,41 @@ public final class CatalogManager {
                     }
                 }
             }
-            
+
             if (!habbo.getClient().getHabbo().hasPermission("acc_infinite_credits")) {
                 if (totalCredits > 0) {
                     habbo.getClient().getHabbo().getHabboInfo().addCredits(-totalCredits);
                     habbo.getClient().sendResponse(new UserCreditsComposer(habbo.getClient().getHabbo()));
                 }
             }
-            
+
             if (!habbo.getClient().getHabbo().hasPermission("acc_infinite_points")) {
                 if (totalPoints > 0) {
                     habbo.getClient().getHabbo().getHabboInfo().addCurrencyAmount(item.getPointsType(), -totalPoints);
                     habbo.getClient().sendResponse(new UserPointsComposer(habbo.getClient().getHabbo().getHabboInfo().getCurrencyAmount(item.getPointsType()), -totalPoints, item.getPointsType()));
                 }
             }
-            
+
             if (item.hasBadge()) {
                 HabboBadge badge = new HabboBadge(0, item.getBadge(), 0, habbo.getClient().getHabbo());
                 Emulator.getThreading().run(badge);
                 habbo.getClient().getHabbo().getHabboInventory().getBadgesComponent().addBadge(badge);
             }
-            
+
             habbo.getClient().sendResponse(new AddHabboItemComposer(itemsList));
             habbo.getClient().getHabbo().getHabboInventory().getItemsComponent().addItems(itemsList);
             habbo.getClient().sendResponse(new PurchaseOKComposer(item, cBaseItem));
             habbo.getClient().sendResponse(new InventoryRefreshComposer());
-            
+
             if (Emulator.getPluginManager().isRegistered(FurnitureBoughtEvent.class, true)) {
                 for (HabboItem itm : itemsList) {
                     Event furnitureBought = new FurnitureBoughtEvent(itm, habbo.getClient().getHabbo());
                     Emulator.getPluginManager().fireEvent(furnitureBought);
                 }
             }
-            
+
             habbo.getClient().getHabbo().getHabboStats().addPurchase(item);
-            
+
         } catch (Exception e) {
             Emulator.getLogging().logPacketError(e);
             habbo.getClient().sendResponse(new AlertPurchaseFailedComposer(AlertPurchaseFailedComposer.SERVER_ERROR));

@@ -7,7 +7,6 @@ import com.eu.habbo.messages.outgoing.Outgoing;
 public class HotelViewCommunityGoalComposer extends MessageComposer {
 
     //:test 1579 b:1 i:0 i:1 i:2 i:3 i:4 i:5 s:a i:6 i:1 i:1
-
     @Override
     public ServerMessage compose() {
         this.response.init(Outgoing.HotelViewCommunityGoalComposer);

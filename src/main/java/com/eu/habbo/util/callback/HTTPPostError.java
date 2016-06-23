@@ -2,7 +2,6 @@ package com.eu.habbo.util.callback;
 
 import com.eu.habbo.Emulator;
 
-
 public class HTTPPostError implements Runnable {
 
     public Throwable stackTrace;

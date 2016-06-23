@@ -13,33 +13,33 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class WiredConditionLessTimeElapsed extends InteractionWiredCondition {
-    
+
     public static final WiredConditionType type = WiredConditionType.TIME_LESS_THAN;
-    
+
     private int cycles;
-    
+
     public WiredConditionLessTimeElapsed(ResultSet set, Item baseItem) throws SQLException {
         super(set, baseItem);
     }
-    
+
     public WiredConditionLessTimeElapsed(int id, int userId, Item item, String extradata, int limitedStack, int limitedSells) {
         super(id, userId, item, extradata, limitedStack, limitedSells);
     }
-    
+
     @Override
     public boolean execute(RoomUnit roomUnit, Room room, Object[] stuff) {
         return (Emulator.getIntUnixTimestamp() - room.getLastTimerReset()) / 0.5 < this.cycles;
     }
-    
+
     @Override
     public String getWiredData() {
         return this.cycles + "";
     }
-    
+
     @Override
     public void loadWiredData(ResultSet set, Room room) throws SQLException {
         String data = set.getString("wired_data");
-        
+
         try {
             if (!data.equals("")) {
                 this.cycles = Integer.valueOf(data);
@@ -48,17 +48,17 @@ public class WiredConditionLessTimeElapsed extends InteractionWiredCondition {
             Emulator.getLogging().logErrorLine(e);
         }
     }
-    
+
     @Override
     public void onPickUp() {
         this.cycles = 0;
     }
-    
+
     @Override
     public WiredConditionType getType() {
         return type;
     }
-    
+
     @Override
     public void serializeWiredData(ServerMessage message) {
         message.appendBoolean(false);
@@ -74,13 +74,13 @@ public class WiredConditionLessTimeElapsed extends InteractionWiredCondition {
         message.appendInt32(0);
         message.appendInt32(0);
     }
-    
+
     @Override
     public boolean saveData(ClientMessage packet) {
         packet.readInt();
-        
+
         this.cycles = packet.readInt();
-        
+
         return true;
     }
 }

@@ -6,7 +6,6 @@ import com.eu.habbo.messages.outgoing.MessageComposer;
 public class SnowWarsResetTimerComposer extends MessageComposer {
 
     //SnowStageRunning?
-
     @Override
     public ServerMessage compose() {
         this.response.init(294);

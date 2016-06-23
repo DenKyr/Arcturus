@@ -24,7 +24,7 @@ public class TalentTrackComposer extends MessageComposer {
         response.appendInt32(1);
 
         response.appendInt32(0);
-            //{
+        //{
         //}
 
         response.appendInt32(1);
@@ -44,7 +44,7 @@ public class TalentTrackComposer extends MessageComposer {
         response.appendInt32(0);
         response.appendInt32(1);
         response.appendInt32(1);
-            //}
+        //}
         //{
         response.appendInt32(18);
         response.appendInt32(0);
@@ -52,7 +52,7 @@ public class TalentTrackComposer extends MessageComposer {
         response.appendInt32(0);
         response.appendInt32(0);
         response.appendInt32(2);
-            //}
+        //}
         //{
         response.appendInt32(19);
         response.appendInt32(1);
@@ -60,7 +60,7 @@ public class TalentTrackComposer extends MessageComposer {
         response.appendInt32(0);
         response.appendInt32(30);
         response.appendInt32(30);
-            //}
+        //}
         //{
         response.appendInt32(8);
         response.appendInt32(1);
@@ -70,7 +70,7 @@ public class TalentTrackComposer extends MessageComposer {
         response.appendInt32(5);
         //}
         response.appendInt32(0);
-            //{
+        //{
         //}
 
         response.appendInt32(1);
@@ -90,7 +90,7 @@ public class TalentTrackComposer extends MessageComposer {
         response.appendInt32(0);
         response.appendInt32(0);
         response.appendInt32(1);
-            //}
+        //}
         //{
         response.appendInt32(11);
         response.appendInt32(1);
@@ -98,7 +98,7 @@ public class TalentTrackComposer extends MessageComposer {
         response.appendInt32(0);
         response.appendInt32(0);
         response.appendInt32(1);
-            //}
+        //}
         //{
         response.appendInt32(18);
         response.appendInt32(2);
@@ -106,7 +106,7 @@ public class TalentTrackComposer extends MessageComposer {
         response.appendInt32(0);
         response.appendInt32(0);
         response.appendInt32(60);
-            //}
+        //}
         //{
         response.appendInt32(8);
         response.appendInt32(2);
@@ -114,10 +114,10 @@ public class TalentTrackComposer extends MessageComposer {
         response.appendInt32(0);
         response.appendInt32(0);
         response.appendInt32(20);
-            //}
+        //}
         //{
         response.appendInt32(0);
-            //{
+        //{
         //}
         response.appendInt32(1);
         //{
@@ -128,7 +128,7 @@ public class TalentTrackComposer extends MessageComposer {
         response.appendInt32(3);
         response.appendInt32(0);
         response.appendInt32(4);
-            //}
+        //}
         //{
         response.appendInt32(11);
         response.appendInt32(2);
@@ -136,7 +136,7 @@ public class TalentTrackComposer extends MessageComposer {
         response.appendInt32(0);
         response.appendInt32(0);
         response.appendInt32(3);
-            //}
+        //}
         //{
         response.appendInt32(18);
         response.appendInt32(1);
@@ -144,7 +144,7 @@ public class TalentTrackComposer extends MessageComposer {
         response.appendInt32(0);
         response.appendInt32(0);
         response.appendInt32(1);
-            //}
+        //}
         //{
         response.appendInt32(18);
         response.appendInt32(3);
@@ -152,7 +152,7 @@ public class TalentTrackComposer extends MessageComposer {
         response.appendInt32(0);
         response.appendInt32(0);
         response.appendInt32(120);
-            //}
+        //}
         //{
         response.appendInt32(50621);
         response.appendInt32(1);
@@ -177,7 +177,7 @@ public class TalentTrackComposer extends MessageComposer {
         response.appendInt32(4);
         response.appendInt32(0);
         response.appendInt32(0);
-            //{
+        //{
         //}
         response.appendInt32(1);
         //{
@@ -187,7 +187,7 @@ public class TalentTrackComposer extends MessageComposer {
         //{
         response.appendString("A1 KUMIANKKA");
         response.appendInt32(0);
-            //}
+        //}
         //{
         response.appendString("HABBO_CLUB_CITIZENSHIP_VIP_REWARD");
         response.appendInt32(7);

@@ -9,7 +9,6 @@ import com.eu.habbo.messages.outgoing.guilds.GuildBoughtComposer;
 import com.eu.habbo.messages.outgoing.users.UserCreditsComposer;
 import com.eu.habbo.plugin.events.guilds.GuildPurchasedEvent;
 
-
 public class RequestGuildBuyEvent extends MessageHandler {
 
     @Override
